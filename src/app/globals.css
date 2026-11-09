@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "../estilos/tema.css";
+@import "../estilos/landing.css";
+
+@layer base {
+  body {
+    @apply bg-superficie-pagina font-texto text-texto-principal antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--foco);
+    outline-offset: 3px;
+  }
+}

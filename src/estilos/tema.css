@@ -1,0 +1,154 @@
+/*
+  SISTEMA DE COLOR Y TIPOGRAFÍA · habitando
+  Fuente: manual de marca (sistema-color-tipografia).
+
+  Los componentes usan SOLO los tokens por rol (bg-superficie-pagina,
+  text-texto-principal, bg-accion-principal...). La paleta base de la
+  sección 1 no se usa directo en componentes: se nombra por color y solo
+  sirve para definir los roles.
+*/
+
+/* 1. PALETA BASE */
+:root {
+  /* Escala azul: siete tonos Holst + extensiones de interfaz (100, 700, 900, 950) */
+  --azul-50: #F3F8FD;
+  --azul-100: #E4EFF8;
+  --azul-200: #D0E1F2;
+  --azul-300: #9FC0E3;
+  --azul-400: #6E9ECC;
+  --azul-500: #4D79A8;
+  --azul-600: #355982;
+  --azul-700: #2C4568;
+  --azul-800: #223A5E;
+  --azul-900: #16243A;
+  --azul-950: #0E1829;
+  --blanco: #FFFFFF;
+
+  /* Estados: la temperatura cálida se reserva para lo que requiere atención.
+     El tono 500 es constante en ambos temas (borde e ícono). */
+  --verde-50: #E3F2EC;
+  --verde-300: #8FD9C4;
+  --verde-500: #2E7D6B;
+  --verde-700: #1B4D42;
+  --verde-900: #15302A;
+
+  --ambar-50: #FBF0DC;
+  --ambar-300: #F2CE85;
+  --ambar-500: #C98A28;
+  --ambar-700: #7A5210;
+  --ambar-900: #33260F;
+
+  --rojo-50: #F9E7E9;
+  --rojo-300: #F2A3B0;
+  --rojo-500: #B3324A;
+  --rojo-700: #7A1F2F;
+  --rojo-900: #3A1620;
+}
+
+/* 2. TEMA CLARO (por defecto): el navy es tinta y acción, nunca fondo de sección */
+:root {
+  color-scheme: light;
+
+  --superficie-pagina: var(--azul-50);
+  --superficie-elevada: var(--blanco);
+  --superficie-hundida: var(--azul-100);
+  --superficie-flotante: var(--blanco);
+
+  --texto-principal: var(--azul-800);
+  --texto-secundario: var(--azul-600);
+  /* Contraste ≈ 4,3:1 (bajo AA): solo para información prescindible, nunca texto chico */
+  --texto-atenuado: var(--azul-500);
+
+  --borde-suave: var(--azul-200);
+  --borde-fuerte: var(--azul-300);
+
+  --accion-principal: var(--azul-800);
+  --accion-principal-hover: var(--azul-900);
+  --accion-principal-texto: var(--azul-50);
+  --accion-secundaria: var(--azul-100);
+  --foco: var(--azul-500);
+
+  /* Éxito (success): pagada, aprobada, resuelta */
+  --exito-fondo: var(--verde-50);
+  --exito-texto: var(--verde-700);
+  --exito-borde: var(--verde-500);
+  /* Atención (warning): por vencer, pendiente, requiere atención */
+  --atencion-fondo: var(--ambar-50);
+  --atencion-texto: var(--ambar-700);
+  --atencion-borde: var(--ambar-500);
+  /* Peligro (danger): vencida, rechazada, error */
+  --peligro-fondo: var(--rojo-50);
+  --peligro-texto: var(--rojo-700);
+  --peligro-borde: var(--rojo-500);
+}
+
+/* 3. TEMA OSCURO: la elevación va hacia arriba (lo más cercano al usuario es más claro) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --superficie-pagina: var(--azul-950);
+    --superficie-elevada: var(--azul-900);
+    --superficie-hundida: var(--azul-950);
+    --superficie-flotante: var(--azul-800);
+
+    --texto-principal: var(--azul-50);
+    --texto-secundario: var(--azul-300);
+    --texto-atenuado: var(--azul-400);
+
+    --borde-suave: var(--azul-700);
+    --borde-fuerte: var(--azul-600);
+
+    --accion-principal: var(--azul-300);
+    --accion-principal-hover: var(--azul-200);
+    --accion-principal-texto: var(--azul-950);
+    --accion-secundaria: var(--azul-800);
+    --foco: var(--azul-400);
+
+    --exito-fondo: var(--verde-900);
+    --exito-texto: var(--verde-300);
+    --atencion-fondo: var(--ambar-900);
+    --atencion-texto: var(--ambar-300);
+    --peligro-fondo: var(--rojo-900);
+    --peligro-texto: var(--rojo-300);
+  }
+}
+
+/* 4. TAILWIND: expone los roles como clases */
+@theme inline {
+  /* Quita los colores y tipografías por defecto: solo existen los de la marca */
+  --color-*: initial;
+  --font-*: initial;
+
+  --color-superficie-pagina: var(--superficie-pagina);
+  --color-superficie-elevada: var(--superficie-elevada);
+  --color-superficie-hundida: var(--superficie-hundida);
+  --color-superficie-flotante: var(--superficie-flotante);
+
+  --color-texto-principal: var(--texto-principal);
+  --color-texto-secundario: var(--texto-secundario);
+  --color-texto-atenuado: var(--texto-atenuado);
+
+  --color-borde-suave: var(--borde-suave);
+  --color-borde-fuerte: var(--borde-fuerte);
+
+  --color-accion-principal: var(--accion-principal);
+  --color-accion-principal-hover: var(--accion-principal-hover);
+  --color-accion-principal-texto: var(--accion-principal-texto);
+  --color-accion-secundaria: var(--accion-secundaria);
+
+  --color-exito-fondo: var(--exito-fondo);
+  --color-exito-texto: var(--exito-texto);
+  --color-exito-borde: var(--exito-borde);
+  --color-atencion-fondo: var(--atencion-fondo);
+  --color-atencion-texto: var(--atencion-texto);
+  --color-atencion-borde: var(--atencion-borde);
+  --color-peligro-fondo: var(--peligro-fondo);
+  --color-peligro-texto: var(--peligro-texto);
+  --color-peligro-borde: var(--peligro-borde);
+
+  /* Bitter: títulos y marca. Chivo: textos e interfaz.
+     Las variables --font-bitter y --font-chivo las inyecta layout.js */
+  --font-titulo: var(--font-bitter), ui-serif, Georgia, serif;
+  --font-texto: var(--font-chivo), ui-sans-serif, system-ui, sans-serif;
+}

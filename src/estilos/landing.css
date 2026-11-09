@@ -1,0 +1,845 @@
+/*
+  ESTILOS PROPIOS DE LA LANDING
+  Se suman a tema.css (que es una copia del de la app y no se toca).
+
+  Acá van:
+  1. Los colores que solo usa la landing (trama, bloques de reparto, banda final, teléfono),
+     nombrados por rol como en tema.css.
+  2. Un corte de pantalla (escritorio) y los tamaños de título que crecen con la pantalla.
+  3. Utilidades de la marca: el corte de 30° y la caja de contenido.
+  4. Lo que no es interfaz sino dibujo: la bienvenida, la trama y el teléfono de la escena.
+     El teléfono se diseña a 288 x 590 px y se escala entero, por eso sus medidas van en px.
+*/
+
+/* 1. COLORES DE LA LANDING */
+:root {
+  /* Zonas apagadas: fondo de selectores, de la sección del problema y de la pantalla del teléfono */
+  --superficie-zona: var(--azul-100);
+
+  /* Trama de planta, versión clara */
+  --trama-1: var(--azul-100);
+  --trama-2: var(--azul-200);
+  --trama-3: var(--blanco);
+  --trama-resalte: var(--azul-800);
+
+  /* Bloques de reparto */
+  --bloque-fuerte: var(--azul-800);
+  --bloque-fuerte-texto: var(--azul-50);
+  --bloque-medio: var(--azul-600);
+  --bloque-medio-texto: var(--blanco);
+  --bloque-claro: var(--azul-200);
+  --bloque-suave: var(--azul-100);
+  --bloque-celeste: var(--azul-300);
+  --bloque-celeste-texto: var(--azul-900);
+
+  /* La banda final usa la trama oscura en los dos temas */
+  --banda: var(--azul-900);
+  --banda-texto: var(--azul-50);
+  --banda-texto-secundario: var(--azul-300);
+
+  --telefono: var(--azul-950);
+  --telefono-borde: transparent;
+  --sombra: rgb(14 24 41 / 0.28);
+  --numero-paso: var(--azul-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --superficie-zona: #121f33;
+
+    --trama-1: var(--azul-900);
+    --trama-2: #1b2c47;
+    --trama-3: #122033;
+    --trama-resalte: var(--azul-300);
+
+    --bloque-fuerte: var(--azul-300);
+    --bloque-fuerte-texto: var(--azul-950);
+    --bloque-medio: var(--azul-700);
+    --bloque-medio-texto: var(--azul-50);
+    --bloque-claro: var(--azul-800);
+    --bloque-suave: var(--azul-900);
+    --bloque-celeste: #1b2c47;
+    --bloque-celeste-texto: var(--azul-50);
+
+    --banda: #0a1220;
+    --telefono: #060b14;
+    --telefono-borde: var(--azul-700);
+    --sombra: rgb(0 0 0 / 0.55);
+  }
+}
+
+@theme inline {
+  --color-superficie-zona: var(--superficie-zona);
+
+  --color-bloque-fuerte: var(--bloque-fuerte);
+  --color-bloque-fuerte-texto: var(--bloque-fuerte-texto);
+  --color-bloque-medio: var(--bloque-medio);
+  --color-bloque-medio-texto: var(--bloque-medio-texto);
+  --color-bloque-claro: var(--bloque-claro);
+  --color-bloque-suave: var(--bloque-suave);
+  --color-bloque-celeste: var(--bloque-celeste);
+  --color-bloque-celeste-texto: var(--bloque-celeste-texto);
+
+  --color-banda: var(--banda);
+  --color-banda-texto: var(--banda-texto);
+  --color-banda-texto-secundario: var(--banda-texto-secundario);
+
+  --color-numero-paso: var(--numero-paso);
+}
+
+/* 2. CORTE DE PANTALLA Y TAMAÑOS DE TÍTULO */
+@theme {
+  /* Desde acá el héroe va en dos columnas (texto y teléfono) */
+  --breakpoint-escritorio: 56.25rem;
+
+  --text-titulo-heroe: clamp(2.6rem, min(5.4vw, 8.4vh), 4.6rem);
+  --text-titulo-heroe--line-height: 1.02;
+  /* En escritorio el título va en dos renglones: el tamaño sigue al ancho de la columna */
+  --text-titulo-heroe-escritorio: clamp(2.3rem, min(4.2vw, 8.4vh), 3.45rem);
+  --text-titulo-heroe-escritorio--line-height: 1.02;
+  --text-bajada: clamp(1.06rem, 1.35vw, 1.2rem);
+  --text-bajada--line-height: 1.6;
+  --text-titulo-seccion: clamp(2rem, 3.7vw, 3.1rem);
+  --text-titulo-seccion--line-height: 1.07;
+  --text-titulo-banda: clamp(2.1rem, 4vw, 3.3rem);
+  --text-titulo-banda--line-height: 1.05;
+  --text-cita: clamp(1.2rem, 1.7vw, 1.42rem);
+  --text-cita--line-height: 1.42;
+  --text-cifra: 2.7rem;
+  --text-cifra--line-height: 1;
+}
+
+/* 3. UTILIDADES DE LA MARCA */
+
+/* El corte de 30° de la marca, arriba a la izquierda: corte-13 corta 13 px de ancho */
+@utility corte-* {
+  --corte: calc(--value(integer) * 1px);
+  clip-path: polygon(0 calc(var(--corte) * 0.577), var(--corte) 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Caja de contenido: 1200 px de ancho útil, respetando el notch del celular */
+@utility contenedor {
+  width: 100%;
+  max-width: 1264px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+
+  @media (width >= 45rem) {
+    padding-left: max(32px, env(safe-area-inset-left, 0px));
+    padding-right: max(32px, env(safe-area-inset-right, 0px));
+  }
+}
+
+@utility espacio-seccion {
+  padding-block: clamp(4.5rem, 9vw, 8rem);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* En el celular con notch, la franja de arriba queda del color de la página */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 30;
+    height: env(safe-area-inset-top, 0px);
+    background: var(--superficie-pagina);
+  }
+}
+
+/* 4. PERFILES
+   Las dos versiones de cada sección están en la página; se ve la del perfil elegido.
+   El perfil lo marca data-perfil en <html>, que se pone antes de pintar (ver layout.js). */
+html[data-perfil="administraciones"] [data-solo="vecinos"],
+html:not([data-perfil="administraciones"]) [data-solo="administraciones"] {
+  display: none;
+}
+
+[data-solo] {
+  transition: opacity 0.2s ease;
+}
+
+html.cambiando-perfil [data-solo] {
+  opacity: 0;
+}
+
+/* 5. BIENVENIDA */
+.bienvenida {
+  display: none;
+}
+
+html.bienvenida-activa .bienvenida {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.bienvenida-simbolo {
+  position: relative;
+  height: min(30vh, 200px);
+  aspect-ratio: 262 / 320;
+  overflow: visible;
+  transform-origin: 0 0;
+}
+
+.bienvenida-simbolo polygon {
+  fill: var(--texto-principal);
+}
+
+.bienvenida-simbolo line {
+  stroke: var(--borde-fuerte);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Mientras dura la bienvenida, el logo del encabezado espera a que lleguen las torres */
+html.bienvenida-activa .isologo-torre {
+  opacity: 0;
+}
+
+.isologo-letras {
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html.bienvenida-activa .isologo-letras {
+  opacity: 0;
+  transform: translateX(-70px);
+}
+
+/* 6. TRAMA DE PLANTA DEL HÉROE */
+.trama-heroe {
+  mask-image: linear-gradient(180deg, transparent 0, transparent 38%, #000 72%);
+
+  @media (width >= 56.25rem) {
+    mask-image: linear-gradient(90deg, transparent 0, transparent 30%, #000 64%);
+  }
+}
+
+.trama-plano {
+  transform-origin: 0 0;
+  transition: transform 1.15s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+.sala {
+  transition:
+    fill 0.7s ease,
+    opacity 0.7s ease;
+}
+
+.sala-tono-1 {
+  fill: var(--trama-1);
+}
+
+.sala-tono-2 {
+  fill: var(--trama-2);
+}
+
+.sala-tono-3 {
+  fill: var(--trama-3);
+}
+
+/* Del lado del vecino, la planta se apaga y queda resaltada su unidad */
+html:not([data-perfil="administraciones"]) .sala {
+  opacity: 0.7;
+}
+
+html:not([data-perfil="administraciones"]) .sala-tuya {
+  opacity: 1;
+  fill: var(--trama-resalte);
+}
+
+/* La trama oscura de la banda final */
+.trama-oscura-1 {
+  fill: var(--azul-800);
+}
+
+.trama-oscura-2 {
+  fill: var(--azul-700);
+}
+
+.trama-oscura-3 {
+  fill: var(--azul-600);
+}
+
+/* 7. TELÉFONO DE LA ESCENA */
+.telefono {
+  position: relative;
+  width: 288px;
+  height: 590px;
+  padding: 10px;
+  border-radius: 46px;
+  background: var(--telefono);
+  box-shadow:
+    0 0 0 1px var(--telefono-borde),
+    0 50px 90px -40px var(--sombra),
+    0 18px 36px -24px var(--sombra);
+  transform: scale(var(--escala, 1));
+  transform-origin: 0 0;
+}
+
+/* La isla de arriba */
+.telefono::before {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: 19px;
+  left: 50%;
+  width: 82px;
+  height: 22px;
+  margin-left: -41px;
+  border-radius: 12px;
+  background: var(--telefono);
+}
+
+.pantalla {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 36px;
+  background: var(--superficie-zona);
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.capa {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "Hoy" se va hacia arriba elemento por elemento (--orden) cuando entra "Con Habitando" */
+.escena[data-estado="hoy"] .capa-con {
+  visibility: hidden;
+}
+
+.capa-hoy .animado {
+  transition:
+    opacity 0.35s ease,
+    transform 0.5s cubic-bezier(0.6, 0, 0.2, 1);
+}
+
+.escena[data-estado="con"] .capa-hoy .animado {
+  opacity: 0;
+  transform: translateY(-26px) scale(0.96);
+  transition-delay: calc(var(--orden, 0) * 40ms);
+}
+
+.llega {
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.llega.esperando {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.barra-estado {
+  display: flex;
+  flex: none;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 15px 26px 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Señal y batería, dibujadas con dos bloques */
+.barra-estado span:last-child {
+  width: 44px;
+  height: 9px;
+  background: linear-gradient(90deg, currentColor 0 62%, transparent 62% 70%, currentColor 70%);
+  opacity: 0.7;
+  clip-path: polygon(0 100%, 30% 100%, 30% 40%, 38% 40%, 38% 100%, 100% 100%, 100% 0, 62% 0, 62% 100%, 0 100%);
+}
+
+/* Chat del grupo del edificio */
+.chat-cabecera,
+.app-cabecera {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 10px;
+  background: var(--superficie-elevada);
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.app-cabecera {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--superficie-zona);
+  color: var(--texto-secundario);
+}
+
+.avatar svg {
+  width: 20px;
+  height: 20px;
+}
+
+.chat-nombre {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chat-sub {
+  font-size: 12px;
+  color: var(--texto-secundario);
+}
+
+.chat-cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 7px;
+  padding: 10px 12px;
+  overflow: hidden;
+}
+
+.sin-leer {
+  align-self: center;
+  margin-bottom: 2px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--superficie-elevada);
+  color: var(--texto-secundario);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.globo {
+  max-width: 86%;
+  padding: 5px 9px;
+  border-radius: 4px 14px 14px 14px;
+  background: var(--superficie-elevada);
+  box-shadow: 0 1px 0 var(--borde-suave);
+  font-size: 13px;
+}
+
+.globo-autor {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--azul-500);
+}
+
+.globo time {
+  float: right;
+  margin: 5px 0 -3px 10px;
+  font-size: 9.5px;
+  color: var(--texto-secundario);
+}
+
+.globo-propio {
+  align-self: flex-end;
+  border-radius: 14px 4px 14px 14px;
+  background: var(--azul-200);
+  color: var(--azul-900);
+}
+
+.globo-propio time {
+  color: var(--azul-700);
+}
+
+.chat-escribir {
+  flex: none;
+  margin: 0 10px 14px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: var(--superficie-elevada);
+  color: var(--texto-secundario);
+  font-size: 12.5px;
+}
+
+/* Pantalla bloqueada de la administración: siempre oscura */
+.bloqueo {
+  background: linear-gradient(180deg, var(--azul-900), #0b1424);
+  color: var(--azul-50);
+}
+
+.hora {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 54px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.fecha {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--azul-300);
+}
+
+.notificaciones {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 0 10px;
+}
+
+.notificacion {
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  gap: 2px 9px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 16px;
+  background: rgb(228 239 248 / 0.1);
+  backdrop-filter: blur(6px);
+}
+
+.notificacion-icono {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--azul-600);
+}
+
+.notificacion-icono svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--blanco);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.notificacion-de {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.notificacion-cuando {
+  font-size: 11.5px;
+  color: var(--azul-300);
+}
+
+.notificacion-texto {
+  grid-column: 2 / 4;
+  overflow: hidden;
+  font-size: 12.5px;
+  color: var(--azul-100);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* La app, en la capa "Con Habitando" */
+.capa-con {
+  background: var(--superficie-pagina);
+  color: var(--texto-principal);
+}
+
+.app-marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.app-marca svg {
+  width: 11px;
+  height: 20px;
+}
+
+.app-dato {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--texto-secundario);
+}
+
+.app-cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 9px;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.saludo {
+  padding: 2px 2px 0;
+  font-family: var(--font-titulo);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tarjeta {
+  padding: 11px 12px;
+  background: var(--superficie-elevada);
+  box-shadow: 0 1px 0 var(--borde-suave);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tarjeta-titulo {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.tarjeta-etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--texto-secundario);
+}
+
+.tarjeta-etiqueta svg {
+  width: 14px;
+  height: 14px;
+}
+
+.monto-grande {
+  margin-top: 4px;
+  font-family: var(--font-titulo);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.dato-chico {
+  font-size: 11.5px;
+  color: var(--texto-secundario);
+}
+
+.desglose {
+  display: grid;
+  gap: 6px;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--borde-suave);
+}
+
+.desglose li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.desglose li > span:last-child {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.desglose small {
+  display: block;
+  font-size: 11.5px;
+  color: var(--texto-secundario);
+}
+
+.desglose u {
+  text-underline-offset: 2px;
+}
+
+.app-boton {
+  margin-top: auto;
+  padding: 11px 12px;
+  background: var(--accion-principal);
+  color: var(--accion-principal-texto);
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.aviso-publicado {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px solid var(--exito-borde);
+  background: var(--exito-fondo);
+  color: var(--exito-texto);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.aviso-publicado svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  color: var(--exito-borde);
+}
+
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.indicador {
+  display: grid;
+  gap: 5px;
+  justify-items: start;
+  padding: 8px 8px 9px;
+  background: var(--superficie-elevada);
+  box-shadow: 0 1px 0 var(--borde-suave);
+  font-size: 9.5px;
+}
+
+.indicador b {
+  font-family: var(--font-titulo);
+  font-size: 20px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagos {
+  display: grid;
+  margin-top: 6px;
+}
+
+.pagos li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 6px 0;
+  border-top: 1px solid var(--borde-suave);
+  font-size: 12.5px;
+}
+
+.pagos li:first-child {
+  border-top: 0;
+}
+
+.pagos b {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagos small {
+  grid-column: 1 / -1;
+  font-size: 11.5px;
+  color: var(--texto-secundario);
+}
+
+/* La pantalla nueva entra barriendo en diagonal, con el corte de 30° del logo (ver EscenaTelefono.js) */
+
+/* Mientras corre el cambio automático, una barrita avanza en "Con Habitando" hasta que cambia la pantalla */
+.selector-escena.avanzando [data-estado-boton="con"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--accion-principal);
+  transform-origin: left;
+  animation: avance 2.9s linear both;
+}
+
+@keyframes avance {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* 8. SECCIONES */
+
+/* Pila de "¿Ya salieron las expensas?": las de atrás quedan solo como borde */
+.globo-pila {
+  transform: translate(calc(var(--orden) * 12px), calc(var(--orden) * -11px));
+}
+
+/* Números de los pasos */
+.pasos {
+  counter-reset: paso;
+}
+
+.paso {
+  counter-increment: paso;
+}
+
+.paso::before {
+  content: counter(paso);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-titulo);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--numero-paso);
+  font-variant-numeric: lining-nums;
+}
+
+/* Línea de estados del reclamo */
+.linea-estado::before {
+  content: "";
+  justify-self: center;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--borde-fuerte);
+  border-radius: 50%;
+}
+
+.linea-estado[data-paso="hecho"]::before {
+  border-color: var(--texto-principal);
+  background: var(--texto-principal);
+}
+
+.linea-estado[data-paso="actual"]::before {
+  border-color: var(--texto-principal);
+  background: var(--superficie-elevada);
+  box-shadow: 0 0 0 4px var(--superficie-zona);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+  }
+}
