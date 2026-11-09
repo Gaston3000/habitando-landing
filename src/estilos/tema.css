@@ -67,6 +67,11 @@
   --accion-principal-texto: var(--azul-50);
   --accion-secundaria: var(--azul-100);
   --foco: var(--azul-500);
+  /* Velo detrás de un menú o diálogo abierto: siempre oscurece, en los dos temas */
+  --velo: color-mix(in srgb, var(--azul-950) 50%, transparent);
+  /* Esqueleto de carga: el bloque y el brillo que lo recorre. Se ve sobre la página y sobre las tarjetas */
+  --esqueleto: var(--azul-200);
+  --esqueleto-brillo: var(--azul-100);
 
   /* Éxito (success): pagada, aprobada, resuelta */
   --exito-fondo: var(--verde-50);
@@ -80,6 +85,26 @@
   --peligro-fondo: var(--rojo-50);
   --peligro-texto: var(--rojo-700);
   --peligro-borde: var(--rojo-500);
+
+  /* Marca: encabezados y fondos con la trama oscura. Son iguales en los dos temas. */
+  --superficie-marca: var(--azul-900);
+  --texto-sobre-marca: var(--azul-50);
+  --texto-sobre-marca-secundario: var(--azul-300);
+
+  /* Trama planta (componente Trama): el fondo y los tres tonos de los ambientes.
+     La oscura es la del archivo trama-planta-oscura; la clara, la de trama-planta-clara. */
+  --trama-oscura-fondo: var(--azul-900);
+  --trama-oscura-1: var(--azul-800);
+  --trama-oscura-2: var(--azul-700);
+  --trama-oscura-3: var(--azul-600);
+  /* Cuánto se ven los ambientes sobre el fondo (1 = como el archivo original). */
+  --trama-oscura-opacidad: 0.35;
+  --trama-clara-opacidad: 0.45;
+
+  --trama-clara-fondo: var(--blanco);
+  --trama-clara-1: var(--azul-100);
+  --trama-clara-2: var(--azul-200);
+  --trama-clara-3: var(--azul-50);
 }
 
 /* 3. TEMA OSCURO: la elevación va hacia arriba (lo más cercano al usuario es más claro) */
@@ -104,6 +129,9 @@
     --accion-principal-texto: var(--azul-950);
     --accion-secundaria: var(--azul-800);
     --foco: var(--azul-400);
+    --velo: color-mix(in srgb, var(--azul-950) 75%, transparent);
+    --esqueleto: var(--azul-800);
+    --esqueleto-brillo: var(--azul-700);
 
     --exito-fondo: var(--verde-900);
     --exito-texto: var(--verde-300);
@@ -111,6 +139,12 @@
     --atencion-texto: var(--ambar-300);
     --peligro-fondo: var(--rojo-900);
     --peligro-texto: var(--rojo-300);
+
+    /* La trama clara se apaga: los ambientes apenas se separan del fondo de la tarjeta. */
+    --trama-clara-fondo: var(--azul-900);
+    --trama-clara-1: color-mix(in srgb, var(--azul-800) 55%, var(--azul-900));
+    --trama-clara-2: var(--azul-800);
+    --trama-clara-3: color-mix(in srgb, var(--azul-800) 25%, var(--azul-900));
   }
 }
 
@@ -136,6 +170,9 @@
   --color-accion-principal-hover: var(--accion-principal-hover);
   --color-accion-principal-texto: var(--accion-principal-texto);
   --color-accion-secundaria: var(--accion-secundaria);
+  --color-velo: var(--velo);
+  --color-esqueleto: var(--esqueleto);
+  --color-esqueleto-brillo: var(--esqueleto-brillo);
 
   --color-exito-fondo: var(--exito-fondo);
   --color-exito-texto: var(--exito-texto);
@@ -147,8 +184,71 @@
   --color-peligro-texto: var(--peligro-texto);
   --color-peligro-borde: var(--peligro-borde);
 
+  --color-superficie-marca: var(--superficie-marca);
+  --color-texto-sobre-marca: var(--texto-sobre-marca);
+  --color-texto-sobre-marca-secundario: var(--texto-sobre-marca-secundario);
+
   /* Bitter: títulos y marca. Chivo: textos e interfaz.
      Las variables --font-bitter y --font-chivo las inyecta layout.js */
   --font-titulo: var(--font-bitter), ui-serif, Georgia, serif;
   --font-texto: var(--font-chivo), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 5. ESQUINA CORTADA: el corte de 30° de los techos del logo, siempre arriba a la izquierda.
+   Va en tarjetas, botones y fotos. Por cada 1 de ancho, el corte baja 0,577 (tan 30°).
+
+   El corte es el del manual:
+     clip-path: polygon(0 calc(var(--corte) * 0.577), var(--corte) 0, 100% 0, 100% 100%, 0 100%);
+   con la misma línea estirada 4 px hacia afuera, para que no se recorten el anillo de foco
+   del teclado (2 px de ancho + 2 px de separación) ni las sombras chicas.
+
+   Uso:
+     esquina-cortada                 corte normal (tarjetas)
+     + corte-chico / corte-grande    botones / fotos y paneles de marca
+     + borde-esquina(-fuerte)        si el elemento tiene borde: dibuja el borde sobre el corte,
+                                     del color de border-borde-suave (o border-borde-fuerte). */
+@utility esquina-cortada {
+  clip-path: polygon(
+    -4px calc(var(--corte, 1.25rem) * 0.57735 + 2.31px),
+    calc(var(--corte, 1.25rem) + 6.93px) -4px,
+    calc(100% + 4px) -4px,
+    calc(100% + 4px) calc(100% + 4px),
+    -4px calc(100% + 4px)
+  );
+}
+
+@utility corte-chico {
+  --corte: 0.875rem;
+}
+
+@utility corte-grande {
+  --corte: 2.25rem;
+}
+
+/* El borde del corte es una línea de 1 px pintada en el fondo, justo sobre la diagonal
+   (el degradado "to bottom right" corta el recuadro de esquina a esquina). */
+@utility borde-esquina {
+  background-image: linear-gradient(
+    to bottom right,
+    transparent 50%,
+    var(--borde-suave) 50%,
+    var(--borde-suave) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
+  background-size: var(--corte, 1.25rem) calc(var(--corte, 1.25rem) * 0.57735);
+  background-repeat: no-repeat;
+  background-origin: border-box;
+}
+
+@utility borde-esquina-fuerte {
+  background-image: linear-gradient(
+    to bottom right,
+    transparent 50%,
+    var(--borde-fuerte) 50%,
+    var(--borde-fuerte) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
+  background-size: var(--corte, 1.25rem) calc(var(--corte, 1.25rem) * 0.57735);
+  background-repeat: no-repeat;
+  background-origin: border-box;
 }

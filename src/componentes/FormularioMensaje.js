@@ -10,7 +10,7 @@ function armarMensaje(unidad) {
   return (
     `Hola, ¿cómo están? Les escribo ${deDonde}. ` +
     "Quería sugerirles Habitando, una plataforma donde los vecinos podemos ver la expensa con el detalle de cada gasto y su factura, " +
-    "los avisos del edificio y el estado de los reclamos. A ustedes les ordena las liquidaciones y los pagos, " +
+    "los avisos del edificio y el estado de los arreglos. A ustedes les ordena las liquidaciones y los pagos, " +
     "y nos ahorraría muchas preguntas a todos. Para los vecinos es gratis. ¿Lo podrían ver?"
   );
 }

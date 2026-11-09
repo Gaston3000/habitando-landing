@@ -9,7 +9,7 @@ const PREGUNTAS = {
     {
       pregunta: "¿Y si mi administración no lo usa?",
       respuesta:
-        "Mandale el mensaje que te dejamos acá abajo. Si lo suma, te llega una invitación a tu mail para entrar con tu unidad.",
+        "Mandale el mensaje que te dejamos acá abajo. Si lo suma, te pasa el código del edificio y con eso te sumás a tu unidad.",
     },
     {
       pregunta: "¿Tengo que instalar algo?",
@@ -23,7 +23,7 @@ const PREGUNTAS = {
     {
       pregunta: "¿Cambia la forma de pagar?",
       respuesta:
-        "No. Pagás como siempre y después subís el comprobante desde tu unidad, así la administración lo ve en el momento.",
+        "No. Pagás como siempre y después informás el pago desde tu unidad, con el comprobante si lo tenés. La administración lo ve y lo confirma.",
     },
   ],
   administraciones: [

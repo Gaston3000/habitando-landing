@@ -103,14 +103,14 @@ export default function PantallaVecino({ llegando }) {
           <article className="tarjeta">
             <p className="tarjeta-etiqueta">
               <Icono nombre="reclamos" />
-              Tu reclamo
+              Tu pedido de arreglo
             </p>
             <div className="fila">
               <p>Filtración en el palier</p>
               <ChipEstado tipo="proceso" texto="En curso" />
             </div>
           </article>
-          <p className="app-boton corte-11">Subir comprobante de pago</p>
+          <p className="app-boton corte-11">Informar un pago</p>
         </div>
       </div>
     </div>

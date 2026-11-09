@@ -3,15 +3,15 @@ const PASOS = {
     titulo: "Cómo llega Habitando a tu edificio",
     pasos: [
       { titulo: "Le contás a tu administración", texto: "Con el mensaje que te dejamos acá abajo." },
-      { titulo: "La administración carga el edificio", texto: "Y te manda una invitación a tu mail." },
-      { titulo: "Entrás y ves tu unidad", texto: "Tu expensa, tus pagos y tus reclamos desde el primer día." },
+      { titulo: "La administración carga el edificio", texto: "Y te pasa el código del edificio." },
+      { titulo: "Te sumás con el código", texto: "Elegís tu unidad y ves tu expensa, tus pagos y tus arreglos desde el primer día." },
     ],
   },
   administraciones: {
     titulo: "Cómo empezar",
     pasos: [
       { titulo: "Cargás el edificio", texto: "Con sus unidades y el porcentaje de cada una." },
-      { titulo: "Invitás a los vecinos", texto: "Cada uno entra con su mail y ve solamente su unidad." },
+      { titulo: "Compartís el código del edificio", texto: "Cada vecino se suma con el código o el QR y ve solamente su unidad." },
       { titulo: "Cerrás el primer mes", texto: "Cargás los gastos, revisás la liquidación y la publicás." },
     ],
   },

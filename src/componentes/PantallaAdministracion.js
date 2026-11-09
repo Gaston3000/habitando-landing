@@ -25,7 +25,7 @@ const NOTIFICACIONES = [
 
 const PAGOS = [
   { unidad: "UF 7 · 3º B", monto: "$ 84.300", detalle: "Transferencia, hace 5 minutos" },
-  { unidad: "UF 2 · 1º A", monto: "$ 61.200", detalle: "Depósito, comprobante cargado por el vecino" },
+  { unidad: "UF 2 · 1º A", monto: "$ 61.200", detalle: "Depósito, informado por el vecino" },
   { unidad: "UF 3 · PB C", monto: "$ 23.000", detalle: "Efectivo, pago parcial" },
 ];
 

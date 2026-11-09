@@ -3,8 +3,8 @@
   Se suman a tema.css (que es una copia del de la app y no se toca).
 
   Acá van:
-  1. Los colores que solo usa la landing (trama, bloques de reparto, banda final, teléfono),
-     nombrados por rol como en tema.css.
+  1. Los colores que solo usa la landing (trama del héroe, bloques de reparto, teléfono),
+     nombrados por rol como en tema.css. La banda final usa los de marca de tema.css.
   2. Un corte de pantalla (escritorio) y los tamaños de título que crecen con la pantalla.
   3. Utilidades de la marca: el corte de 30° y la caja de contenido.
   4. Lo que no es interfaz sino dibujo: la bienvenida, la trama y el teléfono de la escena.
@@ -32,11 +32,6 @@
   --bloque-celeste: var(--azul-300);
   --bloque-celeste-texto: var(--azul-900);
 
-  /* La banda final usa la trama oscura en los dos temas */
-  --banda: var(--azul-900);
-  --banda-texto: var(--azul-50);
-  --banda-texto-secundario: var(--azul-300);
-
   --telefono: var(--azul-950);
   --telefono-borde: transparent;
   --sombra: rgb(14 24 41 / 0.28);
@@ -61,7 +56,6 @@
     --bloque-celeste: #1b2c47;
     --bloque-celeste-texto: var(--azul-50);
 
-    --banda: #0a1220;
     --telefono: #060b14;
     --telefono-borde: var(--azul-700);
     --sombra: rgb(0 0 0 / 0.55);
@@ -79,10 +73,6 @@
   --color-bloque-suave: var(--bloque-suave);
   --color-bloque-celeste: var(--bloque-celeste);
   --color-bloque-celeste-texto: var(--bloque-celeste-texto);
-
-  --color-banda: var(--banda);
-  --color-banda-texto: var(--banda-texto);
-  --color-banda-texto-secundario: var(--banda-texto-secundario);
 
   --color-numero-paso: var(--numero-paso);
 }
@@ -263,17 +253,17 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   fill: var(--trama-resalte);
 }
 
-/* La trama oscura de la banda final */
+/* La trama oscura de la banda final, con los tonos de tema.css */
 .trama-oscura-1 {
-  fill: var(--azul-800);
+  fill: var(--trama-oscura-1);
 }
 
 .trama-oscura-2 {
-  fill: var(--azul-700);
+  fill: var(--trama-oscura-2);
 }
 
 .trama-oscura-3 {
-  fill: var(--azul-600);
+  fill: var(--trama-oscura-3);
 }
 
 /* 7. TELÉFONO DE LA ESCENA */

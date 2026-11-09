@@ -9,7 +9,7 @@ import { useBienvenidaActiva, useMovimientoReducido } from "@/lib/pagina";
 const TEXTOS = {
   vecinos: {
     titulo: ["Dejá de preguntar", "en el grupo del edificio."],
-    bajada: ["Tu expensa con cada factura,", "los avisos del edificio y tus reclamos, en un solo lugar."],
+    bajada: ["Tu expensa con cada factura,", "los avisos del edificio y tus arreglos, en un solo lugar."],
     boton: "Contale a tu administración",
     enlace: "Qué vas a ver",
   },

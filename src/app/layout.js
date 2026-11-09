@@ -15,7 +15,7 @@ const chivo = Chivo({
 
 export const metadata = {
   title: "habitando",
-  description: "Expensas, avisos y reclamos del edificio en un solo lugar, para vecinos y administraciones.",
+  description: "Expensas, avisos y arreglos del edificio en un solo lugar, para vecinos y administraciones.",
 };
 
 // Corre antes de pintar la página, así no parpadea:
