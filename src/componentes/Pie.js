@@ -134,6 +134,8 @@ function ApagadoSalas({ desfase }) {
         {/* Debajo de cada sala encendida va blanco, como el fondo de la banda final */}
         {dibujar(encendidas, () => "sala-base")}
         <g mask="url(#mascara-corte)">{dibujar(encendidas, (sala) => `sala-encendida-${sala.tono}`)}</g>
+        {/* Las salas claras del corte también se encienden al pasar el mouse (ver TramaLuces.js) */}
+        {dibujar(encendidas, () => "luz")}
       </g>
     </svg>
   );

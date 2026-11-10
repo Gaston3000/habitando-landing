@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Sala from "@/componentes/Sala";
 import { useMovimientoReducido } from "@/lib/pagina";
-import { ALTO_MODULO, ANCHO_MODULO, altoSala, SALAS } from "@/lib/trama";
+import { ALTO_MODULO, ANCHO_MODULO, SALAS } from "@/lib/trama";
 
 // Misma escala que la trama clara de la banda final, así cada luz cae justo sobre su sala
 const ESCALA = 0.8;
@@ -11,6 +11,8 @@ const ANCHO = ANCHO_MODULO * ESCALA;
 const ALTO = ALTO_MODULO * ESCALA;
 // Hasta qué distancia del cursor se encienden las salas, en px
 const ALCANCE = 110;
+// Lo que baja el corte con el pie por debajo de la banda (ABAJO en Pie.js): ahí también se encienden las salas claras
+const FRANJA_PIE = 96;
 
 const CONSULTA_MOUSE = "(hover: hover) and (pointer: fine)";
 
@@ -27,27 +29,13 @@ function useHayMouse() {
   );
 }
 
-function cajaSala(sala) {
-  if (sala.rect) return sala.rect;
-  const xs = sala.puntos.split(" ").map((punto) => Number(punto.split(",")[0]));
-  const [arriba, abajo] = altoSala(sala);
-  return [Math.min(...xs), arriba, Math.max(...xs) - Math.min(...xs), abajo - arriba];
-}
-
-// Todas las salas que cubren la banda, con su caja en px dentro de la banda (para medir la distancia al cursor)
+// Todas las salas que cubren la banda
 function armarLuces({ columnas, filas }) {
   const luces = [];
   for (let fila = 0; fila < filas; fila++) {
     for (let columna = 0; columna < columnas; columna++) {
       SALAS.forEach((sala, indice) => {
-        const [x, y, ancho, alto] = cajaSala(sala);
-        luces.push({
-          clave: `${columna}-${fila}-${indice}`,
-          columna,
-          fila,
-          sala,
-          caja: [columna * ANCHO + x * ESCALA, fila * ALTO + y * ESCALA, ancho * ESCALA, alto * ESCALA],
-        });
+        luces.push({ clave: `${columna}-${fila}-${indice}`, columna, fila, sala });
       });
     }
   }
@@ -56,6 +44,7 @@ function armarLuces({ columnas, filas }) {
 
 // Al pasar el mouse por la banda final, las salas cercanas se encienden en un celeste más fuerte, nítidas, y al irse
 // se apagan de a poco, dejando un rastro. Va encima de la trama clara, con las salas en el mismo lugar.
+// También se encienden las salas claras del corte con el pie (las dibuja Pie.js, también con la clase "luz").
 // Sobre el formulario no pasa nada, para no distraer mientras alguien lo completa.
 export default function TramaLuces() {
   const hayMouse = useHayMouse();
@@ -78,13 +67,22 @@ export default function TramaLuces() {
 
   useEffect(() => {
     if (!activa || !medidas) return;
-    const svg = refSvg.current;
-    const banda = svg.parentElement;
-    // Mismo orden que en el dibujo: la luz número i es la sala número i de armarLuces
-    const luces = [...svg.querySelectorAll(".luz")];
-    const cajas = armarLuces(medidas).map((luz) => luz.caja);
+    const banda = refSvg.current.parentElement;
+    let luces = [];
+    let cajas = [];
+    let adentro = false;
     let encendidas = new Set();
     let cuadro = 0;
+
+    // Las cajas se miden al entrar a la zona, relativas a la banda: no cambian con el scroll
+    function medirLuces(cajaBanda) {
+      luces = [...document.querySelectorAll(".luz")];
+      cajas = luces.map((luz) => {
+        const caja = luz.getBoundingClientRect();
+        return [caja.left - cajaBanda.left, caja.top - cajaBanda.top, caja.width, caja.height];
+      });
+      encendidas = new Set();
+    }
 
     function encender(x, y) {
       const nuevas = new Set();
@@ -98,29 +96,30 @@ export default function TramaLuces() {
       encendidas = nuevas;
     }
 
+    // Se escucha en toda la página porque la zona sigue debajo de la banda, en el corte con el pie
     function alMover(evento) {
       cancelAnimationFrame(cuadro);
       cuadro = requestAnimationFrame(() => {
-        if (evento.target.closest("form")) {
-          encender(-Infinity, -Infinity);
+        const cajaBanda = banda.getBoundingClientRect();
+        const x = evento.clientX - cajaBanda.left;
+        const y = evento.clientY - cajaBanda.top;
+        const enZona = y >= 0 && y <= cajaBanda.height + FRANJA_PIE && !evento.target.closest("form");
+
+        if (!enZona) {
+          if (adentro) encender(-Infinity, -Infinity);
+          adentro = false;
           return;
         }
-        const caja = banda.getBoundingClientRect();
-        encender(evento.clientX - caja.left, evento.clientY - caja.top);
+        if (!adentro) medirLuces(cajaBanda);
+        adentro = true;
+        encender(x, y);
       });
     }
 
-    function alSalir() {
-      cancelAnimationFrame(cuadro);
-      encender(-Infinity, -Infinity);
-    }
-
-    banda.addEventListener("pointermove", alMover);
-    banda.addEventListener("pointerleave", alSalir);
+    document.addEventListener("pointermove", alMover);
     return () => {
       cancelAnimationFrame(cuadro);
-      banda.removeEventListener("pointermove", alMover);
-      banda.removeEventListener("pointerleave", alSalir);
+      document.removeEventListener("pointermove", alMover);
     };
   }, [activa, medidas]);
 
