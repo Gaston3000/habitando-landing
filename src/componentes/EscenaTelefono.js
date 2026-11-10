@@ -6,16 +6,16 @@ import PantallaVecino from "@/componentes/PantallaVecino";
 
 const OPCIONES = [
   { estado: "hoy", texto: "Hoy" },
-  { estado: "con", texto: "Con Habitando" },
+  { estado: "con", texto: "Con habitando" },
 ];
 
 // Tiempos del cambio automático, en milisegundos
 const LLEGA_EL_MENSAJE = 750;
 const ENTRA_HABITANDO = 2900;
 
-// El teléfono con "Hoy" y "Con Habitando".
+// El teléfono con "Hoy" y "Con habitando".
 // Con "automatica", la escena arranca en "Hoy", llega un mensaje más y a los 3 segundos pasa sola a
-// "Con Habitando"; mientras tanto, una barrita avanza en el botón. Para que vuelva a empezar
+// "Con habitando"; mientras tanto, una barrita avanza en el botón. Para que vuelva a empezar
 // (por ejemplo, al cambiar de perfil), el héroe la vuelve a montar con otra "key".
 export default function EscenaTelefono({ automatica, movimientoReducido }) {
   const [estado, setEstado] = useState("hoy");
@@ -42,7 +42,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
     return cancelarEsperas;
   }, [automatica]);
 
-  // La pantalla de Habitando entra barriendo en diagonal, con el mismo corte de 30° del logo.
+  // La pantalla de habitando entra barriendo en diagonal, con el mismo corte de 30° del logo.
   useEffect(() => {
     const capas = refEscena.current.querySelectorAll(".capa-con");
     capas.forEach((capa) => capa.getAnimations().forEach((animacion) => animacion.cancel()));
@@ -84,7 +84,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
       {/* En escritorio va al costado izquierdo del teléfono, en vertical: así el alto queda entero para el teléfono */}
       <div
         role="group"
-        aria-label="Comparar cómo es hoy y cómo es con Habitando"
+        aria-label="Comparar cómo es hoy y cómo es con habitando"
         className={`selector-escena inline-flex gap-0.75 bg-superficie-zona p-0.75 corte-12 escritorio:-order-1 escritorio:mb-6 escritorio:flex-col escritorio:corte-14 ${
           avanzando ? "avanzando" : ""
         }`}

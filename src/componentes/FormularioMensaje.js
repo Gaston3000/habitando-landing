@@ -9,13 +9,13 @@ import { CLASES_BOTON, CLASES_ENLACE } from "@/lib/clases";
 function armarMensaje(unidad) {
   const quienSoy = unidad.trim() ? ` Soy del ${unidad.trim()}.` : "";
   return (
-    `Hola, buen día.${quienSoy} Les quería pasar una app que se llama Habitando: ` +
+    `Hola, buen día.${quienSoy} Les quería pasar una app que se llama habitando: ` +
     "ahí los vecinos podemos ver la expensa con las facturas, los avisos y en qué quedó cada arreglo. " +
     "A ustedes les ordena la liquidación y los pagos, y para nosotros es gratis. ¿Le pueden echar un vistazo? ¡Gracias!"
   );
 }
 
-// El vecino no contrata Habitando: se lo sugiere a su administración.
+// El vecino no contrata habitando: se lo sugiere a su administración.
 // Le dejamos el mensaje escrito y corto, mostrado como le va a llegar (una burbuja de chat), para que lo copie y se lo mande.
 // Mientras no lo toque, se completa con su unidad. "Editar el mensaje" lo pasa a un campo de texto.
 export default function FormularioMensaje({ className }) {

@@ -45,7 +45,7 @@ function Notificacion({ icono, de, cuando, texto, orden }) {
 }
 
 // Lo que ve la administración en el celular: hoy, la pantalla bloqueada llena de consultas;
-// con Habitando, las expensas publicadas y los pagos que van entrando.
+// con habitando, las expensas publicadas y los pagos que van entrando.
 export default function PantallaAdministracion({ llegando }) {
   return (
     <div className="pantalla" data-solo="administraciones">

@@ -228,10 +228,10 @@ const FUNCIONES = {
   },
 };
 
-// Qué hace Habitando, en la grilla de bloques de reparto.
+// Qué hace habitando, en la grilla de bloques de reparto.
 export default function Funciones() {
   return (
-    <section id="funciones" aria-label="Qué hace Habitando" className="espacio-seccion">
+    <section id="funciones" aria-label="Qué hace habitando" className="espacio-seccion">
       <div className="contenedor">
         {Object.entries(FUNCIONES).map(([id, funciones]) => (
           <div key={id} data-solo={id}>

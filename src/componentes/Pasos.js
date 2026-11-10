@@ -5,7 +5,7 @@ import { useAparecerEnPantalla } from "@/lib/aparecer";
 
 const PASOS = {
   vecinos: {
-    titulo: "Así llega Habitando a tu edificio.",
+    titulo: "Así llega habitando a tu edificio.",
     pasos: [
       { titulo: "Le contás a tu administración", texto: "Con el mensaje que te dejamos acá abajo." },
       { titulo: "La administración carga el edificio", texto: "Y te pasa el código del edificio." },
@@ -30,7 +30,7 @@ const TAMANOS = [
 ];
 
 // Cada paso es una torre con el techo cortado a 30°, como las del logo, y cada una más alta que la anterior:
-// el edificio crece con Habitando. En escritorio, la sección termina en la base de las torres:
+// el edificio crece con habitando. En escritorio, la sección termina en la base de las torres:
 // el fondo de la sección siguiente es el piso. Al aparecer en pantalla, suben desde el piso una sola vez.
 // En el celular, las torres se acuestan y salen de una línea a la izquierda.
 function Torres({ pasos }) {

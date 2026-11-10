@@ -2,7 +2,7 @@ import ChipEstado from "@/componentes/ChipEstado";
 import Icono from "@/componentes/Icono";
 import Simbolo from "@/componentes/Simbolo";
 
-// Mensajes del grupo del edificio. "orden" escalona cómo se van cuando entra Habitando.
+// Mensajes del grupo del edificio. "orden" escalona cómo se van cuando entra habitando.
 const MENSAJES = [
   { autor: "3º B", texto: "¿Alguien entiende por qué vino tan alta la expensa?", hora: "21:14", orden: 1 },
   { autor: "1º A", texto: "Yo tampoco. El recibo es un choclo", hora: "21:16", orden: 2 },
@@ -21,7 +21,7 @@ function Globo({ autor, texto, hora, orden }) {
   );
 }
 
-// Lo que ve un vecino en el celular: hoy, el grupo del edificio; con Habitando, su unidad.
+// Lo que ve un vecino en el celular: hoy, el grupo del edificio; con habitando, su unidad.
 // "llegando" esconde el último mensaje hasta que entra, como si recién llegara.
 export default function PantallaVecino({ llegando }) {
   return (

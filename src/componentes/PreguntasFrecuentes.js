@@ -10,7 +10,7 @@ const PREGUNTAS = {
   vecinos: [
     {
       pregunta: "¿Tengo que pagar algo?",
-      respuesta: "No. Habitando lo contrata la administración y para los vecinos es gratis.",
+      respuesta: "No. habitando lo contrata la administración y para los vecinos es gratis.",
     },
     {
       pregunta: "¿Y si mi administración no lo usa?",
@@ -40,7 +40,7 @@ const PREGUNTAS = {
     {
       pregunta: "¿Cómo empiezo si hoy trabajo con Excel?",
       respuesta:
-        "Cargás cada edificio con sus unidades y el porcentaje de cada una. Desde ese mes, los gastos se cargan en Habitando y la expensa se arma sola.",
+        "Cargás cada edificio con sus unidades y el porcentaje de cada una. Desde ese mes, los gastos se cargan en habitando y la expensa se arma sola.",
     },
     {
       pregunta: "¿Los vecinos tienen que instalar algo?",

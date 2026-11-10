@@ -15,7 +15,7 @@ const TEXTOS = {
   },
   administraciones: {
     titulo: ["Contestá una vez.", "No cuarenta."],
-    bajada: ["Cargás los gastos y Habitando arma las expensas.", "Cada vecino ve el detalle de la suya sin tener que llamarte."],
+    bajada: ["Cargás los gastos y habitando arma las expensas.", "Cada vecino ve el detalle de la suya sin tener que llamarte."],
     boton: "Pedí una demo",
     enlace: "Qué incluye",
   },
@@ -24,7 +24,7 @@ const TEXTOS = {
 // Lo que asoma de la sección siguiente por debajo del héroe, en escritorio
 const ASOMA = 28;
 
-// Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con Habitando".
+// Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con habitando".
 // En escritorio el héroe ocupa justo una pantalla (menos el encabezado) y el teléfono se achica
 // para que entre entero; en el celular va debajo del texto.
 export default function Heroe({ perfil }) {

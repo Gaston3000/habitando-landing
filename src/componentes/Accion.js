@@ -63,7 +63,7 @@ export default function Accion() {
       <div data-solo="vecinos" className={CLASES_GRILLA}>
         <Llamado
           titulo="Contale a tu administración."
-          texto="Habitando lo contrata la administración: el primer paso lo das vos."
+          texto="habitando lo contrata la administración: el primer paso lo das vos."
         />
         <FormularioMensaje className={CLASES_FORMULARIO} />
       </div>
@@ -71,7 +71,7 @@ export default function Accion() {
       <div data-solo="administraciones" className={CLASES_GRILLA}>
         <Llamado
           titulo="Probalo con uno de tus edificios."
-          texto="Contanos cuántas unidades administrás y te mostramos Habitando funcionando con un edificio tuyo."
+          texto="Contanos cuántas unidades administrás y te mostramos habitando funcionando con un edificio tuyo."
         />
         <FormularioDemo className={CLASES_FORMULARIO} />
       </div>

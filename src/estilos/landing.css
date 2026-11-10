@@ -323,7 +323,7 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   flex-direction: column;
 }
 
-/* "Hoy" se va hacia arriba elemento por elemento (--orden) cuando entra "Con Habitando" */
+/* "Hoy" se va hacia arriba elemento por elemento (--orden) cuando entra "Con habitando" */
 .escena[data-estado="hoy"] .capa-con {
   visibility: hidden;
 }
@@ -559,7 +559,7 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   text-overflow: ellipsis;
 }
 
-/* La app, en la capa "Con Habitando" */
+/* La app, en la capa "Con habitando" */
 .capa-con {
   background: var(--superficie-pagina);
   color: var(--texto-principal);
@@ -762,7 +762,7 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
 
 /* La pantalla nueva entra barriendo en diagonal, con el corte de 30° del logo (ver EscenaTelefono.js) */
 
-/* Mientras corre el cambio automático, una barrita avanza en "Con Habitando" hasta que cambia la pantalla */
+/* Mientras corre el cambio automático, una barrita avanza en "Con habitando" hasta que cambia la pantalla */
 .selector-escena.avanzando [data-estado-boton="con"]::after {
   content: "";
   position: absolute;

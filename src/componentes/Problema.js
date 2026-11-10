@@ -126,7 +126,7 @@ export default function Problema({ perfil, alVerElOtroLado }) {
 
         {/* La frase que cierra el problema y abre la solución. En escritorio, un renglón por oración. */}
         <p className="mt-[clamp(2.5rem,4vw,3.5rem)] font-titulo text-[clamp(1.2rem,1.8vw,1.4rem)] leading-[1.4] font-semibold text-balance">
-          <span className="lg:block">Habitando no inventa información nueva.</span>{" "}
+          <span className="lg:block">habitando no inventa información nueva.</span>{" "}
           <span className="lg:block">Muestra la que la administración ya tiene a quien la necesita, cuando la necesita.</span>
         </p>
       </div>
