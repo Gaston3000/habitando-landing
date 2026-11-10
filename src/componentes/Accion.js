@@ -1,6 +1,7 @@
 import FormularioDemo from "@/componentes/FormularioDemo";
 import FormularioMensaje from "@/componentes/FormularioMensaje";
 import Sala from "@/componentes/Sala";
+import TramaLuces from "@/componentes/TramaLuces";
 import { ALTO_MODULO, ANCHO_MODULO, SALAS } from "@/lib/trama";
 
 // El formulario es una sala más de la planta: blanco, con el corte de 30°, un borde fino y una sombra suave.
@@ -57,6 +58,7 @@ export default function Accion() {
   return (
     <section id="accion" aria-label="Empezar" className="siempre-claro relative overflow-hidden bg-superficie-elevada text-texto-principal">
       <TramaClara />
+      <TramaLuces />
 
       <div data-solo="vecinos" className={CLASES_GRILLA}>
         <Llamado

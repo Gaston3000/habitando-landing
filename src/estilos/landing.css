@@ -1077,3 +1077,15 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
 .parada-marino {
   stop-color: var(--superficie-marca);
 }
+
+/* Luces de la banda final (ver TramaLuces.js): se encienden rápido y se apagan despacio, dejando un rastro */
+.luz {
+  fill: var(--azul-300);
+  opacity: 0;
+  transition: opacity 1.4s ease-out;
+}
+
+.luz.encendida {
+  opacity: 1;
+  transition-duration: 0.12s;
+}
