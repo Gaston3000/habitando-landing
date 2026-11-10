@@ -1030,3 +1030,29 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
   --trama-clara-2: var(--azul-200);
   --trama-clara-3: var(--azul-50);
 }
+
+/* Corte entre la banda final y el pie (ver ApagadoSalas en Pie.js): salas encendidas con los tonos de la trama clara
+   y apagadas con los de la trama oscura */
+.sala-encendida-1 {
+  fill: var(--azul-100);
+}
+
+.sala-encendida-2 {
+  fill: var(--azul-200);
+}
+
+.sala-encendida-3 {
+  fill: var(--azul-50);
+}
+
+.sala-apagada-1 {
+  fill: var(--trama-oscura-1);
+}
+
+.sala-apagada-2 {
+  fill: var(--trama-oscura-2);
+}
+
+.sala-apagada-3 {
+  fill: var(--trama-oscura-3);
+}

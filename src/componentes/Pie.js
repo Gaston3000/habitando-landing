@@ -5,7 +5,7 @@ import Isologo from "@/componentes/Isologo";
 import Sala from "@/componentes/Sala";
 import { CLASES_ENLACE } from "@/lib/clases";
 import { URL_INGRESAR } from "@/lib/enlaces";
-import { ALTO_MODULO, ANCHO_MODULO, SALAS } from "@/lib/trama";
+import { ALTO_MODULO, ANCHO_MODULO, altoSala, SALAS } from "@/lib/trama";
 
 // La trama de la banda final y la del pie van a la misma escala, así los ambientes coinciden en el corte
 const ESCALA_TRAMA = 0.8;
@@ -17,10 +17,9 @@ const SECCIONES = [
   { texto: "Preguntas frecuentes", ancla: "#preguntas" },
 ];
 
-// Arriba del pie sigue la trama de la banda final, en su versión oscura: es el mismo plano, solo cambia la luz.
-// Para que los ambientes sigan del otro lado del corte, el patrón se corre lo que mide la banda final
-// (módulo el alto de una fila de la trama). Se apaga hacia abajo, donde está el texto.
-function TramaPie() {
+// Para que los ambientes sigan del otro lado del corte, la trama del pie se corre lo que mide la banda final
+// (módulo el alto de una fila de la trama). Se mide cada vez que la banda cambia de tamaño.
+function useDesfaseTrama() {
   const [desfase, setDesfase] = useState(0);
 
   useEffect(() => {
@@ -30,6 +29,12 @@ function TramaPie() {
     return () => observador.disconnect();
   }, []);
 
+  return desfase;
+}
+
+// Arriba del pie sigue la trama de la banda final, en su versión oscura: es el mismo plano, solo cambia la luz.
+// Se apaga hacia abajo, donde está el texto.
+function TramaPie({ desfase }) {
   return (
     <svg
       aria-hidden="true"
@@ -53,9 +58,59 @@ function TramaPie() {
   );
 }
 
+// Cuánto entra la transición en la banda final (sin tocar el formulario) y cuánto baja en el pie (sin llegar al texto)
+const ARRIBA = 56;
+const ABAJO = 96;
+const COLUMNAS = 10;
+
+// Número entre 0 y 1 que siempre da lo mismo para la misma sala: así el apagado es igual en el servidor y en el navegador
+function azarDeSala(columna, fila, indice) {
+  const mezcla = Math.imul(columna + 7, 73856093) ^ Math.imul(fila + 11, 19349663) ^ Math.imul(indice + 13, 83492791);
+  return ((mezcla >>> 0) % 1000) / 1000;
+}
+
+// El corte entre la banda final y el pie no es una línea recta: las salas se apagan de a una, como un edificio de noche.
+// Cerca del corte, algunas salas de la banda ya están oscuras y algunas del pie siguen encendidas; cuanto más abajo,
+// más salas apagadas. Cada sala es clara u oscura (sin tonos intermedios), así el dibujo sigue nítido.
+function ApagadoSalas({ desfase }) {
+  const salas = [];
+  for (let fila = -1; fila <= 1; fila++) {
+    for (let columna = 0; columna < COLUMNAS; columna++) {
+      const x = columna * ANCHO_MODULO * ESCALA_TRAMA;
+      const y = fila * ALTO_TRAMA - desfase;
+      SALAS.forEach((sala, indice) => {
+        const [arriba, abajo] = altoSala(sala).map((valor) => y + valor * ESCALA_TRAMA);
+        // Solo las salas que entran enteras en la franja de la transición
+        if (arriba < -ARRIBA || abajo > ABAJO) return;
+        const avance = ((arriba + abajo) / 2 + ARRIBA) / (ARRIBA + ABAJO);
+        const apagada = azarDeSala(columna, fila, indice) < avance;
+        salas.push({ clave: `${columna}-${fila}-${indice}`, x, y, sala, clase: `sala-${apagada ? "apagada" : "encendida"}-${sala.tono}` });
+      });
+    }
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 block w-full"
+      style={{ top: -ARRIBA, height: ARRIBA + ABAJO }}
+    >
+      <g transform={`translate(0 ${ARRIBA})`}>
+        {salas.map(({ clave, x, y, sala, clase }) => (
+          <g key={clave} transform={`translate(${x} ${y}) scale(${ESCALA_TRAMA})`}>
+            <Sala sala={sala} className={clase} />
+          </g>
+        ))}
+      </g>
+    </svg>
+  );
+}
+
 // Pie de la página, siempre oscuro (fondo de marca de tema.css): la marca con su frase, atajos a cada versión
 // y a las preguntas, "Ingresar" para quien ya usa la app y, abajo, la letra chica.
 export default function Pie({ alVerPerfil, alRepetirBienvenida }) {
+  const desfase = useDesfaseTrama();
+
   // Las preguntas se buscan sin cambiar la dirección: así el perfil elegido (#vecinos o #administraciones) se mantiene
   function irASeccion(evento, seccion) {
     evento.preventDefault();
@@ -64,8 +119,9 @@ export default function Pie({ alVerPerfil, alRepetirBienvenida }) {
   }
 
   return (
-    <footer className="relative overflow-hidden bg-superficie-marca text-texto-sobre-marca">
-      <TramaPie />
+    <footer className="relative bg-superficie-marca text-texto-sobre-marca">
+      <TramaPie desfase={desfase} />
+      <ApagadoSalas desfase={desfase} />
 
       <div className="contenedor relative pt-24 pb-8 md:pt-36">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)]">

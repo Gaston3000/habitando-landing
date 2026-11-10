@@ -60,3 +60,10 @@ export function armarPlano(ancho, alto) {
   const moduloTuyo = modulos.find((modulo) => modulo.tuyo);
   return { modulos, unidad: { x: moduloTuyo.x + CENTRO_TUYA[0], y: moduloTuyo.y + CENTRO_TUYA[1] } };
 }
+
+// Dónde empieza y dónde termina una sala en alto, dentro del módulo: [arriba, abajo]
+export function altoSala(sala) {
+  if (sala.rect) return [sala.rect[1], sala.rect[1] + sala.rect[3]];
+  const ys = sala.puntos.split(" ").map((punto) => Number(punto.split(",")[1]));
+  return [Math.min(...ys), Math.max(...ys)];
+}
