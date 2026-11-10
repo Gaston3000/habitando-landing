@@ -6,15 +6,17 @@ import TramaPiso from "@/componentes/TramaPiso";
 import { CLASES_ENLACE } from "@/lib/clases";
 
 // Cada lado con lo que encontramos en la investigación: la encuesta a vecinos y la entrevista al administrador.
+// Los porcentajes de la encuesta van como "3 de cada 4", que se entiende más rápido; el redondeo nunca infla el dato
+// (74 % → 3 de cada 4, 47 % → casi la mitad, 41 % → 4 de cada 10) y los valores exactos quedan en la fuente.
 const LADOS = {
   vecinos: {
     titulo: "Los vecinos",
     datos: [
-      { cifra: "74", porcentaje: true, texto: "se enteró tarde de algo importante del edificio: una obra, un corte, un aumento." },
-      { cifra: "47", porcentaje: true, texto: "tuvo que preguntar, cada vez, cómo iba su propio reclamo." },
-      { cifra: "41", porcentaje: true, texto: "tiene poca o ninguna confianza en cómo se administra la plata." },
+      { cifra: "3 de cada 4", texto: "se enteraron tarde de algo importante del edificio: una obra, un corte, un aumento." },
+      { cifra: "Casi la mitad", texto: "tuvo que preguntar, cada vez, cómo iba su propio reclamo." },
+      { cifra: "4 de cada 10", texto: "tienen poca o ninguna confianza en cómo se administra la plata." },
     ],
-    fuente: "Encuesta a 86 vecinos de Capital y Gran Buenos Aires, septiembre de 2026.",
+    fuente: "Encuesta a 86 vecinos de Capital y Gran Buenos Aires, septiembre de 2026 (74 %, 47 % y 41 %).",
     cita: "Que el recibo de las expensas sea un choclo y no poder entender nada.",
     autorCita: "Un vecino, en la encuesta",
     conteo: "Lo preguntan una vez.",
@@ -23,9 +25,9 @@ const LADOS = {
   administraciones: {
     titulo: "La administración",
     datos: [
-      { cifra: "24", texto: "edificios que se liquidan todos juntos, en la última semana del mes." },
-      { cifra: "6", texto: "herramientas que no se hablan entre sí: un sistema para liquidar, tres casillas de mail, WhatsApp y Excel." },
-      { cifra: "1", texto: "Excel para seis personas, que esperan turno para usarlo." },
+      { cifra: "24 edificios", texto: "que se liquidan todos juntos, en la última semana del mes." },
+      { cifra: "6 herramientas", texto: "que no se hablan entre sí: un sistema para liquidar, tres casillas de mail, WhatsApp y Excel." },
+      { cifra: "1 Excel", texto: "para seis personas, que esperan turno para usarlo." },
     ],
     fuente: "Entrevista en profundidad a un administrador matriculado, septiembre de 2026.",
     cita: "Como todo es Excel, no se pueden sincronizar los archivos en vivo. Tenemos que esperar a terminar uno, pasárselo, y recién ahí seguir.",
@@ -59,15 +61,9 @@ function Lado({ id, lado, esOtroLado, alVerElOtroLado }) {
       <div>
         <ul className="border-t border-borde-suave">
           {lado.datos.map((dato) => (
-            <li
-              key={dato.cifra}
-              className="grid grid-cols-[4.4rem_minmax(0,1fr)] items-baseline gap-x-4 border-b border-borde-suave py-3.5"
-            >
-              <p className="font-titulo text-[2rem] leading-none font-bold tracking-[-0.02em] whitespace-nowrap tabular-nums">
-                {dato.cifra}
-                {dato.porcentaje && <small className="text-[0.5em] tracking-normal">%</small>}
-              </p>
-              <p className="text-texto-secundario">{dato.texto}</p>
+            <li key={dato.cifra} className="border-b border-borde-suave py-3.5">
+              <p className="font-titulo text-[1.5rem] leading-tight font-bold tracking-[-0.01em]">{dato.cifra}</p>
+              <p className="mt-1 text-texto-secundario">{dato.texto}</p>
             </li>
           ))}
         </ul>
