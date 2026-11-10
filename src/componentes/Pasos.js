@@ -30,8 +30,9 @@ const TAMANOS = [
 ];
 
 // Cada paso es una torre con el techo cortado a 30°, como las del logo, y cada una más alta que la anterior:
-// el edificio crece con Habitando. Se paran sobre la misma línea de piso de la bienvenida.
-// Al aparecer en pantalla, suben desde el piso una sola vez. En el celular, las torres se acuestan.
+// el edificio crece con Habitando. En escritorio, la sección termina en la base de las torres:
+// el fondo de la sección siguiente es el piso. Al aparecer en pantalla, suben desde el piso una sola vez.
+// En el celular, las torres se acuestan y salen de una línea a la izquierda.
 function Torres({ pasos }) {
   const [refTorres, estado] = useAparecerEnPantalla(0.3);
 
@@ -39,7 +40,7 @@ function Torres({ pasos }) {
     <ol
       ref={refTorres}
       data-estado={estado}
-      className="torres mt-[clamp(2.5rem,4vw,3.5rem)] grid gap-3 overflow-hidden border-torre max-md:border-l-2 md:grid-cols-3 md:items-end md:gap-[clamp(0.75rem,2vw,1.5rem)] md:border-b-2"
+      className="torres mt-[clamp(2.5rem,4vw,3.5rem)] grid gap-3 overflow-hidden border-torre max-md:border-l-2 md:grid-cols-3 md:items-end md:gap-[clamp(0.75rem,2vw,1.5rem)]"
     >
       {pasos.map((paso, indice) => (
         <li
@@ -61,7 +62,7 @@ function Torres({ pasos }) {
 // corta el ritmo de la página justo antes de las preguntas y la acción.
 export default function Pasos() {
   return (
-    <section aria-label="Cómo empezar" className="espacio-seccion bg-superficie-pasos text-texto-pasos">
+    <section aria-label="Cómo empezar" className="espacio-seccion bg-superficie-pasos text-texto-pasos md:pb-0">
       <div className="contenedor">
         {Object.entries(PASOS).map(([id, contenido]) => (
           <div key={id} data-solo={id}>
