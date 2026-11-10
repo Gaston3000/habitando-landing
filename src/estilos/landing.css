@@ -1056,3 +1056,24 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
 .sala-apagada-3 {
   fill: var(--trama-oscura-3);
 }
+
+.sala-base {
+  fill: var(--blanco);
+}
+
+/* Fondo de la franja del corte: de blanco a marino por la escala de azules de la marca */
+.parada-blanco {
+  stop-color: var(--blanco);
+}
+
+.parada-celeste {
+  stop-color: var(--azul-200);
+}
+
+.parada-azul {
+  stop-color: var(--azul-500);
+}
+
+.parada-marino {
+  stop-color: var(--superficie-marca);
+}
