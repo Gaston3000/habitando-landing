@@ -78,16 +78,19 @@ export default function Problema({ alVerElOtroLado }) {
   return (
     <section aria-labelledby="titulo-problema" className="espacio-seccion bg-superficie-zona">
       <div className="contenedor">
-        <h2
-          id="titulo-problema"
-          className="max-w-[19ch] font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance"
-        >
-          La información ya existe. El problema es que no circula.
-        </h2>
-        <p className="mt-4.5 max-w-xl text-[1.08rem] text-texto-secundario">
-          Le preguntamos a 86 vecinos cómo funciona su edificio y entrevistamos a un administrador con 24 edificios a
-          cargo. Los dos sufren el mismo problema.
-        </p>
+        {/* En escritorio: el título en dos renglones y, a su derecha, el subtítulo alineado con el último renglón */}
+        <div className="grid grid-cols-1 gap-x-10 gap-y-4.5 lg:grid-cols-[auto_minmax(0,20rem)] lg:items-end lg:justify-between">
+          <h2
+            id="titulo-problema"
+            className="max-w-[19ch] font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance escritorio:max-w-none"
+          >
+            <span className="escritorio:block">La información ya existe.</span>{" "}
+            <span className="escritorio:block">El problema es que no circula.</span>
+          </h2>
+          <p className="max-w-xl text-[1.08rem] text-texto-secundario lg:pb-1">
+            Le preguntamos a 86 vecinos y entrevistamos a un administrador con 24 edificios. Los dos sufren lo mismo.
+          </p>
+        </div>
 
         <div className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-[clamp(0.75rem,1.6vw,1.25rem)] md:grid-cols-2">
           <Lado id="vecinos" lado={LADOS.vecinos}>
