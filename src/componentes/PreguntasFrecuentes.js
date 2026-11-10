@@ -80,9 +80,9 @@ const SALIDAS = {
 };
 
 // Portero eléctrico del edificio, con un timbre por pregunta: se enciende el de la pregunta abierta
-// y tocar un timbre abre su pregunta. Es un atajo para el mouse: con teclado y lector de pantalla
+// y tocar un timbre abre su pregunta. Al pasar el mouse, se marcan juntos el timbre y su pregunta. Es un atajo para el mouse: con teclado y lector de pantalla
 // se usan las preguntas, por eso los timbres no reciben foco.
-function Portero({ cantidad, abierta, alTocar }) {
+function Portero({ cantidad, abierta, senalada, alTocar, alSenalar }) {
   return (
     <div aria-hidden="true" className="portero hidden w-60 bg-torre px-7 pt-12 pb-8 text-torre-texto corte-48 escritorio:block">
       <Isologo className="h-5" />
@@ -94,7 +94,10 @@ function Portero({ cantidad, abierta, alTocar }) {
             type="button"
             tabIndex={-1}
             onClick={() => alTocar(indice)}
+            onMouseEnter={() => alSenalar(indice)}
+            onMouseLeave={() => alSenalar(null)}
             data-encendido={abierta === indice}
+            data-senalado={senalada === indice}
             className="timbre flex w-full cursor-pointer items-center gap-3"
           >
             <span className="timbre-boton size-4.5 shrink-0 rounded-full" />
@@ -109,6 +112,7 @@ function Portero({ cantidad, abierta, alTocar }) {
 // Las preguntas de un perfil, con su portero. Se abre una sola a la vez.
 function Preguntas({ id, preguntas }) {
   const [abierta, setAbierta] = useState(null);
+  const [senalada, setSenalada] = useState(null);
 
   function alCambiar(evento, indice) {
     if (evento.currentTarget.open) setAbierta(indice);
@@ -120,7 +124,13 @@ function Preguntas({ id, preguntas }) {
       data-solo={id}
       className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-x-[clamp(2rem,6vw,6rem)] gap-y-8 escritorio:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] escritorio:grid-rows-[auto_1fr]"
     >
-      <Portero cantidad={preguntas.length} abierta={abierta} alTocar={setAbierta} />
+      <Portero
+        cantidad={preguntas.length}
+        abierta={abierta}
+        senalada={senalada}
+        alTocar={setAbierta}
+        alSenalar={setSenalada}
+      />
 
       <div className="border-t border-borde-suave escritorio:col-start-2 escritorio:row-span-2 escritorio:row-start-1">
         {preguntas.map((item, indice) => (
@@ -130,7 +140,10 @@ function Preguntas({ id, preguntas }) {
             name={`preguntas-${id}`}
             open={abierta === indice}
             onToggle={(evento) => alCambiar(evento, indice)}
-            className="pregunta group border-b border-borde-suave px-5 corte-20 transition-colors duration-300 open:border-transparent open:bg-superficie-elevada"
+            onMouseEnter={() => setSenalada(indice)}
+            onMouseLeave={() => setSenalada(null)}
+            data-senalada={senalada === indice}
+            className="pregunta group border-b border-borde-suave px-5 corte-20 transition-colors duration-300 open:border-transparent open:bg-superficie-elevada data-[senalada=true]:not-open:bg-superficie-elevada/50"
           >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[1.15rem] leading-snug font-semibold [&::-webkit-details-marker]:hidden">
               {item.pregunta}

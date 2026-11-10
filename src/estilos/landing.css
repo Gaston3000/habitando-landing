@@ -973,8 +973,14 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
   transition: background-color 0.25s ease;
 }
 
-.timbre:hover .timbre-boton {
-  box-shadow: inset 0 0 0 2px var(--azul-400);
+/* Señalado: el mouse está sobre el timbre o sobre su pregunta */
+.timbre[data-senalado="true"] .timbre-boton {
+  background: var(--azul-600);
+  box-shadow: inset 0 0 0 2px var(--azul-300);
+}
+
+.timbre[data-senalado="true"] .timbre-etiqueta {
+  background: var(--azul-600);
 }
 
 .timbre[data-encendido="true"] .timbre-boton {
