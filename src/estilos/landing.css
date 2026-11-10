@@ -779,6 +779,88 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   transform: translate(calc(var(--orden) * 12px), calc(var(--orden) * -11px));
 }
 
+/* Escenas del final de cada tarjeta del problema (ver EscenaProblema.js).
+   "esperando": todavía no apareció en pantalla. "activa": se anima una vez. "final": como termina, sin moverse. */
+.escena-problema[data-estado="esperando"] .aparece {
+  opacity: 0;
+}
+
+.escena-problema[data-estado="activa"] .aparece {
+  animation: aparecer-globo 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: var(--demora, 0ms);
+}
+
+/* Se usa "translate" y no "transform" para no pisar el corrimiento de la pila */
+@keyframes aparecer-globo {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+/* "escribiendo…" aparece, titila y se apaga: al final no queda */
+.escribiendo {
+  opacity: 0;
+}
+
+.escena-problema[data-estado="activa"] .escribiendo {
+  animation: escribiendo 1.2s ease 0.75s both;
+}
+
+.escena-problema[data-estado="activa"] .escribiendo span {
+  animation: punto 0.9s ease-in-out infinite;
+}
+
+.escribiendo span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.escribiendo span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes escribiendo {
+  0% {
+    opacity: 0;
+  }
+  15%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes punto {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Piso de trama de las tarjetas, con los tonos de la trama clara de tema.css */
+.trama-piso-1 {
+  fill: var(--trama-clara-1);
+}
+
+.trama-piso-2 {
+  fill: var(--trama-clara-2);
+}
+
+.trama-piso-3 {
+  fill: var(--trama-clara-3);
+}
+
+/* La invitación a ver el otro lado no se ve en la tarjeta del perfil elegido */
+html:not([data-perfil="administraciones"]) [data-invita="vecinos"],
+html[data-perfil="administraciones"] [data-invita="administraciones"] {
+  visibility: hidden;
+}
+
 /* Números de los pasos */
 .pasos {
   counter-reset: paso;

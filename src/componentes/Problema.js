@@ -1,10 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import EscenaProblema from "@/componentes/EscenaProblema";
+import TramaPiso from "@/componentes/TramaPiso";
 import { CLASES_ENLACE } from "@/lib/clases";
-
-const CLASES_GLOBO =
-  "absolute bottom-0 left-0 rounded-[6px_20px_20px_20px] px-4 py-2.75 font-semibold whitespace-nowrap";
-
-// Cuántas veces se apila la misma pregunta del lado de la administración
-const PREGUNTAS_APILADAS = 6;
 
 // Cada lado con lo que encontramos en la investigación: la encuesta a vecinos y la entrevista al administrador.
 const LADOS = {
@@ -18,6 +17,7 @@ const LADOS = {
     cita: "Que el recibo de las expensas sea un choclo y no poder entender nada.",
     autorCita: "Un vecino, en la encuesta",
     conteo: "Lo preguntan una vez.",
+    invitacion: "Ver cómo lo viven los vecinos",
   },
   administraciones: {
     titulo: "La administración",
@@ -29,12 +29,21 @@ const LADOS = {
     cita: "Como todo es Excel, no se pueden sincronizar los archivos en vivo. Tenemos que esperar a terminar uno, pasárselo, y recién ahí seguir.",
     autorCita: "El administrador entrevistado",
     conteo: "Lo contesta veinte veces por día.",
+    invitacion: "Ver cómo lo vive la administración",
   },
 };
 
-function Lado({ id, lado, children }) {
+// Cada tarjeta termina con su escena sobre un piso de trama.
+// La tarjeta del otro lado invita a cambiar de perfil: se puede tocar entera, y al pasar el mouse se levanta y repite su escena.
+function Lado({ id, lado, esOtroLado, alVerElOtroLado }) {
+  const [vuelta, setVuelta] = useState(0);
+
   return (
-    <div className="relative flex min-w-0 flex-col gap-6 bg-superficie-elevada p-[clamp(1.6rem,3vw,2.5rem)] corte-26">
+    <div
+      onMouseEnter={() => esOtroLado && setVuelta(vuelta + 1)}
+      className="relative flex min-w-0 flex-col gap-6 bg-superficie-elevada p-[clamp(1.6rem,3vw,2.5rem)] corte-26 transition-transform duration-300 has-[[data-invita]:hover]:-translate-y-1 has-[[data-invita]:focus-visible]:shadow-[inset_0_0_0_2px_var(--foco)]"
+    >
+      <TramaPiso />
       {/* "Tu lado" marca el lado del perfil que se está viendo */}
       <span
         data-solo={id}
@@ -64,17 +73,28 @@ function Lado({ id, lado, children }) {
         <footer className="mt-2 text-[0.88rem] text-texto-secundario">{lado.autorCita}</footer>
       </blockquote>
 
-      <div className="relative mt-auto h-32">{children}</div>
+      <div className="mt-auto">
+        <EscenaProblema key={vuelta} lado={id} />
+      </div>
       <p className="-mt-2 font-titulo text-xl leading-[1.3] font-semibold">{lado.conteo}</p>
+
+      {/* Se ve solo en la tarjeta del otro lado (en la propia queda invisible, así las dos miden lo mismo).
+          El ::after estira el botón a toda la tarjeta. */}
+      <button
+        type="button"
+        data-invita={id}
+        onClick={alVerElOtroLado}
+        className={`${CLASES_ENLACE} -mt-3 self-start after:absolute after:inset-0 focus-visible:outline-none`}
+      >
+        {lado.invitacion}
+      </button>
     </div>
   );
 }
 
 // El mismo problema visto de los dos lados, con lo que encontramos en la investigación:
 // el vecino pregunta una vez, la administración contesta veinte.
-export default function Problema({ alVerElOtroLado }) {
-  const pila = Array.from({ length: PREGUNTAS_APILADAS }, (_, indice) => PREGUNTAS_APILADAS - 1 - indice);
-
+export default function Problema({ perfil, alVerElOtroLado }) {
   return (
     <section aria-labelledby="titulo-problema" className="espacio-seccion bg-superficie-zona">
       <div className="contenedor">
@@ -93,38 +113,15 @@ export default function Problema({ alVerElOtroLado }) {
         </div>
 
         <div className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-[clamp(0.75rem,1.6vw,1.25rem)] md:grid-cols-2">
-          <Lado id="vecinos" lado={LADOS.vecinos}>
-            <p className={`${CLASES_GLOBO} bg-superficie-zona`}>¿Ya salieron las expensas?</p>
-          </Lado>
-
-          <Lado id="administraciones" lado={LADOS.administraciones}>
-            {/* Las de atrás quedan solo como borde: se lee la de adelante */}
-            <div aria-hidden="true">
-              {pila.map((orden) => (
-                <p
-                  key={orden}
-                  style={{ "--orden": orden }}
-                  className={`${CLASES_GLOBO} globo-pila shadow-[0_0_0_1px_var(--borde-fuerte)] ${
-                    orden === 0 ? "bg-superficie-elevada" : "bg-superficie-zona text-transparent"
-                  }`}
-                >
-                  ¿Ya salieron las expensas?
-                </p>
-              ))}
-            </div>
-          </Lado>
+          {Object.entries(LADOS).map(([id, lado]) => (
+            <Lado key={id} id={id} lado={lado} esOtroLado={perfil !== id} alVerElOtroLado={alVerElOtroLado} />
+          ))}
         </div>
 
-        <div className="mt-[clamp(2rem,3vw,2.75rem)] flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-          <p className="max-w-[38rem] text-[1.08rem]">
-            Habitando no inventa información nueva. Muestra la que la administración ya tiene a quien la necesita,
-            cuando la necesita.
-          </p>
-          <button type="button" onClick={alVerElOtroLado} className={CLASES_ENLACE}>
-            <span data-solo="vecinos">Ver cómo lo vive la administración</span>
-            <span data-solo="administraciones">Ver cómo lo viven los vecinos</span>
-          </button>
-        </div>
+        <p className="mt-[clamp(2rem,3vw,2.75rem)] max-w-[38rem] text-[1.08rem]">
+          Habitando no inventa información nueva. Muestra la que la administración ya tiene a quien la necesita,
+          cuando la necesita.
+        </p>
 
         <p className="mt-8 text-[0.85rem] text-texto-secundario">
           Encuesta propia a vecinos de edificios de Capital y Gran Buenos Aires (86 respuestas) y entrevista en

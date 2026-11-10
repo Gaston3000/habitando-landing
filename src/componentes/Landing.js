@@ -73,7 +73,7 @@ export default function Landing() {
         {/* De lo más importante a lo menos: la promesa, el problema con sus datos, qué incluye,
             cómo se empieza, las dudas de antes de decidirse y la acción. */}
         <Heroe perfil={perfil} />
-        <Problema alVerElOtroLado={verElOtroLado} />
+        <Problema perfil={perfil} alVerElOtroLado={verElOtroLado} />
         <Funciones />
         <Pasos />
         <PreguntasFrecuentes />
