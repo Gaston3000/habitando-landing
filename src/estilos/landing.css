@@ -993,3 +993,40 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
 .timbre[data-encendido="true"] .timbre-etiqueta {
   background: var(--azul-600);
 }
+
+/* SIEMPRE CLARO: lo que va adentro usa los colores del tema claro también en modo oscuro.
+   Lo usa la banda final, que va sobre la trama clara del manual. Son los mismos valores del tema claro de tema.css. */
+.siempre-claro {
+  color-scheme: light;
+
+  --superficie-pagina: var(--azul-50);
+  --superficie-elevada: var(--blanco);
+  --superficie-hundida: var(--azul-100);
+  --superficie-flotante: var(--blanco);
+  --superficie-zona: var(--azul-100);
+
+  --texto-principal: var(--azul-800);
+  --texto-secundario: var(--azul-600);
+  --texto-atenuado: var(--azul-500);
+
+  --borde-suave: var(--azul-200);
+  --borde-fuerte: var(--azul-300);
+
+  --accion-principal: var(--azul-800);
+  --accion-principal-hover: var(--azul-900);
+  --accion-principal-texto: var(--azul-50);
+  --accion-secundaria: var(--azul-100);
+  --foco: var(--azul-500);
+  --sombra: rgb(14 24 41 / 0.28);
+
+  --exito-fondo: var(--verde-50);
+  --exito-texto: var(--verde-700);
+  --atencion-fondo: var(--ambar-50);
+  --atencion-texto: var(--ambar-700);
+  --peligro-fondo: var(--rojo-50);
+  --peligro-texto: var(--rojo-700);
+
+  --trama-clara-1: var(--azul-100);
+  --trama-clara-2: var(--azul-200);
+  --trama-clara-3: var(--azul-50);
+}

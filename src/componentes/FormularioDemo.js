@@ -44,17 +44,21 @@ export default function FormularioDemo({ className }) {
 
   return (
     <form onSubmit={enviar} noValidate className={className}>
-      <CampoFormulario id="nombre" etiqueta="Tu nombre" autoComplete="name" error={errores.nombre} />
-      <CampoFormulario id="mail" etiqueta="Tu mail" tipo="email" autoComplete="email" error={errores.mail} />
-      <CampoFormulario
-        id="unidades"
-        etiqueta="Unidades que administrás"
-        inputMode="numeric"
-        placeholder="Ej.: 240"
-        error={errores.unidades}
-      />
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-        <button type="submit" className={CLASES_BOTON}>
+      {/* Nombre y mail en una fila; las unidades con el botón al lado: los mismos datos, más rápidos de completar */}
+      <div className="grid gap-4.5 sm:grid-cols-2 sm:gap-4">
+        <CampoFormulario id="nombre" etiqueta="Tu nombre" autoComplete="name" error={errores.nombre} />
+        <CampoFormulario id="mail" etiqueta="Tu mail" tipo="email" autoComplete="email" error={errores.mail} />
+      </div>
+      <div className="grid gap-4.5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:gap-4">
+        <CampoFormulario
+          id="unidades"
+          etiqueta="Unidades que administrás"
+          inputMode="numeric"
+          placeholder="Ej.: 240"
+          error={errores.unidades}
+        />
+        {/* El margen lo baja a la altura del campo, debajo de la etiqueta */}
+        <button type="submit" className={`${CLASES_BOTON} justify-self-start sm:mt-7.5`}>
           Pedir una demo
         </button>
       </div>

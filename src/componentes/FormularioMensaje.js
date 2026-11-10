@@ -16,20 +16,27 @@ function armarMensaje(unidad) {
 }
 
 // El vecino no contrata Habitando: se lo sugiere a su administración.
-// Le dejamos el mensaje escrito para copiar o mandar por WhatsApp. Mientras no lo toque, se completa con su unidad.
+// Le dejamos el mensaje escrito, mostrado como le va a llegar (una burbuja de chat), para copiar o mandar por WhatsApp.
+// Mientras no lo toque, se completa con su unidad. "Editar el mensaje" lo pasa a un campo de texto.
 export default function FormularioMensaje({ className }) {
   const [unidad, setUnidad] = useState("");
   const [mensajeEditado, setMensajeEditado] = useState(null);
+  const [editando, setEditando] = useState(false);
   const [aviso, setAviso] = useState(null);
 
   const refMensaje = useRef(null);
+  const refBurbuja = useRef(null);
 
   const mensaje = mensajeEditado ?? armarMensaje(unidad);
 
   // Si el navegador no deja copiar, el mensaje queda seleccionado para copiarlo a mano.
   function seleccionarMensaje() {
-    refMensaje.current.focus();
-    refMensaje.current.select();
+    if (editando) {
+      refMensaje.current.focus();
+      refMensaje.current.select();
+    } else {
+      window.getSelection().selectAllChildren(refBurbuja.current);
+    }
     setAviso({ ok: false, texto: "Dejamos el mensaje seleccionado: copialo con Ctrl+C o manteniendo apretado." });
   }
 
@@ -55,15 +62,37 @@ export default function FormularioMensaje({ className }) {
         value={unidad}
         onChange={(evento) => setUnidad(evento.target.value)}
       />
-      <CampoTextoLargo
-        ref={refMensaje}
-        id="mensaje"
-        etiqueta="Mensaje"
-        ayuda="Podés cambiarlo como quieras antes de mandarlo."
-        filas={7}
-        value={mensaje}
-        onChange={(evento) => setMensajeEditado(evento.target.value)}
-      />
+      {editando ? (
+        <CampoTextoLargo
+          ref={refMensaje}
+          id="mensaje"
+          etiqueta="Mensaje"
+          filas={7}
+          autoFocus
+          value={mensaje}
+          onChange={(evento) => setMensajeEditado(evento.target.value)}
+        />
+      ) : (
+        <div className="flex flex-col gap-1.5">
+          <p id="mensaje-etiqueta" className="text-[0.95rem] font-semibold">
+            Así le llega a tu administración
+          </p>
+          <p
+            ref={refBurbuja}
+            aria-labelledby="mensaje-etiqueta"
+            className="rounded-[18px_4px_18px_18px] bg-superficie-hundida px-4 py-3 leading-[1.55]"
+          >
+            {mensaje}
+          </p>
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={() => setEditando(!editando)}
+        className={`${CLASES_ENLACE} -mt-2 justify-self-start text-[0.92rem]`}
+      >
+        {editando ? "Ver cómo queda" : "Editar el mensaje"}
+      </button>
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
         <button type="submit" className={CLASES_BOTON}>
           Copiar mensaje
