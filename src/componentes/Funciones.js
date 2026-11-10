@@ -1,45 +1,192 @@
 import ChipEstado from "@/componentes/ChipEstado";
 import Icono from "@/componentes/Icono";
 
-// Lugar y color de cada bloque. La grilla sale del recurso "bloques de reparto" (16 x 10):
-// en pantallas grandes cada bloque ocupa su lugar del dibujo; más chico, se apilan de a dos o de a uno.
+// Lugar y color de cada bloque, sobre la grilla de los bloques de reparto (16 columnas).
+// En pantallas grandes: uno alto a la izquierda, dos apilados a la derecha y tres chicos abajo.
+// Más chico, se apilan de a dos o de a uno.
 const BLOQUES = [
   {
-    lugar: "corte-34 sm:col-span-2 lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:row-end-5",
+    lugar: "corte-34 sm:col-span-2 lg:col-start-1 lg:col-end-10 lg:row-start-1 lg:row-end-3",
     color: "bg-bloque-fuerte text-bloque-fuerte-texto",
-    destacado: true,
+    grande: true,
   },
-  { lugar: "lg:col-start-7 lg:col-end-11 lg:row-start-1 lg:row-end-5", color: "bg-bloque-claro" },
   {
-    lugar: "sm:col-span-2 lg:col-start-11 lg:col-end-17 lg:row-start-1 lg:row-end-7",
+    lugar: "sm:col-span-2 lg:col-start-10 lg:col-end-17 lg:row-start-1 lg:row-end-2",
     color: "bg-superficie-elevada inset-ring inset-ring-borde-suave",
+    grande: true,
   },
-  { lugar: "lg:col-start-1 lg:col-end-5 lg:row-start-5 lg:row-end-11", color: "bg-bloque-medio text-bloque-medio-texto" },
-  { lugar: "lg:col-start-5 lg:col-end-11 lg:row-start-5 lg:row-end-8", color: "bg-bloque-suave", corto: true },
-  { lugar: "lg:col-start-5 lg:col-end-11 lg:row-start-8 lg:row-end-11", color: "bg-bloque-suave", corto: true },
-  { lugar: "lg:col-start-11 lg:col-end-14 lg:row-start-7 lg:row-end-11", color: "bg-bloque-celeste text-bloque-celeste-texto" },
-  { lugar: "lg:col-start-14 lg:col-end-17 lg:row-start-7 lg:row-end-11", color: "bg-bloque-celeste text-bloque-celeste-texto" },
+  { lugar: "sm:col-span-2 lg:col-start-10 lg:col-end-17 lg:row-start-2 lg:row-end-3", color: "bg-bloque-claro" },
+  { lugar: "lg:col-start-1 lg:col-end-6 lg:row-start-3", color: "bg-bloque-medio text-bloque-medio-texto" },
+  { lugar: "lg:col-start-6 lg:col-end-11 lg:row-start-3", color: "bg-bloque-suave" },
+  { lugar: "sm:col-span-2 lg:col-span-1 lg:col-start-11 lg:col-end-17 lg:row-start-3", color: "bg-bloque-celeste text-bloque-celeste-texto" },
 ];
 
-const ESTADOS_RECLAMO = [
+// Pedacito de la app adentro de un bloque: siempre sobre el fondo de la página, así se lee en cualquier color de bloque.
+// "alto": ocupa todo el alto que le queda al bloque (en el bloque alto de la izquierda).
+function Pieza({ alto = false, children }) {
+  return (
+    <div
+      className={`mt-6 bg-superficie-pagina p-4 text-[0.88rem] text-texto-principal corte-14 ${
+        alto ? "flex flex-1 flex-col" : "lg:mt-auto"
+      }`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Fila({ izquierda, derecha, detalle }) {
+  return (
+    <li className="flex items-baseline justify-between gap-4 border-t border-borde-suave py-2 first:border-t-0">
+      <span>
+        {izquierda}
+        {detalle && <small className="block text-[0.8rem] text-texto-secundario">{detalle}</small>}
+      </span>
+      <span className="font-medium whitespace-nowrap tabular-nums">{derecha}</span>
+    </li>
+  );
+}
+
+// Los gastos de octubre de Rivadavia 4520 y lo que le toca a la UF 7 (4,12 %).
+// Las cuentas cierran con lo que muestra el teléfono del héroe: $ 71.900 de ordinarias + $ 12.400 del ascensor.
+const GASTOS = [
+  { nombre: "Sueldo del encargado", total: "$ 980.000", parte: "$ 40.376" },
+  { nombre: "Luz de espacios comunes", total: "$ 412.300", parte: "$ 16.987" },
+  { nombre: "Arreglo del ascensor", total: "$ 300.970", parte: "$ 12.400", extraordinaria: true },
+  { nombre: "Limpieza", total: "$ 236.850", parte: "$ 9.758" },
+  { nombre: "Seguro del edificio", total: "$ 116.000", parte: "$ 4.779" },
+];
+
+function EncabezadoExpensa() {
+  return (
+    <>
+      <div className="flex items-center justify-between gap-3">
+        <p className="font-semibold">Octubre, UF 7 · 3º B</p>
+        <ChipEstado tipo="atencion" texto="Pendiente" />
+      </div>
+      <p className="mt-1 font-titulo text-[1.6rem] leading-tight font-bold tabular-nums">$ 84.300</p>
+    </>
+  );
+}
+
+// La expensa de una unidad, como la ve el vecino. "completo": cada gasto con su parte y su factura.
+function DetalleExpensa({ completo = false }) {
+  if (completo) {
+    return (
+      <Pieza alto>
+        <EncabezadoExpensa />
+        <ul className="mt-2 border-t border-borde-suave">
+          {GASTOS.map((gasto) => (
+            <Fila
+              key={gasto.nombre}
+              izquierda={gasto.nombre}
+              detalle={
+                <>
+                  {gasto.extraordinaria ? "Extraordinaria. " : ""}
+                  <u>Ver factura</u>
+                </>
+              }
+              derecha={gasto.parte}
+            />
+          ))}
+        </ul>
+      </Pieza>
+    );
+  }
+
+  return (
+    <Pieza>
+      <EncabezadoExpensa />
+      <ul className="mt-2 border-t border-borde-suave">
+        <Fila izquierda="Expensas ordinarias" derecha="$ 71.900" />
+        <Fila izquierda="Arreglo del ascensor" detalle={<>Extraordinaria. <u>Ver factura</u></>} derecha="$ 12.400" />
+      </ul>
+    </Pieza>
+  );
+}
+
+// Los gastos del mes, cada uno con su comprobante, y lo que le toca a una unidad según su porcentaje
+function GastosDelMes() {
+  return (
+    <Pieza alto>
+      <p className="font-semibold">Gastos de octubre, Rivadavia 4520</p>
+      <ul className="mt-2">
+        {GASTOS.map((gasto) => (
+          <Fila key={gasto.nombre} izquierda={gasto.nombre} detalle="Con comprobante" derecha={gasto.total} />
+        ))}
+      </ul>
+      <div className="mt-auto border-t-2 border-texto-principal pt-2.5">
+        <p className="flex items-baseline justify-between gap-4 text-texto-secundario">
+          <span>Total del mes</span>
+          <span className="tabular-nums">$ 2.046.120</span>
+        </p>
+        <p className="mt-1 flex items-baseline justify-between gap-4">
+          <span className="font-semibold">UF 7 · 3º B, 4,12 %</span>
+          <span className="font-titulo text-[1.3rem] font-bold tabular-nums">$ 84.300</span>
+        </p>
+      </div>
+    </Pieza>
+  );
+}
+
+const UNIDADES = [
+  { unidad: "UF 7 · 3º B", monto: "$ 84.300", estado: { tipo: "proceso", texto: "Por confirmar" } },
+  { unidad: "UF 1 · PB A", monto: "", estado: { tipo: "exito", texto: "Al día" } },
+  { unidad: "UF 2 · 1º A", monto: "$ 61.200", estado: { tipo: "atencion", texto: "Pendiente" } },
+  { unidad: "UF 9 · 4º A", monto: "$ 129.900", estado: { tipo: "peligro", texto: "Vencido" } },
+];
+
+// Los pagos que informan los vecinos, junto al estado de cuenta de cada unidad
+function PagosInformados() {
+  return (
+    <Pieza>
+      <table className="w-full border-collapse">
+        <caption className="sr-only">Pagos informados y estado de cuenta de algunas unidades</caption>
+        <tbody>
+          {UNIDADES.map((fila) => (
+            <tr key={fila.unidad} className="border-t border-borde-suave first:border-t-0">
+              <th scope="row" className="py-1.75 text-left font-medium whitespace-nowrap">
+                {fila.unidad}
+              </th>
+              <td className="py-1.75 pl-2.5 text-right whitespace-nowrap tabular-nums">{fila.monto}</td>
+              <td className="py-1.75 pl-2.5 text-right">
+                <ChipEstado tipo={fila.estado.tipo} texto={fila.estado.texto} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Pieza>
+  );
+}
+
+// Un aviso de la administración, como le llega a cada unidad
+function Aviso() {
+  return (
+    <Pieza>
+      <p className="flex items-center gap-1.5 text-[0.8rem] font-semibold text-texto-secundario">
+        <Icono nombre="avisos" className="size-3.5" />
+        Aviso de la administración
+        <span className="ml-auto font-normal">hace 2 días</span>
+      </p>
+      <p className="mt-1.5 font-medium">Corte de agua el jueves 12, de 9 a 13, por el cambio de una cañería.</p>
+    </Pieza>
+  );
+}
+
+const ESTADOS_ARREGLO = [
   { paso: "hecho", texto: "Pendiente", fecha: "mar 27/10" },
   { paso: "actual", texto: "En curso: el plomero va el lunes", fecha: "jue 29/10" },
   { paso: "falta", texto: "Resuelto", fecha: "" },
 ];
 
-const UNIDADES = [
-  { unidad: "UF 1 · PB A", deuda: "", estado: { tipo: "exito", texto: "Al día" } },
-  { unidad: "UF 2 · 1º A", deuda: "$ 61.200", estado: { tipo: "atencion", texto: "Pendiente" } },
-  { unidad: "UF 7 · 3º B", deuda: "", estado: { tipo: "exito", texto: "Al día" } },
-  { unidad: "UF 9 · 4º A", deuda: "$ 129.900", estado: { tipo: "peligro", texto: "Vencido" } },
-];
-
-function LineaReclamo() {
+// La línea de estados de un pedido de arreglo
+function EstadoArreglo() {
   return (
-    <div className="mt-4.5 border-t border-borde-suave pt-4 text-[0.88rem]">
-      <p className="mb-3 text-[0.95rem] font-semibold">Filtración en el palier del 3º</p>
+    <Pieza>
+      <p className="mb-3 font-semibold">Filtración en el palier del 3º</p>
       <ol className="grid gap-2.5">
-        {ESTADOS_RECLAMO.map((estado) => (
+        {ESTADOS_ARREGLO.map((estado) => (
           <li
             key={estado.texto}
             data-paso={estado.paso}
@@ -50,92 +197,33 @@ function LineaReclamo() {
           </li>
         ))}
       </ol>
-    </div>
+    </Pieza>
   );
 }
 
-function TablaUnidades() {
-  return (
-    <div className="mt-4.5 border-t border-borde-suave pt-4">
-      <table className="w-full border-collapse text-[0.86rem]">
-        <caption className="sr-only">Estado de cuenta de algunas unidades</caption>
-        <tbody>
-          {UNIDADES.map((fila) => (
-            <tr key={fila.unidad} className="border-t border-borde-suave first:border-t-0">
-              <th scope="row" className="py-1.75 text-left font-medium whitespace-nowrap">
-                {fila.unidad}
-              </th>
-              <td className="py-1.75 pl-2.5 text-right whitespace-nowrap tabular-nums">{fila.deuda}</td>
-              <td className="py-1.75 pl-2.5 text-right">
-                <ChipEstado tipo={fila.estado.tipo} texto={fila.estado.texto} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
+// Ordenados por el problema que resuelven, en el mismo orden que los datos de "El problema".
+// Los tres primeros llevan un pedacito de la app; los chicos, solo el título.
 const FUNCIONES = {
   vecinos: {
     titulo: "Lo de tu edificio, a la vista.",
     bloques: [
-      { icono: "expensas", titulo: "Tu expensa, explicada", texto: "Cada gasto del mes con su factura. Si sube, ves por qué." },
-      { icono: "avisos", titulo: "Avisos a tiempo", texto: "Cortes, obras y asambleas te llegan al celular antes de que pasen." },
-      {
-        icono: "reclamos",
-        titulo: "Arreglos con estado",
-        texto: "Pedís el arreglo con una foto y seguís cada paso sin tener que volver a preguntar.",
-        detalle: <LineaReclamo />,
-      },
-      {
-        icono: "pagos",
-        titulo: "Pagás e informás el pago",
-        texto: "Transferís como siempre e informás el pago desde tu unidad, con el comprobante. La administración lo confirma y te ahorrás el mail.",
-      },
-      { icono: "unidad", titulo: "Tu historial y tu saldo", texto: "Todas tus expensas y pagos anteriores, con el saldo al día." },
-      { icono: "documentos", titulo: "Los papeles del edificio", texto: "Facturas, actas y reglamento, siempre a mano." },
-      { icono: "edificio", titulo: "Sin instalar nada", texto: "Es una web. Entrás desde el celular o la compu." },
-      {
-        icono: "vecinos",
-        titulo: "Tus datos, cuidados",
-        texto: "Se ve si una unidad está al día, como pide la ley. Tus datos personales, no.",
-      },
+      { icono: "expensas", titulo: "Tu expensa, con cada factura", pieza: <DetalleExpensa completo /> },
+      { icono: "avisos", titulo: "Los avisos te llegan a tiempo", pieza: <Aviso /> },
+      { icono: "reclamos", titulo: "Tus arreglos, con su estado", pieza: <EstadoArreglo /> },
+      { icono: "pagos", titulo: "Informás tu pago desde tu unidad" },
+      { icono: "unidad", titulo: "Tu historial y tu saldo" },
+      { icono: "documentos", titulo: "Los papeles del edificio, siempre a mano" },
     ],
   },
   administraciones: {
-    titulo: "Lo que hoy está en seis lugares, en uno solo.",
+    titulo: "De seis herramientas a una.",
     bloques: [
-      {
-        icono: "expensas",
-        titulo: "Liquidación automática",
-        texto: "Cargás los gastos con su comprobante y el sistema prorratea por unidad, arrastra saldos y calcula intereses.",
-      },
-      { icono: "avisos", titulo: "Un aviso, todo el edificio", texto: "Lo escribís una vez y le llega a cada unidad." },
-      {
-        icono: "pagos",
-        titulo: "Pagos y estado de cuenta",
-        texto: "Registrás cada pago y ves qué unidades están al día, pendientes o vencidas.",
-        detalle: <TablaUnidades />,
-      },
-      {
-        icono: "documentos",
-        titulo: "Pagos informados en un solo lugar",
-        texto: "El vecino informa su pago con el comprobante y vos lo confirmás. Se terminó buscarlo en tres casillas de mail.",
-      },
-      { icono: "vecinos", titulo: "Todo el equipo a la vez", texto: "Varias personas trabajan sobre los mismos datos, sin esperar turno." },
-      {
-        icono: "reclamos",
-        titulo: "Arreglos ordenados",
-        texto: "Cada uno con su foto, su estado y su historial. El vecino sigue el avance solo.",
-      },
-      { icono: "edificio", titulo: "Todos tus edificios", texto: "Cada consorcio con sus unidades y sus porcentajes." },
-      {
-        icono: "unidad",
-        titulo: "Propietario e inquilino",
-        texto: "Lo del inquilino cubre primero las ordinarias; lo del propietario, las extraordinarias.",
-      },
+      { icono: "expensas", titulo: "La expensa se arma sola", pieza: <GastosDelMes /> },
+      { icono: "unidad", titulo: "Cada vecino ve el detalle de su expensa", pieza: <DetalleExpensa /> },
+      { icono: "pagos", titulo: "Los pagos informados, en un solo lugar", pieza: <PagosInformados /> },
+      { icono: "avisos", titulo: "Un aviso llega a todo el edificio" },
+      { icono: "reclamos", titulo: "Cada arreglo, con su estado" },
+      { icono: "vecinos", titulo: "Todo el equipo trabaja a la vez" },
     ],
   },
 };
@@ -147,24 +235,27 @@ export default function Funciones() {
       <div className="contenedor">
         {Object.entries(FUNCIONES).map(([id, funciones]) => (
           <div key={id} data-solo={id}>
-            <h2 className="max-w-[19ch] font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">
+            <h2 className="font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">
               {funciones.titulo}
             </h2>
-            <div className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-16 lg:grid-rows-[repeat(10,minmax(54px,auto))]">
+            <div className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-16">
               {funciones.bloques.map((bloque, indice) => {
-                const { lugar, color, destacado, corto } = BLOQUES[indice];
+                const { lugar, color, grande } = BLOQUES[indice];
                 return (
-                  <article key={bloque.titulo} className={`flex min-w-0 flex-col gap-2.25 px-6 pt-6 pb-6.5 ${lugar} ${color}`}>
-                    <Icono nombre={bloque.icono} className={`box-content size-7.5 pb-3.5 ${corto ? "" : "lg:mb-auto"}`} />
+                  <article
+                    key={bloque.titulo}
+                    className={`flex min-w-0 flex-col p-6 ${bloque.pieza ? "" : "min-h-44"} ${lugar} ${color}`}
+                  >
+                    <Icono nombre={bloque.icono} className="size-7.5 shrink-0" />
+                    {/* Con pieza, el título va arriba y la pieza abajo; sin pieza, el título baja al pie del bloque */}
                     <h3
-                      className={`font-titulo leading-[1.2] font-bold ${
-                        destacado ? "text-[clamp(1.4rem,2.1vw,1.75rem)]" : "text-[1.22rem]"
+                      className={`font-titulo leading-[1.15] font-bold text-balance ${bloque.pieza ? "mt-4" : "mt-auto pt-6"} ${
+                        grande ? "text-[clamp(1.4rem,2.1vw,1.75rem)]" : "text-[1.22rem]"
                       }`}
                     >
                       {bloque.titulo}
                     </h3>
-                    <p className="text-[0.97rem] leading-[1.55]">{bloque.texto}</p>
-                    {bloque.detalle}
+                    {bloque.pieza}
                   </article>
                 );
               })}
