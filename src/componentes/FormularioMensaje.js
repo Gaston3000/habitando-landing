@@ -5,12 +5,13 @@ import CampoFormulario from "@/componentes/CampoFormulario";
 import CampoTextoLargo from "@/componentes/CampoTextoLargo";
 import { CLASES_BOTON, CLASES_ENLACE } from "@/lib/clases";
 
+// Escrito como lo mandaría un vecino por WhatsApp: corto, en primera persona y sin vender.
 function armarMensaje(unidad) {
-  const deDonde = unidad.trim() ? `de la unidad ${unidad.trim()}` : "de mi unidad";
+  const quienSoy = unidad.trim() ? ` Soy del ${unidad.trim()}.` : "";
   return (
-    `Hola, les escribo ${deDonde}. ¿Conocen Habitando? ` +
-    "Los vecinos vemos la expensa con cada factura, los avisos y los arreglos, " +
-    "y a ustedes les ordena las liquidaciones y los pagos. Para los vecinos es gratis. ¿Lo podrían ver?"
+    `Hola, buen día.${quienSoy} Les quería pasar una app que se llama Habitando: ` +
+    "ahí los vecinos podemos ver la expensa con las facturas, los avisos y en qué quedó cada arreglo. " +
+    "A ustedes les ordena la liquidación y los pagos, y para nosotros es gratis. ¿Le pueden echar un vistazo? ¡Gracias!"
   );
 }
 
@@ -85,18 +86,16 @@ export default function FormularioMensaje({ className }) {
           </p>
         </div>
       )}
-      <button
-        type="button"
-        onClick={() => setEditando(!editando)}
-        className={`${CLASES_ENLACE} -mt-2 justify-self-start text-[0.92rem]`}
-      >
-        {editando ? "Ver cómo queda" : "Editar el mensaje"}
-      </button>
-      {/* Un solo botón: copiar sirve para cualquier canal (WhatsApp, mail, el grupo del edificio) */}
+      {/* Copiar es la única acción de envío: sirve para cualquier canal (WhatsApp, mail, el grupo del edificio) */}
       <div>
-        <button type="submit" className={CLASES_BOTON}>
-          Copiar mensaje
-        </button>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <button type="submit" className={CLASES_BOTON}>
+            Copiar mensaje
+          </button>
+          <button type="button" onClick={() => setEditando(!editando)} className={CLASES_ENLACE}>
+            {editando ? "Ver cómo queda" : "Editar el mensaje"}
+          </button>
+        </div>
         <p className="mt-3 text-[0.92rem] text-texto-secundario">
           Después pegalo en el chat o en el mail de tu administración.
         </p>
