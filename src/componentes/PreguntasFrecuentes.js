@@ -1,3 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import Isologo from "@/componentes/Isologo";
+import { CLASES_ENLACE } from "@/lib/clases";
+
 // Las dudas que frenan a alguien antes de decidirse, para cada perfil.
 // Las respuestas dicen solo lo que la app ya hace: el precio todavía no está definido.
 const PREGUNTAS = {
@@ -53,40 +59,115 @@ const PREGUNTAS = {
   ],
 };
 
+// Para quien le quedó una duda: lo lleva a la acción de la banda final
+const SALIDAS = {
+  vecinos: (
+    <>
+      ¿Te quedó otra duda?{" "}
+      <a href="#accion" className={CLASES_ENLACE}>
+        Preguntásela a tu administración
+      </a>{" "}
+      con el mensaje de acá abajo.
+    </>
+  ),
+  administraciones: (
+    <>
+      ¿Te quedó otra duda? Te la respondemos en la demo.{" "}
+      <a href="#accion" className={CLASES_ENLACE}>
+        Pedí una demo
+      </a>
+    </>
+  ),
+};
+
+// Portero eléctrico del edificio, con un timbre por pregunta: se enciende el de la pregunta abierta
+// y tocar un timbre abre su pregunta. Es un atajo para el mouse: con teclado y lector de pantalla
+// se usan las preguntas, por eso los timbres no reciben foco.
+function Portero({ cantidad, abierta, alTocar }) {
+  return (
+    <div aria-hidden="true" className="portero hidden w-60 bg-torre px-7 pt-12 pb-8 text-torre-texto corte-48 escritorio:block">
+      <Isologo className="h-5" />
+      <div className="parlante mt-6 h-16" />
+      <div className="mt-7 grid gap-3">
+        {Array.from({ length: cantidad }, (_, indice) => (
+          <button
+            key={indice}
+            type="button"
+            tabIndex={-1}
+            onClick={() => alTocar(indice)}
+            data-encendido={abierta === indice}
+            className="timbre flex w-full cursor-pointer items-center gap-3"
+          >
+            <span className="timbre-boton size-4.5 shrink-0 rounded-full" />
+            <span className="timbre-etiqueta h-2.5 flex-1 rounded-sm" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Las preguntas de un perfil, con su portero. Se abre una sola a la vez.
+function Preguntas({ id, preguntas }) {
+  const [abierta, setAbierta] = useState(null);
+
+  function alCambiar(evento, indice) {
+    if (evento.currentTarget.open) setAbierta(indice);
+    else if (abierta === indice) setAbierta(null);
+  }
+
+  return (
+    <div
+      data-solo={id}
+      className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-x-[clamp(2rem,6vw,6rem)] gap-y-8 escritorio:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] escritorio:grid-rows-[auto_1fr]"
+    >
+      <Portero cantidad={preguntas.length} abierta={abierta} alTocar={setAbierta} />
+
+      <div className="border-t border-borde-suave escritorio:col-start-2 escritorio:row-span-2 escritorio:row-start-1">
+        {preguntas.map((item, indice) => (
+          // Todas llevan el mismo "name": el navegador cierra la abierta cuando se abre otra
+          <details
+            key={item.pregunta}
+            name={`preguntas-${id}`}
+            open={abierta === indice}
+            onToggle={(evento) => alCambiar(evento, indice)}
+            className="pregunta group border-b border-borde-suave px-5 corte-20 transition-colors duration-300 open:border-transparent open:bg-superficie-elevada"
+          >
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[1.15rem] leading-snug font-semibold [&::-webkit-details-marker]:hidden">
+              {item.pregunta}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                className="size-5 shrink-0 text-texto-secundario transition-transform duration-300 group-open:rotate-45"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </summary>
+            <p className="max-w-[60ch] pr-10 pb-6 text-texto-secundario">{item.respuesta}</p>
+          </details>
+        ))}
+      </div>
+
+      <p className="max-w-[30ch] text-[1.05rem] escritorio:col-start-1 escritorio:row-start-2 escritorio:self-end">
+        {SALIDAS[id]}
+      </p>
+    </div>
+  );
+}
+
 export default function PreguntasFrecuentes() {
   return (
     <section aria-labelledby="titulo-preguntas" className="espacio-seccion">
-      <div className="contenedor grid grid-cols-1 items-start gap-[clamp(2rem,6vw,6rem)] escritorio:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <h2
-          id="titulo-preguntas"
-          className="max-w-[19ch] font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance escritorio:sticky escritorio:top-28"
-        >
+      <div className="contenedor">
+        <h2 id="titulo-preguntas" className="font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">
           Preguntas frecuentes
         </h2>
-
         {Object.entries(PREGUNTAS).map(([id, preguntas]) => (
-          <div key={id} data-solo={id} className="border-t border-borde-suave">
-            {preguntas.map((item) => (
-              // <details> se abre y se cierra solo, con teclado incluido
-              <details key={item.pregunta} className="group border-b border-borde-suave">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[1.08rem] font-semibold [&::-webkit-details-marker]:hidden">
-                  {item.pregunta}
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    className="size-5 shrink-0 text-texto-secundario transition-transform duration-200 group-open:rotate-45"
-                  >
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </summary>
-                <p className="max-w-[60ch] pr-10 pb-6 text-texto-secundario">{item.respuesta}</p>
-              </details>
-            ))}
-          </div>
+          <Preguntas key={id} id={id} preguntas={preguntas} />
         ))}
       </div>
     </section>
