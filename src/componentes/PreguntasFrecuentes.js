@@ -174,7 +174,7 @@ function Preguntas({ id, preguntas }) {
 
 export default function PreguntasFrecuentes() {
   return (
-    <section aria-labelledby="titulo-preguntas" className="espacio-seccion">
+    <section id="preguntas" aria-labelledby="titulo-preguntas" className="espacio-seccion">
       <div className="contenedor">
         <h2 id="titulo-preguntas" className="font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">
           Preguntas frecuentes

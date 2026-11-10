@@ -54,6 +54,12 @@ export default function Landing() {
     window.scrollTo({ top: 0, behavior: movimientoReducido ? "auto" : "smooth" });
   }
 
+  // Desde el pie: sube y muestra la versión elegida
+  function verPerfil(nuevo) {
+    irArriba();
+    elegirPerfil(nuevo);
+  }
+
   function verElOtroLado() {
     irArriba();
     elegirPerfil(perfil === "vecinos" ? "administraciones" : "vecinos");
@@ -79,7 +85,7 @@ export default function Landing() {
         <PreguntasFrecuentes />
         <Accion />
       </main>
-      <Pie alRepetirBienvenida={repetirBienvenida} />
+      <Pie alVerPerfil={verPerfil} alRepetirBienvenida={repetirBienvenida} />
     </>
   );
 }
