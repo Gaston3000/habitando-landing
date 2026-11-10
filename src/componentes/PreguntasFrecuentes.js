@@ -55,7 +55,7 @@ const PREGUNTAS = {
 
 export default function PreguntasFrecuentes() {
   return (
-    <section aria-labelledby="titulo-preguntas" className="pb-[clamp(4.5rem,9vw,8rem)]">
+    <section aria-labelledby="titulo-preguntas" className="espacio-seccion">
       <div className="contenedor grid grid-cols-1 items-start gap-[clamp(2rem,6vw,6rem)] escritorio:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <h2
           id="titulo-preguntas"

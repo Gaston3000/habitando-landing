@@ -35,7 +35,13 @@
   --telefono: var(--azul-950);
   --telefono-borde: transparent;
   --sombra: rgb(14 24 41 / 0.28);
-  --numero-paso: var(--azul-400);
+
+  /* Pasos: el celeste de la marca y las torres en marino. Iguales en los dos temas. */
+  --superficie-pasos: var(--azul-300);
+  --texto-pasos: var(--azul-950);
+  --torre: var(--azul-800);
+  --torre-texto: var(--azul-50);
+  --torre-texto-secundario: var(--azul-300);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -74,7 +80,11 @@
   --color-bloque-celeste: var(--bloque-celeste);
   --color-bloque-celeste-texto: var(--bloque-celeste-texto);
 
-  --color-numero-paso: var(--numero-paso);
+  --color-superficie-pasos: var(--superficie-pasos);
+  --color-texto-pasos: var(--texto-pasos);
+  --color-torre: var(--torre);
+  --color-torre-texto: var(--torre-texto);
+  --color-torre-texto-secundario: var(--torre-texto-secundario);
 }
 
 /* 2. CORTE DE PANTALLA Y TAMAÑOS DE TÍTULO */
@@ -861,24 +871,34 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
   visibility: hidden;
 }
 
-/* Números de los pasos */
-.pasos {
-  counter-reset: paso;
+/* Torres de los pasos (ver Pasos.js): suben desde el piso de a una, con el movimiento de la bienvenida.
+   En el celular están acostadas, así que entran desde la línea de la izquierda. */
+.torres[data-estado="esperando"] .torre {
+  translate: 0 100%;
+
+  @media (width < 48rem) {
+    translate: -100% 0;
+  }
 }
 
-.paso {
-  counter-increment: paso;
+.torres[data-estado="activa"] .torre {
+  animation: subir-torre 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--demora, 0ms) backwards;
+
+  @media (width < 48rem) {
+    animation-name: entrar-torre;
+  }
 }
 
-.paso::before {
-  content: counter(paso);
-  margin-bottom: 0.5rem;
-  font-family: var(--font-titulo);
-  font-size: 2.4rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--numero-paso);
-  font-variant-numeric: lining-nums;
+@keyframes subir-torre {
+  from {
+    translate: 0 100%;
+  }
+}
+
+@keyframes entrar-torre {
+  from {
+    translate: -100% 0;
+  }
 }
 
 /* Línea de estados del reclamo */

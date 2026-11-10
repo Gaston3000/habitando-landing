@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useMovimientoReducido } from "@/lib/pagina";
+import { useAparecerEnPantalla } from "@/lib/aparecer";
 
 const CLASES_GLOBO = "rounded-[6px_20px_20px_20px] px-4 py-2.75 font-semibold whitespace-nowrap";
 
@@ -63,26 +62,7 @@ function PilaDePreguntas() {
 // Para repetirla, quien la usa la vuelve a montar con otra "key".
 // Con movimiento reducido se muestra directo como termina.
 export default function EscenaProblema({ lado }) {
-  const movimientoReducido = useMovimientoReducido();
-  const [vista, setVista] = useState(false);
-  const refEscena = useRef(null);
-
-  useEffect(() => {
-    if (movimientoReducido) return;
-    const observador = new IntersectionObserver(
-      ([entrada]) => {
-        if (entrada.isIntersecting) {
-          setVista(true);
-          observador.disconnect();
-        }
-      },
-      { threshold: 0.6 }
-    );
-    observador.observe(refEscena.current);
-    return () => observador.disconnect();
-  }, [movimientoReducido]);
-
-  const estado = movimientoReducido ? "final" : vista ? "activa" : "esperando";
+  const [refEscena, estado] = useAparecerEnPantalla();
 
   return (
     <div ref={refEscena} data-estado={estado} aria-hidden="true" className="escena-problema relative h-32">
