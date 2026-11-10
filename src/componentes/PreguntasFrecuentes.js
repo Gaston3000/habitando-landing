@@ -59,20 +59,19 @@ const PREGUNTAS = {
   ],
 };
 
-// Para quien le quedó una duda: lo lleva a la acción de la banda final
+// Para quien le quedó una duda: lo lleva a la acción de la banda final. La pregunta va en un renglón y la salida, en otro.
 const SALIDAS = {
   vecinos: (
     <>
-      ¿Te quedó otra duda?{" "}
       <a href="#accion" className={CLASES_ENLACE}>
         Preguntásela a tu administración
       </a>{" "}
-      con el mensaje de acá abajo.
+      acá abajo.
     </>
   ),
   administraciones: (
     <>
-      ¿Te quedó otra duda? Te la respondemos en la demo.{" "}
+      Te la respondemos en la demo.{" "}
       <a href="#accion" className={CLASES_ENLACE}>
         Pedí una demo
       </a>
@@ -152,8 +151,9 @@ function Preguntas({ id, preguntas }) {
         ))}
       </div>
 
-      <p className="max-w-[30ch] text-[1.05rem] escritorio:col-start-1 escritorio:row-start-2 escritorio:self-end">
-        {SALIDAS[id]}
+      <p className="text-[1.05rem] escritorio:col-start-1 escritorio:row-start-2 escritorio:self-end">
+        <span className="block">¿Te quedó otra duda?</span>
+        <span className="block">{SALIDAS[id]}</span>
       </p>
     </div>
   );
