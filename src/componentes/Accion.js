@@ -46,8 +46,9 @@ function Llamado({ titulo, texto }) {
   );
 }
 
+// El título arranca a la misma altura que el formulario
 const CLASES_GRILLA =
-  "contenedor relative grid grid-cols-1 items-center gap-[clamp(2.5rem,5vw,5rem)] py-[clamp(4.5rem,9vw,7.5rem)] escritorio:grid-cols-2";
+  "contenedor relative grid grid-cols-1 items-start gap-[clamp(2.5rem,5vw,5rem)] py-[clamp(4.5rem,9vw,7.5rem)] escritorio:grid-cols-2";
 
 // Banda final con la acción de cada perfil: el vecino le escribe a su administración;
 // la administración pide una demo. Va sobre la trama clara y siempre en tema claro (ver .siempre-claro en landing.css):
