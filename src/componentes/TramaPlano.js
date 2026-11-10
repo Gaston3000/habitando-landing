@@ -82,7 +82,9 @@ export default function TramaPlano({ refHeroe, perfil, movimientoReducido }) {
       espera = setTimeout(() => encuadrar(false), 120);
     }
     window.addEventListener("resize", alCambiarTamano);
-    document.fonts.ready.then(() => encuadrar(false));
+    // Cuando terminan de cargar las tipografías el teléfono puede moverse un poco: se vuelve a encuadrar.
+    // Solo si no se está animando un cambio de perfil, porque encuadrar sin transición cortaría el acercamiento.
+    if (!animarCambio) document.fonts.ready.then(() => encuadrar(false));
 
     return () => {
       clearTimeout(espera);
