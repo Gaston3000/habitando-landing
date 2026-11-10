@@ -48,7 +48,7 @@ function Llamado({ titulo, texto }) {
 
 // El título arranca a la misma altura que el formulario
 const CLASES_GRILLA =
-  "contenedor relative grid grid-cols-1 items-start gap-[clamp(2.5rem,5vw,5rem)] py-[clamp(4.5rem,9vw,7.5rem)] escritorio:grid-cols-2";
+  "contenedor relative grid grid-cols-1 items-start gap-[clamp(2.5rem,5vw,5rem)] py-[clamp(3.5rem,7vw,5.5rem)] escritorio:grid-cols-2";
 
 // Banda final con la acción de cada perfil: el vecino le escribe a su administración;
 // la administración pide una demo. Va sobre la trama clara y siempre en tema claro (ver .siempre-claro en landing.css):
@@ -61,7 +61,7 @@ export default function Accion() {
       <div data-solo="vecinos" className={CLASES_GRILLA}>
         <Llamado
           titulo="Contale a tu administración."
-          texto="Habitando lo contrata la administración, así que el primer paso lo das vos. Te dejamos el mensaje escrito: completá tu unidad, copialo y mandalo."
+          texto="Habitando lo contrata la administración: el primer paso lo das vos."
         />
         <FormularioMensaje className={CLASES_FORMULARIO} />
       </div>

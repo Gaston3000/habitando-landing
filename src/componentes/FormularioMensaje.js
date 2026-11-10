@@ -8,15 +8,14 @@ import { CLASES_BOTON, CLASES_ENLACE } from "@/lib/clases";
 function armarMensaje(unidad) {
   const deDonde = unidad.trim() ? `de la unidad ${unidad.trim()}` : "de mi unidad";
   return (
-    `Hola, ¿cómo están? Les escribo ${deDonde}. ` +
-    "Quería sugerirles Habitando, una plataforma donde los vecinos podemos ver la expensa con el detalle de cada gasto y su factura, " +
-    "los avisos del edificio y el estado de los arreglos. A ustedes les ordena las liquidaciones y los pagos, " +
-    "y nos ahorraría muchas preguntas a todos. Para los vecinos es gratis. ¿Lo podrían ver?"
+    `Hola, les escribo ${deDonde}. ¿Conocen Habitando? ` +
+    "Los vecinos vemos la expensa con cada factura, los avisos y los arreglos, " +
+    "y a ustedes les ordena las liquidaciones y los pagos. Para los vecinos es gratis. ¿Lo podrían ver?"
   );
 }
 
 // El vecino no contrata Habitando: se lo sugiere a su administración.
-// Le dejamos el mensaje escrito, mostrado como le va a llegar (una burbuja de chat), para copiar o mandar por WhatsApp.
+// Le dejamos el mensaje escrito y corto, mostrado como le va a llegar (una burbuja de chat), para que lo copie y se lo mande.
 // Mientras no lo toque, se completa con su unidad. "Editar el mensaje" lo pasa a un campo de texto.
 export default function FormularioMensaje({ className }) {
   const [unidad, setUnidad] = useState("");
@@ -47,7 +46,7 @@ export default function FormularioMensaje({ className }) {
       return;
     }
     navigator.clipboard.writeText(mensaje).then(
-      () => setAviso({ ok: true, texto: "Mensaje copiado. Pegalo en el chat o el mail de tu administración." }),
+      () => setAviso({ ok: true, texto: "Listo, el mensaje está copiado." }),
       seleccionarMensaje
     );
   }
@@ -67,7 +66,7 @@ export default function FormularioMensaje({ className }) {
           ref={refMensaje}
           id="mensaje"
           etiqueta="Mensaje"
-          filas={7}
+          filas={5}
           autoFocus
           value={mensaje}
           onChange={(evento) => setMensajeEditado(evento.target.value)}
@@ -93,18 +92,14 @@ export default function FormularioMensaje({ className }) {
       >
         {editando ? "Ver cómo queda" : "Editar el mensaje"}
       </button>
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+      {/* Un solo botón: copiar sirve para cualquier canal (WhatsApp, mail, el grupo del edificio) */}
+      <div>
         <button type="submit" className={CLASES_BOTON}>
           Copiar mensaje
         </button>
-        <a
-          href={`https://wa.me/?text=${encodeURIComponent(mensaje)}`}
-          target="_blank"
-          rel="noopener"
-          className={CLASES_ENLACE}
-        >
-          Abrir en WhatsApp
-        </a>
+        <p className="mt-3 text-[0.92rem] text-texto-secundario">
+          Después pegalo en el chat o en el mail de tu administración.
+        </p>
       </div>
       <p aria-live="polite" className={`min-h-[1.4em] text-[0.92rem] font-medium ${aviso?.ok ? "text-exito-texto" : "text-texto-secundario"}`}>
         {aviso?.texto}
