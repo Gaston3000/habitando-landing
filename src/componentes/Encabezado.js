@@ -51,16 +51,16 @@ export default function Encabezado({ perfil, alElegirPerfil, alIrArriba, refIsol
         conBorde ? "border-borde-suave" : "border-transparent"
       }`}
     >
-      <div className="contenedor grid min-h-14 grid-cols-[1fr_auto] items-center gap-x-6 md:min-h-18.5 md:grid-cols-[1fr_auto_1fr]">
+      <div className="contenedor grid min-h-14 grid-cols-[1fr_auto] items-center gap-x-6 md:min-h-18.5 md:grid-cols-[auto_1fr_auto] amplio:grid-cols-[1fr_auto_1fr]">
         <a href="#vecinos" onClick={irArriba} aria-label="habitando" className="inline-flex justify-self-start text-texto-principal">
           <Isologo ref={refIsologo} className="h-7 md:h-8.5" />
         </a>
 
-        <SelectorPerfil perfil={perfil} alElegir={alElegirPerfil} className="hidden md:flex" />
+        <SelectorPerfil perfil={perfil} alElegir={alElegirPerfil} className="hidden justify-self-center md:flex" />
 
         <div className="col-start-2 row-start-1 flex items-center gap-6 justify-self-end md:col-start-3">
           <div
-            className={`hidden transition-[opacity,visibility] duration-300 md:block ${
+            className={`hidden transition-[opacity,visibility] duration-300 lg:block ${
               botonOculto ? "invisible opacity-0" : ""
             }`}
           >

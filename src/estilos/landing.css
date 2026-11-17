@@ -91,6 +91,8 @@
 @theme {
   /* Desde acá el héroe va en dos columnas (texto y teléfono) */
   --breakpoint-escritorio: 56.25rem;
+  /* Desde acá entran en el encabezado, con el selector centrado, el botón de la acción y "Ingresar" */
+  --breakpoint-amplio: 75rem;
 
   /* En el celular el título también va en dos renglones: el más largo ("en el grupo del edificio.") mide
      10,2 veces el tamaño de letra, así que el tamaño sale del ancho libre (la pantalla menos el margen de cada lado) */
