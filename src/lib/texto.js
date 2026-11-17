@@ -1,7 +1,7 @@
 // Palabras cortas que no pueden quedar solas al final de un renglón ("Dejá de / preguntar" se lee cortado)
 const PALABRAS_CORTAS = [
-  "a", "al", "con", "de", "del", "e", "el", "en", "la", "las", "lo", "los", "mi", "o", "por",
-  "que", "se", "sin", "su", "tu", "u", "un", "una", "y",
+  "a", "al", "con", "de", "del", "e", "el", "en", "la", "las", "lo", "los", "mi", "no", "o", "por",
+  "que", "se", "sin", "su", "tu", "u", "un", "una", "y", "ya",
 ];
 
 const DESPUES_DE_CORTA = new RegExp(`(^|\\s)(${PALABRAS_CORTAS.join("|")}) `, "gi");

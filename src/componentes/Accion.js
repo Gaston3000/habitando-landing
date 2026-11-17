@@ -43,7 +43,7 @@ function Llamado({ titulo, texto }) {
   return (
     <div>
       <h2 className="max-w-[15ch] font-titulo text-titulo-banda font-bold tracking-[-0.022em] text-balance">{unirPalabrasCortas(titulo)}</h2>
-      <p className="mt-4.5 max-w-xl text-[1.08rem] text-texto-secundario">{texto}</p>
+      <p className="mt-4.5 max-w-xl text-[1.08rem] text-texto-secundario">{unirPalabrasCortas(texto)}</p>
     </div>
   );
 }

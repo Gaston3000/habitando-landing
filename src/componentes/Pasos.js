@@ -52,7 +52,7 @@ function Torres({ pasos }) {
           <TramaPiso variante="oscura" />
           <p className="font-titulo text-[2.4rem] leading-none font-bold text-torre-texto-secundario">{indice + 1}</p>
           <h3 className="mt-4 font-titulo text-[1.25rem] leading-[1.2] font-bold text-balance md:max-lg:text-[1.1rem]">{unirPalabrasCortas(paso.titulo)}</h3>
-          <p className="mt-2 text-torre-texto-secundario">{paso.texto}</p>
+          <p className="mt-2 text-torre-texto-secundario">{unirPalabrasCortas(paso.texto)}</p>
         </li>
       ))}
     </ol>

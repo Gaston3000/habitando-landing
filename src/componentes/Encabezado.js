@@ -5,6 +5,7 @@ import Isologo from "@/componentes/Isologo";
 import SelectorPerfil from "@/componentes/SelectorPerfil";
 import { CLASES_BOTON_CHICO, CLASES_ENLACE } from "@/lib/clases";
 import { URL_INGRESAR } from "@/lib/enlaces";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Encabezado fijo: el logo, el selector de perfil, el botón de la acción principal e "Ingresar".
 // En el celular queda solo el logo con "Ingresar", para no ocupar pantalla: el selector va en el héroe.
@@ -64,7 +65,7 @@ export default function Encabezado({ perfil, alElegirPerfil, alIrArriba, refIsol
             }`}
           >
             <a href="#accion" className={CLASES_BOTON_CHICO}>
-              <span data-solo="vecinos">Contale a tu administración</span>
+              <span data-solo="vecinos">{unirPalabrasCortas("Contale a tu administración")}</span>
               <span data-solo="administraciones">Pedí una demo</span>
             </a>
           </div>

@@ -6,6 +6,7 @@ import Sala from "@/componentes/Sala";
 import { CLASES_ENLACE } from "@/lib/clases";
 import { URL_INGRESAR } from "@/lib/enlaces";
 import { ALTO_MODULO, ANCHO_MODULO, altoSala, SALAS } from "@/lib/trama";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // La trama de la banda final y la del pie van a la misma escala, así los ambientes coinciden en el corte
 const ESCALA_TRAMA = 0.8;
@@ -194,7 +195,7 @@ export default function Pie({ alVerPerfil, alRepetirBienvenida }) {
         </div>
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-t border-texto-sobre-marca-secundario/25 pt-5 text-[0.88rem] text-texto-sobre-marca-secundario">
-          <p>Proyecto de tesis de Diseño y Programación Web, 2026.</p>
+          <p>{unirPalabrasCortas("Proyecto de tesis de Diseño y Programación Web, 2026.")}</p>
           <button
             type="button"
             onClick={alRepetirBienvenida}

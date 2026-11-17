@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import CampoFormulario from "@/componentes/CampoFormulario";
 import CampoTextoLargo from "@/componentes/CampoTextoLargo";
 import { CLASES_BOTON, CLASES_ENLACE } from "@/lib/clases";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Escrito como lo mandaría un vecino por WhatsApp: corto, en primera persona y sin vender.
 function armarMensaje(unidad) {
@@ -75,14 +76,14 @@ export default function FormularioMensaje({ className }) {
       ) : (
         <div className="flex flex-col gap-1.5">
           <p id="mensaje-etiqueta" className="text-[0.95rem] font-semibold">
-            Así le llega a tu administración
+            {unirPalabrasCortas("Así le llega a tu administración")}
           </p>
           <p
             ref={refBurbuja}
             aria-labelledby="mensaje-etiqueta"
             className="rounded-[18px_4px_18px_18px] bg-superficie-hundida px-4 py-3 leading-[1.55]"
           >
-            {mensaje}
+            {unirPalabrasCortas(mensaje)}
           </p>
         </div>
       )}
@@ -97,11 +98,11 @@ export default function FormularioMensaje({ className }) {
           </button>
         </div>
         <p className="mt-3 text-[0.92rem] text-texto-secundario">
-          Después pegalo en el chat o en el mail de tu administración.
+          {unirPalabrasCortas("Después pegalo en el chat o en el mail de tu administración.")}
         </p>
       </div>
       <p aria-live="polite" className={`min-h-[1.4em] text-[0.92rem] font-medium ${aviso?.ok ? "text-exito-texto" : "text-texto-secundario"}`}>
-        {aviso?.texto}
+        {aviso && unirPalabrasCortas(aviso.texto)}
       </p>
     </form>
   );

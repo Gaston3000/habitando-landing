@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Isologo from "@/componentes/Isologo";
 import { CLASES_ENLACE } from "@/lib/clases";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Las dudas que frenan a alguien antes de decidirse, para cada perfil.
 // Las respuestas dicen solo lo que la app ya hace: el precio todavía no está definido.
@@ -64,16 +65,16 @@ const SALIDAS = {
   vecinos: (
     <>
       <a href="#accion" className={CLASES_ENLACE}>
-        Preguntásela a tu administración
+        {unirPalabrasCortas("Preguntásela a tu administración")}
       </a>{" "}
-      acá abajo.
+      {unirPalabrasCortas("acá abajo.")}
     </>
   ),
   administraciones: (
     <>
-      Te la respondemos en la demo.{" "}
+      {unirPalabrasCortas("Te la respondemos en la demo.")}{" "}
       <a href="#accion" className={CLASES_ENLACE}>
-        Pedí una demo
+        {unirPalabrasCortas("Pedí una demo")}
       </a>
     </>
   ),
@@ -146,7 +147,7 @@ function Preguntas({ id, preguntas }) {
             className="pregunta group border-b border-borde-suave px-5 corte-20 transition-colors duration-300 open:border-transparent open:bg-superficie-elevada data-[senalada=true]:not-open:bg-superficie-elevada/50"
           >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[1.15rem] leading-snug font-semibold [&::-webkit-details-marker]:hidden">
-              {item.pregunta}
+              <span>{unirPalabrasCortas(item.pregunta)}</span>
               <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
@@ -159,7 +160,7 @@ function Preguntas({ id, preguntas }) {
                 <path d="M12 5v14M5 12h14" />
               </svg>
             </summary>
-            <p className="max-w-[60ch] pr-10 pb-6 text-texto-secundario">{item.respuesta}</p>
+            <p className="max-w-[60ch] pr-10 pb-6 text-texto-secundario">{unirPalabrasCortas(item.respuesta)}</p>
           </details>
         ))}
       </div>

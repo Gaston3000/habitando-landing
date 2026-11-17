@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Simbolo from "@/componentes/Simbolo";
 import { CLASES_BOTON } from "@/lib/clases";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Solo en el celular: una barra fija abajo con la acción de la versión elegida, siempre a mano para el pulgar,
 // y al lado el cambio de versión (las dos torres). Aparece cuando ya pasaste el botón del héroe y se esconde
@@ -39,7 +40,7 @@ export default function BarraAccion({ perfil, alElegirPerfil }) {
     >
       <div className="contenedor flex items-center gap-3">
         <a href="#accion" className={`${CLASES_BOTON} flex-1`}>
-          <span data-solo="vecinos">Contale a tu administración</span>
+          <span data-solo="vecinos">{unirPalabrasCortas("Contale a tu administración")}</span>
           <span data-solo="administraciones">Pedí una demo</span>
         </a>
         <button

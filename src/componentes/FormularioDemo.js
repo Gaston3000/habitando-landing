@@ -4,6 +4,7 @@ import { useState } from "react";
 import CampoFormulario from "@/componentes/CampoFormulario";
 import { CLASES_BOTON } from "@/lib/clases";
 import { enfocarPrimerError } from "@/lib/foco";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 const ORDEN_CAMPOS = ["nombre", "mail", "unidades"];
 
@@ -64,7 +65,7 @@ export default function FormularioDemo({ className }) {
       </div>
       <p aria-live="polite" className="min-h-[1.4em] text-[0.92rem] font-medium text-exito-texto">
         {nombreEnviado &&
-          `Gracias, ${nombreEnviado}. Esta página es una propuesta, así que el pedido todavía no se envía.`}
+          unirPalabrasCortas(`Gracias, ${nombreEnviado}. Esta página es una propuesta, así que el pedido todavía no se envía.`)}
       </p>
     </form>
   );

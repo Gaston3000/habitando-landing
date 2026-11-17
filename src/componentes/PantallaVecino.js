@@ -1,6 +1,7 @@
 import ChipEstado from "@/componentes/ChipEstado";
 import Icono from "@/componentes/Icono";
 import Simbolo from "@/componentes/Simbolo";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Mensajes del grupo del edificio. "orden" escalona cómo se van cuando entra habitando.
 const MENSAJES = [
@@ -15,7 +16,7 @@ function Globo({ autor, texto, hora, orden }) {
   return (
     <div className={`globo animado ${autor ? "" : "globo-propio"}`} style={{ "--orden": orden }}>
       {autor && <p className="globo-autor">{autor}</p>}
-      <p>{texto}</p>
+      <p>{unirPalabrasCortas(texto)}</p>
       <time>{hora}</time>
     </div>
   );
@@ -98,7 +99,7 @@ export default function PantallaVecino({ llegando }) {
               <Icono nombre="avisos" />
               Aviso de la administración
             </p>
-            <p>El ascensor vuelve a andar el jueves 5. El técnico viene a la mañana.</p>
+            <p>{unirPalabrasCortas("El ascensor vuelve a andar el jueves 5. El técnico viene a la mañana.")}</p>
           </article>
           <article className="tarjeta">
             <p className="tarjeta-etiqueta">
@@ -106,7 +107,7 @@ export default function PantallaVecino({ llegando }) {
               Tu pedido de arreglo
             </p>
             <div className="fila">
-              <p>Filtración en el palier</p>
+              <p>{unirPalabrasCortas("Filtración en el palier")}</p>
               <ChipEstado tipo="proceso" texto="En curso" />
             </div>
           </article>

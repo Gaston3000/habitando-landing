@@ -1,6 +1,7 @@
 import ChipEstado from "@/componentes/ChipEstado";
 import Icono from "@/componentes/Icono";
 import Simbolo from "@/componentes/Simbolo";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Íconos de las notificaciones del celular (trazo, como los del sistema del teléfono)
 const ICONOS_NOTIFICACION = {
@@ -39,7 +40,7 @@ function Notificacion({ icono, de, cuando, texto, orden }) {
       </span>
       <span className="notificacion-de">{de}</span>
       <span className="notificacion-cuando">{cuando}</span>
-      <span className="notificacion-texto">{texto}</span>
+      <span className="notificacion-texto">{unirPalabrasCortas(texto)}</span>
     </div>
   );
 }
@@ -85,7 +86,7 @@ export default function PantallaAdministracion({ llegando }) {
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12l5 5L20 7" />
             </svg>
-            Expensas de octubre publicadas. Las 24 unidades ya ven su detalle.
+            {unirPalabrasCortas("Expensas de octubre publicadas. Las 24 unidades ya ven su detalle.")}
           </p>
           <div className="indicadores">
             <div className="indicador">

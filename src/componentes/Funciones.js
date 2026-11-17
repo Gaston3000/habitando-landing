@@ -194,7 +194,7 @@ function Aviso() {
         Aviso de la administración
         <span className="ml-auto font-normal">hace 2 días</span>
       </p>
-      <p className="mt-1.5 font-medium">Corte de agua el jueves 12, de 9 a 13, por el cambio de una cañería.</p>
+      <p className="mt-1.5 font-medium">{unirPalabrasCortas("Corte de agua el jueves 12, de 9 a 13, por el cambio de una cañería.")}</p>
     </Pieza>
   );
 }
@@ -209,7 +209,7 @@ const ESTADOS_ARREGLO = [
 function EstadoArreglo() {
   return (
     <Pieza>
-      <p className="mb-3 font-semibold">Filtración en el palier del 3º</p>
+      <p className="mb-3 font-semibold">{unirPalabrasCortas("Filtración en el palier del 3º")}</p>
       <ol className="grid gap-2.5">
         {ESTADOS_ARREGLO.map((estado) => (
           <li
@@ -217,7 +217,7 @@ function EstadoArreglo() {
             data-paso={estado.paso}
             className="linea-estado grid grid-cols-[16px_1fr_auto] items-center gap-2.5 text-texto-secundario data-[paso=actual]:font-semibold data-[paso=actual]:text-texto-principal"
           >
-            <span>{estado.texto}</span>
+            <span>{unirPalabrasCortas(estado.texto)}</span>
             <time className="text-[0.8rem] font-normal text-texto-secundario tabular-nums">{estado.fecha}</time>
           </li>
         ))}

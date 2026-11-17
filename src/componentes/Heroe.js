@@ -107,7 +107,7 @@ export default function Heroe({ perfil, alElegirPerfil }) {
                 </p>
                 <div data-acciones-heroe className="mt-[clamp(1.4rem,3.2vh,2.1rem)] flex flex-wrap items-center gap-x-7 gap-y-3">
                   <a href="#accion" className={CLASES_BOTON}>
-                    {textos.boton}
+                    {unirPalabrasCortas(textos.boton)}
                   </a>
                   <a href="#funciones" className={`${CLASES_ENLACE} inline-flex min-h-11 items-center`}>
                     {textos.enlace}

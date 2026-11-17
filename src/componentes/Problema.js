@@ -65,11 +65,11 @@ function Lado({ id, lado, esOtroLado, oculta, alVerElOtroLado }) {
           {lado.datos.map((dato) => (
             <li key={dato.cifra} className="border-b border-borde-suave py-3.5">
               <p className="font-titulo text-[1.5rem] leading-tight font-bold tracking-[-0.01em]">{dato.cifra}</p>
-              <p className="mt-1 text-texto-secundario">{dato.texto}</p>
+              <p className="mt-1 text-texto-secundario">{unirPalabrasCortas(dato.texto)}</p>
             </li>
           ))}
         </ul>
-        <p className="mt-2.5 text-[0.82rem] text-texto-secundario">{lado.fuente}</p>
+        <p className="mt-2.5 text-[0.82rem] text-texto-secundario">{unirPalabrasCortas(lado.fuente)}</p>
       </div>
 
       <blockquote className="max-w-[30rem]">
@@ -113,11 +113,11 @@ export default function Problema({ perfil, alVerElOtroLado }) {
             id="titulo-problema"
             className="max-w-[19ch] font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance escritorio:max-w-none"
           >
-            <span className="escritorio:block">{unirPalabrasCortas("La información ya existe.")}</span>{" "}
-            <span className="escritorio:block">{unirPalabrasCortas("El problema es que no circula.")}</span>
+            <span className="block">{unirPalabrasCortas("La información ya existe.")}</span>{" "}
+            <span className="block">{unirPalabrasCortas("El problema es que no circula.")}</span>
           </h2>
           <p className="max-w-xl text-[1.08rem] text-texto-secundario lg:pb-1">
-            Le preguntamos a 86 vecinos y entrevistamos a un administrador con 24 edificios. Los dos sufren lo mismo.
+            {unirPalabrasCortas("Le preguntamos a 86 vecinos y entrevistamos a un administrador con 24 edificios. Los dos sufren lo mismo.")}
           </p>
         </div>
 
