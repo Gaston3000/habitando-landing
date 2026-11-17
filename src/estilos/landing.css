@@ -879,21 +879,15 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
   visibility: hidden;
 }
 
-/* Torres de los pasos (ver Pasos.js): suben desde el piso de a una, con el movimiento de la bienvenida.
-   En el celular están acostadas, así que entran desde la línea de la izquierda. */
-.torres[data-estado="esperando"] .torre {
-  translate: 0 100%;
-
-  @media (width < 48rem) {
-    translate: -100% 0;
+/* Torres de los pasos (ver Pasos.js). En escritorio suben juntas desde el piso, con el movimiento de la bienvenida:
+   lo que manda es el estado de la lista. */
+@media (width >= 48rem) {
+  .torres[data-estado="esperando"] .torre {
+    translate: 0 100%;
   }
-}
 
-.torres[data-estado="activa"] .torre {
-  animation: subir-torre 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--demora, 0ms) backwards;
-
-  @media (width < 48rem) {
-    animation-name: entrar-torre;
+  .torres[data-estado="activa"] .torre {
+    animation: subir-torre 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--demora, 0ms) backwards;
   }
 }
 
@@ -903,9 +897,38 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
   }
 }
 
-@keyframes entrar-torre {
+/* En el celular cada barra tiene su propio estado: se arma de izquierda a derecha cuando aparece
+   (el recorte crece hasta su largo, con el corte de 30° adelante) y después aparece su texto. */
+@media (width < 48rem) {
+  .torre[data-estado="esperando"] {
+    clip-path: polygon(0 calc(var(--corte) * 0.577), var(--corte) 0, var(--corte) 0, var(--corte) 100%, 0 100%);
+
+    > p,
+    > h3 {
+      opacity: 0;
+    }
+  }
+
+  .torre[data-estado="activa"] {
+    animation: armar-torre var(--duracion, 600ms) cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+
+    > p,
+    > h3 {
+      animation: aparecer-texto-torre 0.4s ease-out calc(var(--duracion, 600ms) * 0.75) backwards;
+    }
+  }
+}
+
+@keyframes armar-torre {
   from {
-    translate: -100% 0;
+    clip-path: polygon(0 calc(var(--corte) * 0.577), var(--corte) 0, var(--corte) 0, var(--corte) 100%, 0 100%);
+  }
+}
+
+@keyframes aparecer-texto-torre {
+  from {
+    opacity: 0;
+    translate: -0.5rem 0;
   }
 }
 

@@ -30,10 +30,31 @@ const TAMANOS = [
   "md:h-[clamp(24rem,34vw,27rem)] max-md:w-full",
 ];
 
+// En el celular cada barra se arma recién cuando aparece en pantalla, así se ven de a una al bajar.
+// La más larga tarda un poco más: se nota que el edificio crece.
+function Torre({ paso, indice }) {
+  // Arranca cuando la barra pasa el último cuarto de la pantalla (está recortada, ver aparecer.js)
+  const [refTorre, estado] = useAparecerEnPantalla(0, "25%");
+
+  return (
+    <li
+      ref={refTorre}
+      data-estado={estado}
+      style={{ "--demora": `${indice * 130}ms`, "--duracion": `${600 + indice * 80}ms` }}
+      className={`torre relative flex flex-col bg-torre px-6 pt-11 pb-6 text-torre-texto corte-56 ${TAMANOS[indice]}`}
+    >
+      <TramaPiso variante="oscura" />
+      <p className="font-titulo text-[2.4rem] leading-none font-bold text-torre-texto-secundario">{indice + 1}</p>
+      <h3 className="mt-4 font-titulo text-[1.25rem] leading-[1.2] font-bold text-balance md:max-lg:text-[1.1rem]">{unirPalabrasCortas(paso.titulo)}</h3>
+      <p className="mt-2 text-torre-texto-secundario">{unirPalabrasCortas(paso.texto)}</p>
+    </li>
+  );
+}
+
 // Cada paso es una torre con el techo cortado a 30°, como las del logo, y cada una más alta que la anterior:
 // el edificio crece con habitando. En escritorio, la sección termina en la base de las torres:
-// el fondo de la sección siguiente es el piso. Al aparecer en pantalla, suben desde el piso una sola vez.
-// En el celular, las torres se acuestan y salen de una línea a la izquierda.
+// el fondo de la sección siguiente es el piso. Al aparecer en pantalla, suben juntas desde el piso una sola vez.
+// En el celular, las torres se acuestan y cada una se arma de izquierda a derecha.
 function Torres({ pasos }) {
   const [refTorres, estado] = useAparecerEnPantalla(0.3);
 
@@ -41,19 +62,10 @@ function Torres({ pasos }) {
     <ol
       ref={refTorres}
       data-estado={estado}
-      className="torres mt-[clamp(2.5rem,4vw,3.5rem)] grid gap-3 overflow-hidden border-torre max-md:border-l-2 md:grid-cols-3 md:items-end md:gap-[clamp(0.75rem,2vw,1.5rem)]"
+      className="torres mt-[clamp(2.5rem,4vw,3.5rem)] grid gap-3 overflow-hidden md:grid-cols-3 md:items-end md:gap-[clamp(0.75rem,2vw,1.5rem)]"
     >
       {pasos.map((paso, indice) => (
-        <li
-          key={paso.titulo}
-          style={{ "--demora": `${indice * 130}ms` }}
-          className={`torre relative flex flex-col bg-torre px-6 pt-11 pb-6 text-torre-texto corte-56 ${TAMANOS[indice]}`}
-        >
-          <TramaPiso variante="oscura" />
-          <p className="font-titulo text-[2.4rem] leading-none font-bold text-torre-texto-secundario">{indice + 1}</p>
-          <h3 className="mt-4 font-titulo text-[1.25rem] leading-[1.2] font-bold text-balance md:max-lg:text-[1.1rem]">{unirPalabrasCortas(paso.titulo)}</h3>
-          <p className="mt-2 text-torre-texto-secundario">{unirPalabrasCortas(paso.texto)}</p>
-        </li>
+        <Torre key={paso.titulo} paso={paso} indice={indice} />
       ))}
     </ol>
   );
