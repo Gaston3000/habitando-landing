@@ -63,13 +63,17 @@ export default function TramaPlano({ refHeroe, perfil, movimientoReducido }) {
       const angosto = cajaHeroe.width < 900;
       const conEtiqueta = angosto || libreDerecha >= LUGAR_PARA_ETIQUETA;
 
-      // En el celular el teléfono va abajo: la unidad queda en el espacio libre de la primera pantalla, a la derecha
-      // y justo encima del teléfono. En escritorio, si hay lugar, va a la derecha del teléfono; si no, detrás, sin etiqueta.
+      // En el celular la primera pantalla es un afiche: la unidad queda en la trama de arriba, entre el selector de
+      // perfil y el título. En escritorio, si hay lugar, va a la derecha del teléfono; si no, detrás, sin etiqueta.
       let x;
       let y;
       if (angosto) {
-        x = cajaHeroe.width * 0.72;
-        y = cajaTelefono.top - cajaHeroe.top - 150;
+        const selector = [...heroe.querySelectorAll("nav")].find((nav) => nav.offsetParent);
+        const titulo = [...heroe.querySelectorAll("h1")].find((h1) => h1.offsetParent);
+        const arribaLibre = selector ? selector.getBoundingClientRect().bottom - cajaHeroe.top : 0;
+        const abajoLibre = titulo.getBoundingClientRect().top - cajaHeroe.top;
+        x = cajaHeroe.width * 0.66;
+        y = (arribaLibre + abajoLibre) / 2 - 28;
       } else {
         x = conEtiqueta
           ? cajaTelefono.right - cajaHeroe.left + libreDerecha / 2

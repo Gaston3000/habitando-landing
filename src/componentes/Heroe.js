@@ -30,8 +30,9 @@ const MARGEN_CELULAR = 80;
 
 // Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con habitando".
 // En escritorio el héroe ocupa justo una pantalla (menos el encabezado) y el teléfono se achica
-// para que entre entero. En el celular no entran los dos a un tamaño que se lea: el texto ocupa la primera
-// pantalla y el teléfono empieza justo debajo, así nunca aparece cortado por la mitad.
+// para que entre entero. En el celular no entran los dos a un tamaño que se lea, así que la primera pantalla se arma
+// como un afiche: arriba la trama como imagen y el texto apoyado abajo; el teléfono empieza justo debajo,
+// pegado al botón, y nunca aparece cortado por la mitad.
 export default function Heroe({ perfil, alElegirPerfil }) {
   const bienvenidaActiva = useBienvenidaActiva();
   const movimientoReducido = useMovimientoReducido();
@@ -87,30 +88,33 @@ export default function Heroe({ perfil, alElegirPerfil }) {
         ref={refGrilla}
         className="contenedor relative grid grid-cols-1 items-center gap-[clamp(2.5rem,5vw,5rem)] escritorio:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
       >
-        {/* En el celular, el texto ocupa la primera pantalla entera (menos el encabezado y el margen de arriba) */}
-        <div className="min-w-0 max-escritorio:min-h-[calc(100svh-var(--alto-encabezado,56px)-2rem)]">
+        {/* En el celular ocupa la primera pantalla entera (menos el encabezado y el margen de arriba):
+            el selector arriba, la trama en el medio y el texto apoyado abajo */}
+        <div className="min-w-0 max-escritorio:flex max-escritorio:min-h-[calc(100svh-var(--alto-encabezado,56px)-2rem)] max-escritorio:flex-col max-escritorio:pb-4">
           <SelectorPerfil perfil={perfil} alElegir={alElegirPerfil} className="mb-7 flex md:hidden" />
-          {Object.entries(TEXTOS).map(([id, textos]) => (
-            <div key={id} data-solo={id}>
-              <h1 className="max-w-[12.5ch] font-titulo text-titulo-heroe font-bold tracking-[-0.028em] text-balance escritorio:max-w-none escritorio:text-titulo-heroe-escritorio">
-                {/* En escritorio, cada parte es un renglón */}
-                <span className="escritorio:block escritorio:whitespace-nowrap">{textos.titulo[0]}</span>{" "}
-                <span className="escritorio:block escritorio:whitespace-nowrap">{textos.titulo[1]}</span>
-              </h1>
-              <p className="mt-5.5 max-w-[34rem] text-bajada text-texto-secundario escritorio:max-w-none">
-                <span className="escritorio:block">{textos.bajada[0]}</span>{" "}
-                <span className="escritorio:block">{textos.bajada[1]}</span>
-              </p>
-              <div data-acciones-heroe className="mt-[clamp(1.4rem,3.2vh,2.1rem)] flex flex-wrap items-center gap-x-7 gap-y-3">
-                <a href="#accion" className={CLASES_BOTON}>
-                  {textos.boton}
-                </a>
-                <a href="#funciones" className={`${CLASES_ENLACE} inline-flex min-h-11 items-center`}>
-                  {textos.enlace}
-                </a>
+          <div className="max-escritorio:mt-auto">
+            {Object.entries(TEXTOS).map(([id, textos]) => (
+              <div key={id} data-solo={id}>
+                <h1 className="max-w-[12.5ch] font-titulo text-titulo-heroe font-bold tracking-[-0.028em] text-balance escritorio:max-w-none escritorio:text-titulo-heroe-escritorio">
+                  {/* En escritorio, cada parte es un renglón */}
+                  <span className="escritorio:block escritorio:whitespace-nowrap">{textos.titulo[0]}</span>{" "}
+                  <span className="escritorio:block escritorio:whitespace-nowrap">{textos.titulo[1]}</span>
+                </h1>
+                <p className="mt-5.5 max-w-[34rem] text-bajada text-texto-secundario escritorio:max-w-none">
+                  <span className="escritorio:block">{textos.bajada[0]}</span>{" "}
+                  <span className="escritorio:block">{textos.bajada[1]}</span>
+                </p>
+                <div data-acciones-heroe className="mt-[clamp(1.4rem,3.2vh,2.1rem)] flex flex-wrap items-center gap-x-7 gap-y-3">
+                  <a href="#accion" className={CLASES_BOTON}>
+                    {textos.boton}
+                  </a>
+                  <a href="#funciones" className={`${CLASES_ENLACE} inline-flex min-h-11 items-center`}>
+                    {textos.enlace}
+                  </a>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Al cambiar de perfil o al terminar la bienvenida, la escena se vuelve a montar y empieza de nuevo */}

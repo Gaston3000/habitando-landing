@@ -223,8 +223,9 @@ html.bienvenida-activa .isologo-letras {
 
 /* 6. TRAMA DE PLANTA DEL HÉROE */
 .trama-heroe {
-  /* En el celular la trama aparece debajo del texto y llena el espacio libre de la primera pantalla */
-  mask-image: linear-gradient(180deg, transparent 0, transparent 22%, #000 42%);
+  /* En el celular la primera pantalla es un afiche: la trama se ve arriba, se apaga detrás del texto
+     y vuelve alrededor del teléfono */
+  mask-image: linear-gradient(180deg, #000 0, #000 18%, rgb(0 0 0 / 0.18) 30%, rgb(0 0 0 / 0.18) 50%, #000 64%);
 
   @media (width >= 56.25rem) {
     mask-image: linear-gradient(90deg, transparent 0, transparent 30%, #000 64%);
