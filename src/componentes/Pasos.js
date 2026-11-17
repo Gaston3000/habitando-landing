@@ -2,6 +2,7 @@
 
 import TramaPiso from "@/componentes/TramaPiso";
 import { useAparecerEnPantalla } from "@/lib/aparecer";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 const PASOS = {
   vecinos: {
@@ -50,7 +51,7 @@ function Torres({ pasos }) {
         >
           <TramaPiso variante="oscura" />
           <p className="font-titulo text-[2.4rem] leading-none font-bold text-torre-texto-secundario">{indice + 1}</p>
-          <h3 className="mt-4 font-titulo text-[1.25rem] leading-[1.2] font-bold text-balance">{paso.titulo}</h3>
+          <h3 className="mt-4 font-titulo text-[1.25rem] leading-[1.2] font-bold text-balance md:max-lg:text-[1.1rem]">{unirPalabrasCortas(paso.titulo)}</h3>
           <p className="mt-2 text-torre-texto-secundario">{paso.texto}</p>
         </li>
       ))}
@@ -66,7 +67,7 @@ export default function Pasos() {
       <div className="contenedor">
         {Object.entries(PASOS).map(([id, contenido]) => (
           <div key={id} data-solo={id}>
-            <h2 className="font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">{contenido.titulo}</h2>
+            <h2 className="font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">{unirPalabrasCortas(contenido.titulo)}</h2>
             <Torres pasos={contenido.pasos} />
           </div>
         ))}

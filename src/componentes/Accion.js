@@ -3,6 +3,7 @@ import FormularioMensaje from "@/componentes/FormularioMensaje";
 import Sala from "@/componentes/Sala";
 import TramaLuces from "@/componentes/TramaLuces";
 import { ALTO_MODULO, ANCHO_MODULO, SALAS } from "@/lib/trama";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // El formulario es una sala más de la planta: blanco, con el corte de 30°, un borde fino y una sombra suave.
 const CLASES_FORMULARIO =
@@ -41,7 +42,7 @@ function TramaClara() {
 function Llamado({ titulo, texto }) {
   return (
     <div>
-      <h2 className="max-w-[14ch] font-titulo text-titulo-banda font-bold tracking-[-0.022em] text-balance">{titulo}</h2>
+      <h2 className="max-w-[15ch] font-titulo text-titulo-banda font-bold tracking-[-0.022em] text-balance">{unirPalabrasCortas(titulo)}</h2>
       <p className="mt-4.5 max-w-xl text-[1.08rem] text-texto-secundario">{texto}</p>
     </div>
   );

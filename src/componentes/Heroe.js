@@ -6,6 +6,7 @@ import SelectorPerfil from "@/componentes/SelectorPerfil";
 import TramaPlano from "@/componentes/TramaPlano";
 import { CLASES_BOTON, CLASES_ENLACE } from "@/lib/clases";
 import { useBienvenidaActiva, useMovimientoReducido } from "@/lib/pagina";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 const TEXTOS = {
   vecinos: {
@@ -95,14 +96,14 @@ export default function Heroe({ perfil, alElegirPerfil }) {
           <div className="max-escritorio:mt-auto">
             {Object.entries(TEXTOS).map(([id, textos]) => (
               <div key={id} data-solo={id}>
-                <h1 className="max-w-[12.5ch] font-titulo text-titulo-heroe font-bold tracking-[-0.028em] text-balance escritorio:max-w-none escritorio:text-titulo-heroe-escritorio">
-                  {/* En escritorio, cada parte es un renglón */}
-                  <span className="escritorio:block escritorio:whitespace-nowrap">{textos.titulo[0]}</span>{" "}
-                  <span className="escritorio:block escritorio:whitespace-nowrap">{textos.titulo[1]}</span>
+                <h1 className="font-titulo text-titulo-heroe font-bold tracking-[-0.028em] escritorio:text-titulo-heroe-escritorio">
+                  {/* Siempre dos renglones, cortados por sentido: el tamaño se ajusta para que el más largo entre en el ancho */}
+                  <span className="block whitespace-nowrap">{unirPalabrasCortas(textos.titulo[0])}</span>{" "}
+                  <span className="block whitespace-nowrap">{unirPalabrasCortas(textos.titulo[1])}</span>
                 </h1>
                 <p className="mt-5.5 max-w-[34rem] text-bajada text-texto-secundario escritorio:max-w-none">
-                  <span className="escritorio:block">{textos.bajada[0]}</span>{" "}
-                  <span className="escritorio:block">{textos.bajada[1]}</span>
+                  <span className="escritorio:block">{unirPalabrasCortas(textos.bajada[0])}</span>{" "}
+                  <span className="escritorio:block">{unirPalabrasCortas(textos.bajada[1])}</span>
                 </p>
                 <div data-acciones-heroe className="mt-[clamp(1.4rem,3.2vh,2.1rem)] flex flex-wrap items-center gap-x-7 gap-y-3">
                   <a href="#accion" className={CLASES_BOTON}>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import EscenaProblema from "@/componentes/EscenaProblema";
 import TramaPiso from "@/componentes/TramaPiso";
 import { CLASES_ENLACE } from "@/lib/clases";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Cada lado con lo que encontramos en la investigación: la encuesta a vecinos y la entrevista al administrador.
 // Los porcentajes de la encuesta van como "3 de cada 4", que se entiende más rápido; el redondeo nunca infla el dato
@@ -72,14 +73,14 @@ function Lado({ id, lado, esOtroLado, oculta, alVerElOtroLado }) {
       </div>
 
       <blockquote className="max-w-[30rem]">
-        <p className="-indent-[0.42em] font-titulo text-[1.1rem] leading-[1.42] font-semibold">“{lado.cita}”</p>
+        <p className="-indent-[0.42em] font-titulo text-[1.1rem] leading-[1.42] font-semibold">“{unirPalabrasCortas(lado.cita)}”</p>
         <footer className="mt-2 text-[0.88rem] text-texto-secundario">{lado.autorCita}</footer>
       </blockquote>
 
       <div className="mt-auto">
         <EscenaProblema key={vuelta} lado={id} />
       </div>
-      <p className="-mt-2 font-titulo text-xl leading-[1.3] font-semibold">{lado.conteo}</p>
+      <p className="-mt-2 font-titulo text-xl leading-[1.3] font-semibold">{unirPalabrasCortas(lado.conteo)}</p>
 
       {/* Se ve solo en la tarjeta del otro lado (en la propia queda invisible, así las dos miden lo mismo).
           El ::after estira el botón a toda la tarjeta. En el celular no va: ahí cambia de lado el selector de arriba. */}
@@ -112,8 +113,8 @@ export default function Problema({ perfil, alVerElOtroLado }) {
             id="titulo-problema"
             className="max-w-[19ch] font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance escritorio:max-w-none"
           >
-            <span className="escritorio:block">La información ya existe.</span>{" "}
-            <span className="escritorio:block">El problema es que no circula.</span>
+            <span className="escritorio:block">{unirPalabrasCortas("La información ya existe.")}</span>{" "}
+            <span className="escritorio:block">{unirPalabrasCortas("El problema es que no circula.")}</span>
           </h2>
           <p className="max-w-xl text-[1.08rem] text-texto-secundario lg:pb-1">
             Le preguntamos a 86 vecinos y entrevistamos a un administrador con 24 edificios. Los dos sufren lo mismo.
@@ -149,8 +150,8 @@ export default function Problema({ perfil, alVerElOtroLado }) {
 
         {/* La frase que cierra el problema y abre la solución. En escritorio, un renglón por oración. */}
         <p className="mt-[clamp(2.5rem,4vw,3.5rem)] font-titulo text-[clamp(1.2rem,1.8vw,1.4rem)] leading-[1.4] font-semibold text-balance">
-          <span className="lg:block">habitando no inventa información nueva.</span>{" "}
-          <span className="lg:block">Muestra la que la administración ya tiene a quien la necesita, cuando la necesita.</span>
+          <span className="lg:block">{unirPalabrasCortas("habitando no inventa información nueva.")}</span>{" "}
+          <span className="lg:block">{unirPalabrasCortas("Muestra la que la administración ya tiene a quien la necesita, cuando la necesita.")}</span>
         </p>
       </div>
     </section>

@@ -92,7 +92,9 @@
   /* Desde acá el héroe va en dos columnas (texto y teléfono) */
   --breakpoint-escritorio: 56.25rem;
 
-  --text-titulo-heroe: clamp(2.6rem, min(5.4vw, 8.4vh), 4.6rem);
+  /* En el celular el título también va en dos renglones: el más largo ("en el grupo del edificio.") mide
+     10,2 veces el tamaño de letra, así que el tamaño sale del ancho libre (la pantalla menos el margen de cada lado) */
+  --text-titulo-heroe: min(4.6rem, calc((100vw - 2 * var(--margen-contenedor)) / 10.4));
   --text-titulo-heroe--line-height: 1.02;
   /* En escritorio el título va en dos renglones: el tamaño sigue al ancho de la columna */
   --text-titulo-heroe-escritorio: clamp(2.3rem, min(4.2vw, 8.4vh), 3.45rem);
@@ -117,18 +119,22 @@
   clip-path: polygon(0 calc(var(--corte) * 0.577), var(--corte) 0, 100% 0, 100% 100%, 0 100%);
 }
 
+/* Margen a cada lado de la caja de contenido. Lo usa también el título del héroe para calcular su tamaño. */
+:root {
+  --margen-contenedor: 16px;
+
+  @media (width >= 45rem) {
+    --margen-contenedor: 32px;
+  }
+}
+
 /* Caja de contenido: 1200 px de ancho útil, respetando el notch del celular */
 @utility contenedor {
   width: 100%;
   max-width: 1264px;
   margin-inline: auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-
-  @media (width >= 45rem) {
-    padding-left: max(32px, env(safe-area-inset-left, 0px));
-    padding-right: max(32px, env(safe-area-inset-right, 0px));
-  }
+  padding-left: max(var(--margen-contenedor), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--margen-contenedor), env(safe-area-inset-right, 0px));
 }
 
 @utility espacio-seccion {

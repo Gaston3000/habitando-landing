@@ -1,5 +1,6 @@
 import ChipEstado from "@/componentes/ChipEstado";
 import Icono from "@/componentes/Icono";
+import { unirPalabrasCortas } from "@/lib/texto";
 
 // Lugar y color de cada bloque, sobre la grilla de los bloques de reparto (16 columnas).
 // En pantallas grandes: uno alto a la izquierda, dos apilados a la derecha y tres chicos abajo.
@@ -263,7 +264,7 @@ export default function Funciones() {
         {Object.entries(FUNCIONES).map(([id, funciones]) => (
           <div key={id} data-solo={id}>
             <h2 className="font-titulo text-titulo-seccion font-bold tracking-[-0.022em] text-balance">
-              {funciones.titulo}
+              {unirPalabrasCortas(funciones.titulo)}
             </h2>
             <div className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-16">
               {funciones.bloques.map((bloque, indice) => {
@@ -280,7 +281,7 @@ export default function Funciones() {
                         grande ? "text-[clamp(1.4rem,2.1vw,1.75rem)]" : "text-[1.22rem]"
                       }`}
                     >
-                      {bloque.titulo}
+                      {unirPalabrasCortas(bloque.titulo)}
                     </h3>
                     {bloque.pieza}
                   </article>
