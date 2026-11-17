@@ -223,7 +223,8 @@ html.bienvenida-activa .isologo-letras {
 
 /* 6. TRAMA DE PLANTA DEL HÉROE */
 .trama-heroe {
-  mask-image: linear-gradient(180deg, transparent 0, transparent 38%, #000 72%);
+  /* En el celular la trama aparece debajo del texto y llena el espacio libre de la primera pantalla */
+  mask-image: linear-gradient(180deg, transparent 0, transparent 22%, #000 42%);
 
   @media (width >= 56.25rem) {
     mask-image: linear-gradient(90deg, transparent 0, transparent 30%, #000 64%);
@@ -1088,4 +1089,21 @@ html[data-perfil="administraciones"] [data-invita="administraciones"] {
 .luz.encendida {
   opacity: 1;
   transition-duration: 0.12s;
+}
+
+/* Ola de luces del celular (ver TramaLuces.js): cada sala se enciende y se apaga cuando le llega su turno */
+.luces-ola .luz {
+  animation: ola-luz 0.7s ease-out var(--demora, 0ms) both;
+}
+
+@keyframes ola-luz {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

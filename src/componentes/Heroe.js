@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import EscenaTelefono from "@/componentes/EscenaTelefono";
+import SelectorPerfil from "@/componentes/SelectorPerfil";
 import TramaPlano from "@/componentes/TramaPlano";
 import { CLASES_BOTON, CLASES_ENLACE } from "@/lib/clases";
 import { useBienvenidaActiva, useMovimientoReducido } from "@/lib/pagina";
@@ -24,10 +25,14 @@ const TEXTOS = {
 // Lo que asoma de la sección siguiente por debajo del héroe, en escritorio
 const ASOMA = 28;
 
+// En el celular, lo que queda libre debajo del teléfono y su selector al mirarlo entero
+const MARGEN_CELULAR = 80;
+
 // Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con habitando".
 // En escritorio el héroe ocupa justo una pantalla (menos el encabezado) y el teléfono se achica
-// para que entre entero; en el celular va debajo del texto.
-export default function Heroe({ perfil }) {
+// para que entre entero. En el celular no entran los dos a un tamaño que se lea: el texto ocupa la primera
+// pantalla y el teléfono empieza justo debajo, así nunca aparece cortado por la mitad.
+export default function Heroe({ perfil, alElegirPerfil }) {
   const bienvenidaActiva = useBienvenidaActiva();
   const movimientoReducido = useMovimientoReducido();
 
@@ -55,7 +60,8 @@ export default function Heroe({ perfil }) {
         const altoLibre = altoPantalla - altoEncabezado - ASOMA - relleno;
         escala = Math.min(1, anchoLibre / 288, Math.max(0.68, altoLibre / 590));
       } else {
-        escala = Math.min(1, (anchoPantalla * 0.82) / 288, (altoPantalla - 140) / 590);
+        // Que el teléfono con su selector entre entero en una pantalla
+        escala = Math.min(1, (anchoPantalla * 0.82) / 288, (altoPantalla - altoEncabezado - MARGEN_CELULAR) / 590);
       }
       heroe.style.setProperty("--escala", escala.toFixed(3));
     }
@@ -81,7 +87,9 @@ export default function Heroe({ perfil }) {
         ref={refGrilla}
         className="contenedor relative grid grid-cols-1 items-center gap-[clamp(2.5rem,5vw,5rem)] escritorio:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
       >
-        <div className="min-w-0">
+        {/* En el celular, el texto ocupa la primera pantalla entera (menos el encabezado y el margen de arriba) */}
+        <div className="min-w-0 max-escritorio:min-h-[calc(100svh-var(--alto-encabezado,56px)-2rem)]">
+          <SelectorPerfil perfil={perfil} alElegir={alElegirPerfil} className="mb-7 flex md:hidden" />
           {Object.entries(TEXTOS).map(([id, textos]) => (
             <div key={id} data-solo={id}>
               <h1 className="max-w-[12.5ch] font-titulo text-titulo-heroe font-bold tracking-[-0.028em] text-balance escritorio:max-w-none escritorio:text-titulo-heroe-escritorio">
@@ -97,7 +105,7 @@ export default function Heroe({ perfil }) {
                 <a href="#accion" className={CLASES_BOTON}>
                   {textos.boton}
                 </a>
-                <a href="#funciones" className={CLASES_ENLACE}>
+                <a href="#funciones" className={`${CLASES_ENLACE} inline-flex min-h-11 items-center`}>
                   {textos.enlace}
                 </a>
               </div>

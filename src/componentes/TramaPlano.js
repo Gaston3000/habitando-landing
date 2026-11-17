@@ -60,13 +60,22 @@ export default function TramaPlano({ refHeroe, perfil, movimientoReducido }) {
       const cajaTelefono = heroe.querySelector(".telefono").getBoundingClientRect();
       const acercamiento = cajaHeroe.width < 900 ? ACERCAMIENTO.angosto : ACERCAMIENTO.ancho;
       const libreDerecha = cajaHeroe.right - cajaTelefono.right;
-      const conEtiqueta = libreDerecha >= LUGAR_PARA_ETIQUETA;
+      const angosto = cajaHeroe.width < 900;
+      const conEtiqueta = angosto || libreDerecha >= LUGAR_PARA_ETIQUETA;
 
-      // Si hay lugar, la unidad va a la derecha del teléfono; si no, queda detrás, sin etiqueta.
-      const x = conEtiqueta
-        ? cajaTelefono.right - cajaHeroe.left + libreDerecha / 2
-        : cajaTelefono.left - cajaHeroe.left + cajaTelefono.width / 2;
-      const y = cajaTelefono.top - cajaHeroe.top + cajaTelefono.height * (conEtiqueta ? 0.3 : 0.45);
+      // En el celular el teléfono va abajo: la unidad queda en el espacio libre de la primera pantalla, a la derecha
+      // y justo encima del teléfono. En escritorio, si hay lugar, va a la derecha del teléfono; si no, detrás, sin etiqueta.
+      let x;
+      let y;
+      if (angosto) {
+        x = cajaHeroe.width * 0.72;
+        y = cajaTelefono.top - cajaHeroe.top - 150;
+      } else {
+        x = conEtiqueta
+          ? cajaTelefono.right - cajaHeroe.left + libreDerecha / 2
+          : cajaTelefono.left - cajaHeroe.left + cajaTelefono.width / 2;
+        y = cajaTelefono.top - cajaHeroe.top + cajaTelefono.height * (conEtiqueta ? 0.3 : 0.45);
+      }
 
       grupo.style.transform = `translate(${x - acercamiento * plano.unidad.x}px, ${y - acercamiento * plano.unidad.y}px) scale(${acercamiento})`;
       etiqueta.style.left = `${x}px`;

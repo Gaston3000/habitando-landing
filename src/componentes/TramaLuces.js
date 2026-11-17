@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Sala from "@/componentes/Sala";
+import { useAparecerEnPantalla } from "@/lib/aparecer";
 import { useMovimientoReducido } from "@/lib/pagina";
-import { ALTO_MODULO, ANCHO_MODULO, SALAS } from "@/lib/trama";
+import { ALTO_MODULO, ANCHO_MODULO, altoSala, SALAS } from "@/lib/trama";
 
 // Misma escala que la trama clara de la banda final, así cada luz cae justo sobre su sala
 const ESCALA = 0.8;
@@ -13,6 +14,8 @@ const ALTO = ALTO_MODULO * ESCALA;
 const ALCANCE = 110;
 // Lo que baja el corte con el pie por debajo de la banda (ABAJO en Pie.js): ahí también se encienden las salas claras
 const FRANJA_PIE = 96;
+// Lo que tarda la ola del celular en cruzar la banda, en milisegundos
+const DURACION_OLA = 900;
 
 const CONSULTA_MOUSE = "(hover: hover) and (pointer: fine)";
 
@@ -29,13 +32,26 @@ function useHayMouse() {
   );
 }
 
-// Todas las salas que cubren la banda
+function centroSala(sala) {
+  const [arriba, abajo] = altoSala(sala);
+  const xs = sala.rect ? [sala.rect[0], sala.rect[0] + sala.rect[2]] : sala.puntos.split(" ").map((punto) => Number(punto.split(",")[0]));
+  return [(Math.min(...xs) + Math.max(...xs)) / 2, (arriba + abajo) / 2];
+}
+
+// Todas las salas que cubren la banda. "demora" es cuándo le llega la ola del celular a cada sala:
+// arranca abajo a la izquierda y termina arriba a la derecha.
 function armarLuces({ columnas, filas }) {
   const luces = [];
+  const ancho = columnas * ANCHO;
+  const alto = filas * ALTO;
   for (let fila = 0; fila < filas; fila++) {
     for (let columna = 0; columna < columnas; columna++) {
       SALAS.forEach((sala, indice) => {
-        luces.push({ clave: `${columna}-${fila}-${indice}`, columna, fila, sala });
+        const [cx, cy] = centroSala(sala);
+        const x = columna * ANCHO + cx * ESCALA;
+        const y = fila * ALTO + cy * ESCALA;
+        const avance = (x / ancho + (1 - y / alto)) / 2;
+        luces.push({ clave: `${columna}-${fila}-${indice}`, columna, fila, sala, demora: Math.round(avance * DURACION_OLA) });
       });
     }
   }
@@ -46,27 +62,28 @@ function armarLuces({ columnas, filas }) {
 // se apagan de a poco, dejando un rastro. Va encima de la trama clara, con las salas en el mismo lugar.
 // También se encienden las salas claras del corte con el pie (las dibuja Pie.js, también con la clase "luz").
 // Sobre el formulario no pasa nada, para no distraer mientras alguien lo completa.
+// En el celular no hay mouse: las salas se encienden en una ola diagonal, una sola vez, cuando la banda aparece.
 export default function TramaLuces() {
   const hayMouse = useHayMouse();
   const movimientoReducido = useMovimientoReducido();
-  const activa = hayMouse && !movimientoReducido;
+  const modo = movimientoReducido ? null : hayMouse ? "mouse" : "ola";
 
   const [medidas, setMedidas] = useState(null);
-  const refSvg = useRef(null);
+  const [refSvg, vista] = useAparecerEnPantalla(0.3);
 
   // Cuántos módulos de trama hacen falta para cubrir la banda
   useEffect(() => {
-    if (!activa) return;
+    if (!modo) return;
     const banda = refSvg.current.parentElement;
     const observador = new ResizeObserver(() =>
       setMedidas({ columnas: Math.ceil(banda.clientWidth / ANCHO) + 1, filas: Math.ceil(banda.clientHeight / ALTO) + 1 })
     );
     observador.observe(banda);
     return () => observador.disconnect();
-  }, [activa]);
+  }, [modo, refSvg]);
 
   useEffect(() => {
-    if (!activa || !medidas) return;
+    if (modo !== "mouse" || !medidas) return;
     const banda = refSvg.current.parentElement;
     let luces = [];
     let cajas = [];
@@ -121,14 +138,23 @@ export default function TramaLuces() {
       cancelAnimationFrame(cuadro);
       document.removeEventListener("pointermove", alMover);
     };
-  }, [activa, medidas]);
+  }, [modo, medidas, refSvg]);
 
-  const luces = activa && medidas ? armarLuces(medidas) : [];
+  const luces = modo && medidas ? armarLuces(medidas) : [];
+  const ola = modo === "ola" && vista === "activa";
 
   return (
-    <svg ref={refSvg} aria-hidden="true" className="pointer-events-none absolute inset-0 block size-full">
-      {luces.map(({ clave, columna, fila, sala }) => (
-        <g key={clave} transform={`translate(${columna * ANCHO} ${fila * ALTO}) scale(${ESCALA})`}>
+    <svg
+      ref={refSvg}
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-0 block size-full ${ola ? "luces-ola" : ""}`}
+    >
+      {luces.map(({ clave, columna, fila, sala, demora }) => (
+        <g
+          key={clave}
+          transform={`translate(${columna * ANCHO} ${fila * ALTO}) scale(${ESCALA})`}
+          style={{ "--demora": `${demora}ms` }}
+        >
           <Sala sala={sala} className="luz" />
         </g>
       ))}

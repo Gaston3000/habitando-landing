@@ -39,13 +39,14 @@ const LADOS = {
 
 // Cada tarjeta termina con su escena sobre un piso de trama.
 // La tarjeta del otro lado invita a cambiar de perfil: se puede tocar entera, y al pasar el mouse se levanta y repite su escena.
-function Lado({ id, lado, esOtroLado, alVerElOtroLado }) {
+// En el celular se ve una sola tarjeta a la vez ("oculta" esconde la otra).
+function Lado({ id, lado, esOtroLado, oculta, alVerElOtroLado }) {
   const [vuelta, setVuelta] = useState(0);
 
   return (
     <div
       onMouseEnter={() => esOtroLado && setVuelta(vuelta + 1)}
-      className="relative flex min-w-0 flex-col gap-6 bg-superficie-elevada p-[clamp(1.6rem,3vw,2.5rem)] corte-26 transition-transform duration-300 has-[[data-invita]:hover]:-translate-y-1 has-[[data-invita]:focus-visible]:shadow-[inset_0_0_0_2px_var(--foco)]"
+      className={`${oculta ? "max-md:hidden" : ""} relative flex min-w-0 flex-col gap-6 bg-superficie-elevada p-[clamp(1.6rem,3vw,2.5rem)] corte-26 transition-transform duration-300 has-[[data-invita]:hover]:-translate-y-1 has-[[data-invita]:focus-visible]:shadow-[inset_0_0_0_2px_var(--foco)]`}
     >
       <TramaPiso />
       {/* "Tu lado" marca el lado del perfil que se está viendo */}
@@ -81,12 +82,12 @@ function Lado({ id, lado, esOtroLado, alVerElOtroLado }) {
       <p className="-mt-2 font-titulo text-xl leading-[1.3] font-semibold">{lado.conteo}</p>
 
       {/* Se ve solo en la tarjeta del otro lado (en la propia queda invisible, así las dos miden lo mismo).
-          El ::after estira el botón a toda la tarjeta. */}
+          El ::after estira el botón a toda la tarjeta. En el celular no va: ahí cambia de lado el selector de arriba. */}
       <button
         type="button"
         data-invita={id}
         onClick={alVerElOtroLado}
-        className={`${CLASES_ENLACE} -mt-3 self-start after:absolute after:inset-0 focus-visible:outline-none`}
+        className={`${CLASES_ENLACE} -mt-3 self-start after:absolute after:inset-0 focus-visible:outline-none max-md:hidden`}
       >
         {lado.invitacion}
       </button>
@@ -97,6 +98,11 @@ function Lado({ id, lado, esOtroLado, alVerElOtroLado }) {
 // El mismo problema visto de los dos lados, con lo que encontramos en la investigación:
 // el vecino pregunta una vez, la administración contesta veinte.
 export default function Problema({ perfil, alVerElOtroLado }) {
+  // En el celular se ve una tarjeta a la vez: arranca la del perfil elegido y el selector muestra la otra.
+  // Lo que se eligió vale para ese perfil; al cambiar de perfil vuelve a arrancar por el propio lado.
+  const [eleccion, setEleccion] = useState({ perfil, lado: perfil });
+  const ladoVisible = eleccion.perfil === perfil ? eleccion.lado : perfil;
+
   return (
     <section aria-labelledby="titulo-problema" className="espacio-seccion bg-superficie-zona">
       <div className="contenedor">
@@ -114,9 +120,30 @@ export default function Problema({ perfil, alVerElOtroLado }) {
           </p>
         </div>
 
-        <div className="mt-[clamp(2.5rem,4vw,3.5rem)] grid grid-cols-1 gap-[clamp(0.75rem,1.6vw,1.25rem)] md:grid-cols-2">
+        <div role="group" aria-label="Elegí qué lado ver" className="mt-8 flex gap-1 bg-superficie-elevada p-1 corte-16 md:hidden">
           {Object.entries(LADOS).map(([id, lado]) => (
-            <Lado key={id} id={id} lado={lado} esOtroLado={perfil !== id} alVerElOtroLado={alVerElOtroLado} />
+            <button
+              key={id}
+              type="button"
+              aria-pressed={ladoVisible === id}
+              onClick={() => setEleccion({ perfil, lado: id })}
+              className="min-h-11 flex-1 cursor-pointer px-2 text-[0.92rem] font-semibold text-texto-secundario corte-12 transition-colors duration-300 aria-pressed:bg-superficie-zona aria-pressed:text-texto-principal"
+            >
+              {lado.titulo}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-[clamp(0.75rem,1.6vw,1.25rem)] md:mt-[clamp(2.5rem,4vw,3.5rem)] md:grid-cols-2">
+          {Object.entries(LADOS).map(([id, lado]) => (
+            <Lado
+              key={id}
+              id={id}
+              lado={lado}
+              esOtroLado={perfil !== id}
+              oculta={ladoVisible !== id}
+              alVerElOtroLado={alVerElOtroLado}
+            />
           ))}
         </div>
 

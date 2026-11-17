@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import PantallaAdministracion from "@/componentes/PantallaAdministracion";
 import PantallaVecino from "@/componentes/PantallaVecino";
+import { useAparecerEnPantalla } from "@/lib/aparecer";
 
 const OPCIONES = [
   { estado: "hoy", texto: "Hoy" },
@@ -15,15 +16,17 @@ const ENTRA_HABITANDO = 2900;
 
 // El teléfono con "Hoy" y "Con habitando".
 // Con "automatica", la escena arranca en "Hoy", llega un mensaje más y a los 3 segundos pasa sola a
-// "Con habitando"; mientras tanto, una barrita avanza en el botón. Para que vuelva a empezar
+// "Con habitando"; mientras tanto, una barrita avanza en el botón. Todo eso empieza recién cuando el teléfono
+// se ve (en el celular está más abajo), así nadie se pierde el "Hoy". Para que vuelva a empezar
 // (por ejemplo, al cambiar de perfil), el héroe la vuelve a montar con otra "key".
 export default function EscenaTelefono({ automatica, movimientoReducido }) {
   const [estado, setEstado] = useState("hoy");
   const [llegando, setLlegando] = useState(automatica);
   const [avanzando, setAvanzando] = useState(automatica);
 
-  const refEscena = useRef(null);
+  const [refEscena, vista] = useAparecerEnPantalla(0.6);
   const refEsperas = useRef([]);
+  const corriendo = automatica && vista === "activa";
 
   function cancelarEsperas() {
     refEsperas.current.forEach(clearTimeout);
@@ -31,7 +34,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
   }
 
   useEffect(() => {
-    if (!automatica) return;
+    if (!corriendo) return;
     refEsperas.current = [
       setTimeout(() => setLlegando(false), LLEGA_EL_MENSAJE),
       setTimeout(() => {
@@ -40,7 +43,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
       }, ENTRA_HABITANDO),
     ];
     return cancelarEsperas;
-  }, [automatica]);
+  }, [corriendo]);
 
   // La pantalla de habitando entra barriendo en diagonal, con el mismo corte de 30° del logo.
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
         { duration: 950, delay: 240, easing: "cubic-bezier(.65,0,.25,1)", fill: "backwards" }
       );
     });
-  }, [estado, movimientoReducido]);
+  }, [estado, movimientoReducido, refEscena]);
 
   function elegir(nuevo) {
     cancelarEsperas();
@@ -86,7 +89,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
         role="group"
         aria-label="Comparar cómo es hoy y cómo es con habitando"
         className={`selector-escena inline-flex gap-0.75 bg-superficie-zona p-0.75 corte-12 escritorio:-order-1 escritorio:mb-6 escritorio:flex-col escritorio:corte-14 ${
-          avanzando ? "avanzando" : ""
+          avanzando && corriendo ? "avanzando" : ""
         }`}
       >
         {OPCIONES.map((opcion) => (

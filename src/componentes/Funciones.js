@@ -35,9 +35,24 @@ function Pieza({ alto = false, children }) {
   );
 }
 
-function Fila({ izquierda, derecha, detalle }) {
+// En el celular se muestran los primeros gastos y el resto queda resumido en "y 2 gastos más"
+const GASTOS_EN_CELULAR = 3;
+
+function GastosOcultos({ cantidad }) {
   return (
-    <li className="flex items-baseline justify-between gap-4 border-t border-borde-suave py-2 first:border-t-0">
+    <li className="border-t border-borde-suave py-2 text-texto-secundario sm:hidden">
+      y {cantidad} gastos más
+    </li>
+  );
+}
+
+function Fila({ izquierda, derecha, detalle, soloEscritorio = false }) {
+  return (
+    <li
+      className={`flex items-baseline justify-between gap-4 border-t border-borde-suave py-2 first:border-t-0 ${
+        soloEscritorio ? "max-sm:hidden" : ""
+      }`}
+    >
       <span>
         {izquierda}
         {detalle && <small className="block text-[0.8rem] text-texto-secundario">{detalle}</small>}
@@ -76,9 +91,10 @@ function DetalleExpensa({ completo = false }) {
       <Pieza alto>
         <EncabezadoExpensa />
         <ul className="mt-2 border-t border-borde-suave">
-          {GASTOS.map((gasto) => (
+          {GASTOS.map((gasto, indice) => (
             <Fila
               key={gasto.nombre}
+              soloEscritorio={indice >= GASTOS_EN_CELULAR}
               izquierda={gasto.nombre}
               detalle={
                 <>
@@ -89,6 +105,7 @@ function DetalleExpensa({ completo = false }) {
               derecha={gasto.parte}
             />
           ))}
+          <GastosOcultos cantidad={GASTOS.length - GASTOS_EN_CELULAR} />
         </ul>
       </Pieza>
     );
@@ -111,9 +128,16 @@ function GastosDelMes() {
     <Pieza alto>
       <p className="font-semibold">Gastos de octubre, Rivadavia 4520</p>
       <ul className="mt-2">
-        {GASTOS.map((gasto) => (
-          <Fila key={gasto.nombre} izquierda={gasto.nombre} detalle="Con comprobante" derecha={gasto.total} />
+        {GASTOS.map((gasto, indice) => (
+          <Fila
+            key={gasto.nombre}
+            soloEscritorio={indice >= GASTOS_EN_CELULAR}
+            izquierda={gasto.nombre}
+            detalle="Con comprobante"
+            derecha={gasto.total}
+          />
         ))}
+        <GastosOcultos cantidad={GASTOS.length - GASTOS_EN_CELULAR} />
       </ul>
       <div className="mt-auto border-t-2 border-texto-principal pt-2.5">
         <p className="flex items-baseline justify-between gap-4 text-texto-secundario">
@@ -201,6 +225,9 @@ function EstadoArreglo() {
   );
 }
 
+// Bloques chicos (solo ícono y título): en el celular, una fila compacta con el ícono al lado del título
+const SIN_PIEZA = "sm:min-h-44 max-sm:flex-row max-sm:items-center max-sm:gap-4 max-sm:py-5";
+
 // Ordenados por el problema que resuelven, en el mismo orden que los datos de "El problema".
 // Los tres primeros llevan un pedacito de la app; los chicos, solo el título.
 const FUNCIONES = {
@@ -244,12 +271,12 @@ export default function Funciones() {
                 return (
                   <article
                     key={bloque.titulo}
-                    className={`flex min-w-0 flex-col p-6 ${bloque.pieza ? "" : "min-h-44"} ${lugar} ${color}`}
+                    className={`flex min-w-0 flex-col p-6 ${bloque.pieza ? "" : SIN_PIEZA} ${lugar} ${color}`}
                   >
                     <Icono nombre={bloque.icono} className="size-7.5 shrink-0" />
                     {/* Con pieza, el título va arriba y la pieza abajo; sin pieza, el título baja al pie del bloque */}
                     <h3
-                      className={`font-titulo leading-[1.15] font-bold text-balance ${bloque.pieza ? "mt-4" : "mt-auto pt-6"} ${
+                      className={`font-titulo leading-[1.15] font-bold text-balance ${bloque.pieza ? "mt-4" : "sm:mt-auto sm:pt-6"} ${
                         grande ? "text-[clamp(1.4rem,2.1vw,1.75rem)]" : "text-[1.22rem]"
                       }`}
                     >

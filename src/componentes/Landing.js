@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Accion from "@/componentes/Accion";
+import BarraAccion from "@/componentes/BarraAccion";
 import Bienvenida from "@/componentes/Bienvenida";
 import Encabezado from "@/componentes/Encabezado";
 import Funciones from "@/componentes/Funciones";
@@ -78,7 +79,7 @@ export default function Landing() {
       <main>
         {/* De lo más importante a lo menos: la promesa, el problema con sus datos, qué incluye,
             cómo se empieza, las dudas de antes de decidirse y la acción. */}
-        <Heroe perfil={perfil} />
+        <Heroe perfil={perfil} alElegirPerfil={elegirPerfil} />
         <Problema perfil={perfil} alVerElOtroLado={verElOtroLado} />
         <Funciones />
         <Pasos />
@@ -86,6 +87,7 @@ export default function Landing() {
         <Accion />
       </main>
       <Pie alVerPerfil={verPerfil} alRepetirBienvenida={repetirBienvenida} />
+      <BarraAccion perfil={perfil} alElegirPerfil={elegirPerfil} />
     </>
   );
 }
