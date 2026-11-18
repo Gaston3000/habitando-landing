@@ -9,6 +9,8 @@ import { unirPalabrasCortas } from "@/lib/texto";
 // Cada lado con lo que encontramos en la investigación: la encuesta a vecinos y la entrevista al administrador.
 // Los porcentajes de la encuesta van como "3 de cada 4", que se entiende más rápido; el redondeo nunca infla el dato
 // (74 % → 3 de cada 4, 47 % → casi la mitad, 41 % → 4 de cada 10) y los valores exactos quedan en la fuente.
+// La entrevista es un solo caso, así que no va con cifras (se leerían como datos de todas las administraciones):
+// se presenta al administrador y se cuenta su mes, para que quien lea reconozca el suyo.
 const LADOS = {
   vecinos: {
     titulo: "Los vecinos",
@@ -25,12 +27,16 @@ const LADOS = {
   },
   administraciones: {
     titulo: "La administración",
+    presentacion: "Un administrador matriculado con 24 edificios nos contó cómo es su mes.",
     datos: [
-      { cifra: "24 edificios", texto: "que se liquidan todos juntos, en la última semana del mes." },
-      { cifra: "6 herramientas", texto: "que no se hablan entre sí: un sistema para liquidar, tres casillas de mail, WhatsApp y Excel." },
-      { cifra: "1 Excel", texto: "para seis personas, que esperan turno para usarlo." },
+      { titulo: "Todo cae a fin de mes", texto: "Los 24 edificios se liquidan juntos, en la última semana." },
+      {
+        titulo: "Seis herramientas sueltas",
+        texto: "Un sistema para liquidar, tres casillas de mail, WhatsApp y Excel. Ninguna se conecta con otra.",
+      },
+      { titulo: "Un Excel para seis personas", texto: "Hay que esperar turno para usarlo." },
     ],
-    fuente: "Entrevista en profundidad a un administrador matriculado, septiembre de 2026.",
+    fuente: "Entrevista en profundidad, septiembre de 2026.",
     cita: "Como todo es Excel, no se pueden sincronizar los archivos en vivo. Tenemos que esperar a terminar uno, pasárselo, y recién ahí seguir.",
     autorCita: "El administrador entrevistado",
     conteo: "Lo contesta veinte veces por día.",
@@ -59,12 +65,18 @@ function Lado({ id, lado, esOtroLado, oculta, alVerElOtroLado }) {
       </span>
       <h3 className="font-titulo text-[1.45rem] font-bold">{lado.titulo}</h3>
 
-      {/* Cada lado lleva la fuente de sus datos justo debajo */}
+      {/* Cada lado lleva la fuente de sus datos justo debajo. Los datos de la encuesta van con su cifra grande;
+          los del caso, con un título más chico que dice la situación. */}
       <div>
+        {lado.presentacion && <p className="mb-4 text-[1.05rem]">{unirPalabrasCortas(lado.presentacion)}</p>}
         <ul className="border-t border-borde-suave">
           {lado.datos.map((dato) => (
-            <li key={dato.cifra} className="border-b border-borde-suave py-3.5">
-              <p className="font-titulo text-[1.5rem] leading-tight font-bold tracking-[-0.01em]">{dato.cifra}</p>
+            <li key={dato.cifra ?? dato.titulo} className="border-b border-borde-suave py-3.5">
+              {dato.cifra ? (
+                <p className="font-titulo text-[1.5rem] leading-tight font-bold tracking-[-0.01em]">{dato.cifra}</p>
+              ) : (
+                <p className="font-titulo text-[1.2rem] leading-tight font-bold">{unirPalabrasCortas(dato.titulo)}</p>
+              )}
               <p className="mt-1 text-texto-secundario">{unirPalabrasCortas(dato.texto)}</p>
             </li>
           ))}
