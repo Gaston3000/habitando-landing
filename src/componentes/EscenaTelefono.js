@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Compu from "@/componentes/Compu";
 import PantallaAdministracion from "@/componentes/PantallaAdministracion";
 import PantallaVecino from "@/componentes/PantallaVecino";
 import { useAparecerEnPantalla } from "@/lib/aparecer";
@@ -14,7 +15,7 @@ const OPCIONES = [
 const LLEGA_EL_MENSAJE = 750;
 const ENTRA_HABITANDO = 2900;
 
-// El teléfono con "Hoy" y "Con habitando".
+// El teléfono con "Hoy" y "Con habitando" (para la administración, "Con habitando" es la compu).
 // Con "automatica", la escena arranca en "Hoy", llega un mensaje más y a los 3 segundos pasa sola a
 // "Con habitando"; mientras tanto, una barrita avanza en el botón. Todo eso empieza recién cuando el teléfono
 // se ve (en el celular está más abajo), así nadie se pierde el "Hoy". Para que vuelva a empezar
@@ -76,12 +77,14 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
       data-estado={estado}
       className="escena m-0 grid min-w-0 justify-items-center gap-4 justify-self-center escritorio:grid-cols-[auto_auto] escritorio:items-end escritorio:gap-x-4.5"
     >
-      {/* El teléfono se diseña a 288 x 590 y se escala entero (--escala, lo calcula el héroe) */}
-      <div className="h-[calc(590px*var(--escala,1))] w-[calc(288px*var(--escala,1))]">
+      {/* El teléfono se diseña a 288 x 590 y se escala entero (--escala, lo calcula el héroe).
+          Para la administración el lugar es más ancho: ahí entra la compu cuando pasa a "Con habitando". */}
+      <div className="dispositivo">
         <div className="telefono">
           <PantallaVecino llegando={llegando} />
           <PantallaAdministracion llegando={llegando} />
         </div>
+        <Compu />
       </div>
 
       {/* En escritorio va al costado izquierdo del teléfono, en vertical: así el alto queda entero para el teléfono */}

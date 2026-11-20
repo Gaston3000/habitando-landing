@@ -1,6 +1,6 @@
-import ChipEstado from "@/componentes/ChipEstado";
+import Image from "next/image";
 import Icono from "@/componentes/Icono";
-import Simbolo from "@/componentes/Simbolo";
+import capturaVecino from "@/imagenes/app-vecino.png";
 import { unirPalabrasCortas } from "@/lib/texto";
 
 // Mensajes del grupo del edificio. "orden" escalona cómo se van cuando entra habitando.
@@ -22,7 +22,7 @@ function Globo({ autor, texto, hora, orden }) {
   );
 }
 
-// Lo que ve un vecino en el celular: hoy, el grupo del edificio; con habitando, su unidad.
+// Lo que ve un vecino en el celular: hoy, el grupo del edificio; con habitando, su unidad en la app.
 // "llegando" esconde el último mensaje hasta que entra, como si recién llegara.
 export default function PantallaVecino({ llegando }) {
   return (
@@ -57,62 +57,18 @@ export default function PantallaVecino({ llegando }) {
         </p>
       </div>
 
-      <div className="capa capa-con">
+      {/* Con habitando: la app de verdad, una captura del panel del vecino */}
+      <div className="capa capa-con captura-celular">
         <div className="barra-estado">
           <span>22:05</span>
           <span />
         </div>
-        <div className="app-cabecera">
-          <span className="app-marca">
-            <Simbolo />
-            Rivadavia 4520
-          </span>
-          <span className="app-dato">UF 7 · 3º B</span>
-        </div>
-        <div className="app-cuerpo">
-          <p className="saludo">Hola, 3º B</p>
-          <article className="tarjeta corte-14">
-            <div className="fila">
-              <p className="tarjeta-titulo">Octubre</p>
-              <ChipEstado tipo="atencion" texto="Pendiente" />
-            </div>
-            <p className="monto-grande">$ 84.300</p>
-            <p className="dato-chico">Vence el 10 de noviembre</p>
-            <ul className="desglose">
-              <li>
-                <span>Expensas ordinarias</span>
-                <span>$ 71.900</span>
-              </li>
-              <li>
-                <span>
-                  Arreglo del ascensor
-                  <small>
-                    Extraordinaria. <u>Ver factura</u>
-                  </small>
-                </span>
-                <span>$ 12.400</span>
-              </li>
-            </ul>
-          </article>
-          <article className="tarjeta">
-            <p className="tarjeta-etiqueta">
-              <Icono nombre="avisos" />
-              Aviso de la administración
-            </p>
-            <p>{unirPalabrasCortas("El ascensor vuelve a andar el jueves 5. El técnico viene a la mañana.")}</p>
-          </article>
-          <article className="tarjeta">
-            <p className="tarjeta-etiqueta">
-              <Icono nombre="reclamos" />
-              Tu pedido de arreglo
-            </p>
-            <div className="fila">
-              <p>{unirPalabrasCortas("Filtración en el palier")}</p>
-              <ChipEstado tipo="proceso" texto="En curso" />
-            </div>
-          </article>
-          <p className="app-boton corte-11">Informar un pago</p>
-        </div>
+        <Image
+          src={capturaVecino}
+          alt="La app de habitando en el celular de un vecino: su expensa de octubre, al día, y un arreglo en curso."
+          sizes="268px"
+          className="block h-auto w-full"
+        />
       </div>
     </div>
   );

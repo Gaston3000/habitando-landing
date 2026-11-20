@@ -7,7 +7,7 @@
      nombrados por rol como en tema.css. La banda final usa los de marca de tema.css.
   2. Un corte de pantalla (escritorio) y los tamaños de título que crecen con la pantalla.
   3. Utilidades de la marca: el corte de 30° y la caja de contenido.
-  4. Lo que no es interfaz sino dibujo: la bienvenida, la trama y el teléfono de la escena.
+  4. Lo que no es interfaz sino dibujo: la bienvenida, la trama, el teléfono y la compu de la escena.
      El teléfono se diseña a 288 x 590 px y se escala entero, por eso sus medidas van en px.
 */
 
@@ -382,8 +382,7 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
 }
 
 /* Chat del grupo del edificio */
-.chat-cabecera,
-.app-cabecera {
+.chat-cabecera {
   display: flex;
   flex: none;
   align-items: center;
@@ -391,11 +390,6 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   padding: 8px 16px 10px;
   background: var(--superficie-elevada);
   border-bottom: 1px solid var(--borde-suave);
-}
-
-.app-cabecera {
-  justify-content: space-between;
-  gap: 8px;
 }
 
 .avatar {
@@ -575,199 +569,125 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   color: var(--texto-principal);
 }
 
-.app-marca {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  font-weight: 600;
+/* En el celular del vecino es una captura de la app (en modo oscuro). La barra de arriba toma el color
+   de la cabecera de la app, así la captura sigue sin corte debajo de la isla. */
+.captura-celular {
+  background: var(--superficie-marca);
 }
 
-.app-marca svg {
-  width: 11px;
-  height: 20px;
+.captura-celular .barra-estado {
+  height: 28px;
+  padding-top: 6px;
+  color: var(--texto-sobre-marca);
 }
 
-.app-dato {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--texto-secundario);
+/* 8. COMPU DE LA ADMINISTRACIÓN (ver Compu.js)
+   Para la administración el lugar del teléfono se ensancha hasta el ancho de la compu. En "Hoy" se ve el teléfono,
+   centrado; en "Con habitando" el teléfono baja y se va, y la compu sube en su lugar. */
+.dispositivo {
+  position: relative;
+  width: calc(288px * var(--escala, 1));
+  height: calc(590px * var(--escala, 1));
 }
 
-.app-cuerpo {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 9px;
-  padding: 12px;
+html[data-perfil="administraciones"] .dispositivo {
+  width: max(calc(288px * var(--escala, 1)), calc(560px * var(--escala-compu, 1)));
+}
+
+/* En escritorio la escena de la administración se apoya a la derecha (lo que sobra de la compu avanza sobre
+   el espacio entre columnas, nunca sobre el borde) y el selector queda a media altura, al lado de la compu */
+@media (width >= 56.25rem) {
+  html[data-perfil="administraciones"] .escena {
+    justify-self: end;
+    align-items: center;
+  }
+
+  html[data-perfil="administraciones"] .selector-escena {
+    margin-bottom: 0;
+  }
+}
+
+html[data-perfil="administraciones"] .dispositivo .telefono {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 144px * var(--escala, 1));
+}
+
+.telefono,
+.compu {
+  transition:
+    opacity 0.45s ease,
+    translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html[data-perfil="administraciones"] .escena[data-estado="con"] .telefono {
+  opacity: 0;
+  translate: 0 28px;
+}
+
+.compu {
+  position: absolute;
+  left: 0;
+  /* A media altura del lugar del teléfono */
+  top: calc(50% - 173px * var(--escala-compu, 1));
+  width: 560px;
+  height: 346px;
+  transform: scale(var(--escala-compu, 1));
+  transform-origin: 0 0;
+}
+
+.escena[data-estado="hoy"] .compu {
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 28px;
+  transition:
+    opacity 0.3s ease,
+    translate 0.3s ease,
+    visibility 0s 0.3s;
+}
+
+.escena[data-estado="con"] .compu {
+  transition-delay: 0.15s;
+}
+
+.compu-tapa {
+  width: 520px;
+  height: 332px;
+  margin-inline: auto;
+  padding: 10px;
+  border-radius: 16px 16px 4px 4px;
+  background: var(--telefono);
+  box-shadow:
+    0 0 0 1px var(--telefono-borde),
+    0 50px 90px -40px var(--sombra),
+    0 18px 36px -24px var(--sombra);
+}
+
+.compu-pantalla {
+  height: 100%;
   overflow: hidden;
+  border-radius: 6px;
 }
 
-.saludo {
-  padding: 2px 2px 0;
-  font-family: var(--font-titulo);
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.tarjeta {
-  padding: 11px 12px;
-  background: var(--superficie-elevada);
-  box-shadow: 0 1px 0 var(--borde-suave);
-}
-
-.fila {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.tarjeta-titulo {
-  font-size: 13.5px;
-  font-weight: 600;
-}
-
-.tarjeta-etiqueta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 3px;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--texto-secundario);
-}
-
-.tarjeta-etiqueta svg {
-  width: 14px;
+/* La base, un poco más ancha que la tapa, con la muesca para abrirla */
+.compu-base {
+  position: relative;
   height: 14px;
+  border-radius: 2px 2px 12px 12px;
+  background: var(--telefono);
+  box-shadow: 0 0 0 1px var(--telefono-borde);
 }
 
-.monto-grande {
-  margin-top: 4px;
-  font-family: var(--font-titulo);
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.15;
-  font-variant-numeric: tabular-nums;
-}
-
-.dato-chico {
-  font-size: 11.5px;
-  color: var(--texto-secundario);
-}
-
-.desglose {
-  display: grid;
-  gap: 6px;
-  margin-top: 9px;
-  padding-top: 8px;
-  border-top: 1px solid var(--borde-suave);
-}
-
-.desglose li {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 12.5px;
-}
-
-.desglose li > span:last-child {
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.desglose small {
-  display: block;
-  font-size: 11.5px;
-  color: var(--texto-secundario);
-}
-
-.desglose u {
-  text-underline-offset: 2px;
-}
-
-.app-boton {
-  margin-top: auto;
-  padding: 11px 12px;
-  background: var(--accion-principal);
-  color: var(--accion-principal-texto);
-  text-align: center;
-  font-size: 13.5px;
-  font-weight: 600;
-}
-
-.aviso-publicado {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 9px 10px;
-  border: 1px solid var(--exito-borde);
-  background: var(--exito-fondo);
-  color: var(--exito-texto);
-  font-size: 12.5px;
-  font-weight: 500;
-}
-
-.aviso-publicado svg {
-  flex: none;
-  width: 15px;
-  height: 15px;
-  margin-top: 1px;
-  color: var(--exito-borde);
-}
-
-.indicadores {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-}
-
-.indicador {
-  display: grid;
-  gap: 5px;
-  justify-items: start;
-  padding: 8px 8px 9px;
-  background: var(--superficie-elevada);
-  box-shadow: 0 1px 0 var(--borde-suave);
-  font-size: 9.5px;
-}
-
-.indicador b {
-  font-family: var(--font-titulo);
-  font-size: 20px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.pagos {
-  display: grid;
-  margin-top: 6px;
-}
-
-.pagos li {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  padding: 6px 0;
-  border-top: 1px solid var(--borde-suave);
-  font-size: 12.5px;
-}
-
-.pagos li:first-child {
-  border-top: 0;
-}
-
-.pagos b {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.pagos small {
-  grid-column: 1 / -1;
-  font-size: 11.5px;
-  color: var(--texto-secundario);
+.compu-base::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 90px;
+  height: 5px;
+  margin-left: -45px;
+  border-radius: 0 0 6px 6px;
+  background: var(--telefono-borde);
 }
 
 /* La pantalla nueva entra barriendo en diagonal, con el corte de 30° del logo (ver EscenaTelefono.js) */
@@ -792,7 +712,7 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
   }
 }
 
-/* 8. SECCIONES */
+/* 9. SECCIONES */
 
 /* Pila de "¿Ya salieron las expensas?": las de atrás quedan solo como borde */
 .globo-pila {

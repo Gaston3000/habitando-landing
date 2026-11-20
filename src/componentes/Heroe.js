@@ -29,6 +29,9 @@ const ASOMA = 28;
 // En el celular, lo que queda libre debajo del teléfono y su selector al mirarlo entero
 const MARGEN_CELULAR = 80;
 
+// Ancho al que se diseña la compu de la administración (ver Compu.js)
+const ANCHO_COMPU = 560;
+
 // Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con habitando".
 // En escritorio el héroe ocupa justo una pantalla (menos el encabezado) y el teléfono se achica
 // para que entre entero. En el celular no entran los dos a un tamaño que se lea, así que la primera pantalla se arma
@@ -52,6 +55,7 @@ export default function Heroe({ perfil, alElegirPerfil }) {
       document.documentElement.style.setProperty("--alto-encabezado", `${altoEncabezado}px`);
 
       let escala;
+      let escalaCompu;
       if (anchoPantalla >= 900) {
         // El selector va al costado, así que todo el alto es para el teléfono. El ancho de la columna también limita.
         // Nunca menos del 68 %: más chico ya no se lee.
@@ -61,11 +65,22 @@ export default function Heroe({ perfil, alElegirPerfil }) {
         const anchoLibre = grilla.clientWidth / 2 - selector.offsetWidth - 18;
         const altoLibre = altoPantalla - altoEncabezado - ASOMA - relleno;
         escala = Math.min(1, anchoLibre / 288, Math.max(0.68, altoLibre / 590));
+        // La compu ocupa el ancho de la columna que queda al lado del selector y avanza sobre parte del espacio
+        // entre las columnas (la escena se corre hacia el texto, ver landing.css)
+        const estiloGrilla = getComputedStyle(grilla);
+        const anchoColumna = parseFloat(estiloGrilla.gridTemplateColumns.split(" ")[1]);
+        const separacion = parseFloat(estiloGrilla.columnGap);
+        escalaCompu = Math.min(1, (anchoColumna + separacion * 0.75 - selector.offsetWidth - 18) / ANCHO_COMPU);
       } else {
         // Que el teléfono con su selector entre entero en una pantalla
         escala = Math.min(1, (anchoPantalla * 0.82) / 288, (altoPantalla - altoEncabezado - MARGEN_CELULAR) / 590);
+        // La compu, de lado a lado de la caja de contenido
+        const estiloGrilla = getComputedStyle(grilla);
+        const anchoContenido = grilla.clientWidth - parseFloat(estiloGrilla.paddingLeft) - parseFloat(estiloGrilla.paddingRight);
+        escalaCompu = Math.min(1, anchoContenido / ANCHO_COMPU);
       }
       heroe.style.setProperty("--escala", escala.toFixed(3));
+      heroe.style.setProperty("--escala-compu", escalaCompu.toFixed(3));
     }
 
     ajustarTelefono();

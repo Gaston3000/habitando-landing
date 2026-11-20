@@ -1,6 +1,3 @@
-import ChipEstado from "@/componentes/ChipEstado";
-import Icono from "@/componentes/Icono";
-import Simbolo from "@/componentes/Simbolo";
 import { unirPalabrasCortas } from "@/lib/texto";
 
 // Íconos de las notificaciones del celular (trazo, como los del sistema del teléfono)
@@ -24,12 +21,6 @@ const NOTIFICACIONES = [
   { icono: "mensaje", de: "5º D, Rivadavia", cuando: "34 min", texto: "El ascensor sigue sin andar" },
 ];
 
-const PAGOS = [
-  { unidad: "UF 7 · 3º B", monto: "$ 84.300", detalle: "Transferencia, hace 5 minutos" },
-  { unidad: "UF 2 · 1º A", monto: "$ 61.200", detalle: "Depósito, informado por el vecino" },
-  { unidad: "UF 3 · PB C", monto: "$ 23.000", detalle: "Efectivo, pago parcial" },
-];
-
 function Notificacion({ icono, de, cuando, texto, orden }) {
   return (
     <div className="notificacion animado" style={{ "--orden": orden }}>
@@ -45,8 +36,8 @@ function Notificacion({ icono, de, cuando, texto, orden }) {
   );
 }
 
-// Lo que ve la administración en el celular: hoy, la pantalla bloqueada llena de consultas;
-// con habitando, las expensas publicadas y los pagos que van entrando.
+// Lo que ve la administración en el celular hoy: la pantalla bloqueada llena de consultas.
+// Con habitando, el celular se va y entra la compu con el panel (ver Compu.js).
 export default function PantallaAdministracion({ llegando }) {
   return (
     <div className="pantalla" data-solo="administraciones">
@@ -67,61 +58,6 @@ export default function PantallaAdministracion({ llegando }) {
             <Notificacion icono="mensaje" de="2º B, Laprida" cuando="ahora" texto="¿Ya salieron las expensas?" orden={7} />
           </li>
         </ul>
-      </div>
-
-      <div className="capa capa-con">
-        <div className="barra-estado">
-          <span>22:47</span>
-          <span />
-        </div>
-        <div className="app-cabecera">
-          <span className="app-marca">
-            <Simbolo />
-            Rivadavia 4520
-          </span>
-          <span className="app-dato">Octubre</span>
-        </div>
-        <div className="app-cuerpo">
-          <p className="aviso-publicado">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12l5 5L20 7" />
-            </svg>
-            {unirPalabrasCortas("Expensas de octubre publicadas. Las 24 unidades ya ven su detalle.")}
-          </p>
-          <div className="indicadores">
-            <div className="indicador">
-              <b>17</b>
-              <ChipEstado tipo="exito" texto="Al día" tamano="text-[9.5px]" />
-            </div>
-            <div className="indicador">
-              <b>5</b>
-              <ChipEstado tipo="atencion" texto="Pendientes" tamano="text-[9.5px]" />
-            </div>
-            <div className="indicador">
-              <b>2</b>
-              <ChipEstado tipo="peligro" texto="Vencidas" tamano="text-[9.5px]" />
-            </div>
-          </div>
-          <article className="tarjeta corte-14">
-            <p className="tarjeta-titulo">Últimos pagos</p>
-            <ul className="pagos">
-              {PAGOS.map((pago) => (
-                <li key={pago.unidad}>
-                  <span>{pago.unidad}</span>
-                  <b>{pago.monto}</b>
-                  <small>{pago.detalle}</small>
-                </li>
-              ))}
-            </ul>
-          </article>
-          <article className="tarjeta">
-            <p className="tarjeta-etiqueta">
-              <Icono nombre="pagos" />
-              Por cobrar este mes
-            </p>
-            <p className="monto-grande">$ 498.700</p>
-          </article>
-        </div>
       </div>
     </div>
   );
