@@ -29,8 +29,11 @@ const ASOMA = 28;
 // En el celular, lo que queda libre debajo del teléfono y su selector al mirarlo entero
 const MARGEN_CELULAR = 80;
 
-// Ancho al que se diseña la compu de la administración (ver Compu.js)
+// Ancho al que se diseña la compu de la administración (ver Compu.js), lo más que puede crecer en escritorio
+// y el aire que deja siempre contra el borde de la ventana
 const ANCHO_COMPU = 560;
+const ANCHO_COMPU_MAXIMO = 640;
+const AIRE_COMPU = 24;
 
 // Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con habitando".
 // En escritorio el héroe ocupa justo una pantalla (menos el encabezado) y el teléfono se achica
@@ -56,6 +59,7 @@ export default function Heroe({ perfil, alElegirPerfil }) {
 
       let escala;
       let escalaCompu;
+      let sobraCompu = 0;
       if (anchoPantalla >= 900) {
         // El selector va al costado, así que todo el alto es para el teléfono. El ancho de la columna también limita.
         // Nunca menos del 68 %: más chico ya no se lee.
@@ -65,12 +69,16 @@ export default function Heroe({ perfil, alElegirPerfil }) {
         const anchoLibre = grilla.clientWidth / 2 - selector.offsetWidth - 18;
         const altoLibre = altoPantalla - altoEncabezado - ASOMA - relleno;
         escala = Math.min(1, anchoLibre / 288, Math.max(0.68, altoLibre / 590));
-        // La compu ocupa el ancho de la columna que queda al lado del selector y avanza sobre parte del espacio
-        // entre las columnas (la escena se corre hacia el texto, ver landing.css)
+        // La compu ocupa el ancho de la columna que queda al lado del selector, avanza sobre parte del espacio
+        // entre las columnas y, del otro lado, sobre el margen de la página hasta casi el borde: crece sin cortarse.
         const estiloGrilla = getComputedStyle(grilla);
         const anchoColumna = parseFloat(estiloGrilla.gridTemplateColumns.split(" ")[1]);
         const separacion = parseFloat(estiloGrilla.columnGap);
-        escalaCompu = Math.min(1, (anchoColumna + separacion * 0.75 - selector.offsetWidth - 18) / ANCHO_COMPU);
+        const enColumna = anchoColumna + separacion * 0.75 - selector.offsetWidth - 18;
+        const bordeContenido = grilla.getBoundingClientRect().right - parseFloat(estiloGrilla.paddingRight);
+        const margenLibre = Math.max(0, document.documentElement.clientWidth - bordeContenido - AIRE_COMPU);
+        escalaCompu = Math.min(ANCHO_COMPU_MAXIMO / ANCHO_COMPU, (enColumna + margenLibre) / ANCHO_COMPU);
+        sobraCompu = Math.max(0, ANCHO_COMPU * escalaCompu - enColumna);
       } else {
         // Que el teléfono con su selector entre entero en una pantalla
         escala = Math.min(1, (anchoPantalla * 0.82) / 288, (altoPantalla - altoEncabezado - MARGEN_CELULAR) / 590);
@@ -81,6 +89,7 @@ export default function Heroe({ perfil, alElegirPerfil }) {
       }
       heroe.style.setProperty("--escala", escala.toFixed(3));
       heroe.style.setProperty("--escala-compu", escalaCompu.toFixed(3));
+      heroe.style.setProperty("--sobra-compu", `${Math.round(sobraCompu)}px`);
     }
 
     ajustarTelefono();

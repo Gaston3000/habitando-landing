@@ -583,7 +583,8 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
 
 /* 8. COMPU DE LA ADMINISTRACIÓN (ver Compu.js)
    Para la administración el lugar del teléfono se ensancha hasta el ancho de la compu. En "Hoy" se ve el teléfono,
-   centrado; en "Con habitando" el teléfono baja y se va, y la compu sube en su lugar. */
+   centrado; en "Con habitando" el teléfono baja y se va, y la compu sube en su lugar.
+   En escritorio la compu sobresale a la derecha sobre el margen de la página (--sobra-compu, lo calcula el héroe). */
 .dispositivo {
   position: relative;
   width: calc(288px * var(--escala, 1));
@@ -591,19 +592,14 @@ html:not([data-perfil="administraciones"]) .sala-tuya {
 }
 
 html[data-perfil="administraciones"] .dispositivo {
-  width: max(calc(288px * var(--escala, 1)), calc(560px * var(--escala-compu, 1)));
+  width: max(calc(288px * var(--escala, 1)), calc(560px * var(--escala-compu, 1) - var(--sobra-compu, 0px)));
 }
 
-/* En escritorio la escena de la administración se apoya a la derecha (lo que sobra de la compu avanza sobre
-   el espacio entre columnas, nunca sobre el borde) y el selector queda a media altura, al lado de la compu */
+/* En escritorio la escena de la administración se apoya a la derecha: lo que no entra en la columna avanza sobre
+   el espacio entre columnas. El selector queda abajo, en el mismo lugar que en la versión de vecinos. */
 @media (width >= 56.25rem) {
   html[data-perfil="administraciones"] .escena {
     justify-self: end;
-    align-items: center;
-  }
-
-  html[data-perfil="administraciones"] .selector-escena {
-    margin-bottom: 0;
   }
 }
 
@@ -628,12 +624,17 @@ html[data-perfil="administraciones"] .escena[data-estado="con"] .telefono {
 .compu {
   position: absolute;
   left: 0;
-  /* A media altura del lugar del teléfono */
+  /* En el celular, a media altura del lugar del teléfono. En escritorio se apoya en la misma línea que el borde
+     de abajo del selector (que tiene 1.5rem de margen abajo). */
   top: calc(50% - 161px * var(--escala-compu, 1));
   width: 560px;
   height: 322px;
   transform: scale(var(--escala-compu, 1));
   transform-origin: 0 0;
+
+  @media (width >= 56.25rem) {
+    top: calc(100% - 1.5rem - 322px * var(--escala-compu, 1));
+  }
 }
 
 .escena[data-estado="hoy"] .compu {
