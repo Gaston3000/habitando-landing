@@ -83,7 +83,7 @@ export default function Heroe({ perfil, alElegirPerfil }) {
         const acciones = [...heroe.querySelectorAll("[data-acciones-heroe]")].find((elemento) => elemento.offsetParent);
         const arribaSelector = escena.getBoundingClientRect().bottom - MARGEN_ABAJO_SELECTOR - selector.offsetHeight;
         const selectorAfuera = arribaSelector >= acciones.getBoundingClientRect().bottom + DISTANCIA_A_LOS_BOTONES;
-        escena.dataset.selector = selectorAfuera ? "afuera" : "al-lado";
+        heroe.dataset.selector = selectorAfuera ? "afuera" : "al-lado";
 
         // La compu ocupa el ancho de la columna (menos el selector, si va al lado), avanza sobre parte del espacio
         // entre las columnas y, del otro lado, sobre el margen de la página hasta casi el borde: crece sin cortarse.

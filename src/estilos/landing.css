@@ -598,20 +598,21 @@ html[data-perfil="administraciones"] .dispositivo {
 /* En escritorio el selector "Hoy / Con habitando" sale de la escena hacia la izquierda, debajo del texto, apoyado
    en la misma línea que el dispositivo y en el mismo lugar en las dos versiones: la escena se corre a la izquierda
    (--corrimiento-escena, lo calcula el héroe) y el dispositivo arranca en el espacio entre columnas.
-   En pantallas bajas no entra debajo de los botones (data-selector="al-lado"): vuelve al costado del dispositivo
+   En pantallas bajas no entra debajo de los botones (data-selector="al-lado", lo pone el héroe en la sección):
+   vuelve al costado del dispositivo
    y la escena de la administración se apoya a la derecha. */
 @media (width >= 56.25rem) {
-  .escena[data-selector="afuera"] {
+  [data-selector="afuera"] .escena {
     justify-self: start;
     margin-left: calc(-1 * var(--corrimiento-escena, 0px));
     column-gap: 28px;
   }
 
-  html[data-perfil="administraciones"] .escena[data-selector="afuera"] .telefono {
+  html[data-perfil="administraciones"] [data-selector="afuera"] .telefono {
     left: 0;
   }
 
-  html[data-perfil="administraciones"] .escena:not([data-selector="afuera"]) {
+  html[data-perfil="administraciones"] [data-selector="al-lado"] .escena {
     justify-self: end;
   }
 }
@@ -637,17 +638,13 @@ html[data-perfil="administraciones"] .escena[data-estado="con"] .telefono {
 .compu {
   position: absolute;
   left: 0;
-  /* En el celular, a media altura del lugar del teléfono. En escritorio se apoya en la misma línea que el borde
-     de abajo del selector (que tiene 1.5rem de margen abajo). */
+  /* A media altura del lugar del teléfono. En escritorio ese lugar está centrado con el texto, así que la compu
+     queda a la altura del medio del título y los botones; el selector sigue abajo, como en vecinos. */
   top: calc(50% - 161px * var(--escala-compu, 1));
   width: 560px;
   height: 322px;
   transform: scale(var(--escala-compu, 1));
   transform-origin: 0 0;
-
-  @media (width >= 56.25rem) {
-    top: calc(100% - 1.5rem - 322px * var(--escala-compu, 1));
-  }
 }
 
 .escena[data-estado="hoy"] .compu {
