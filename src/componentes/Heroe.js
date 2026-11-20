@@ -35,6 +35,12 @@ const ANCHO_COMPU = 560;
 const ANCHO_COMPU_MAXIMO = 640;
 const AIRE_COMPU = 24;
 
+// En escritorio el selector "Hoy / Con habitando" va a la izquierda del dispositivo, apoyado en su misma línea:
+// su margen de abajo (escritorio:mb-6), lo que lo separa del dispositivo y lo mínimo que lo separa de los botones
+const MARGEN_ABAJO_SELECTOR = 24;
+const SEPARACION_SELECTOR = 28;
+const DISTANCIA_A_LOS_BOTONES = 32;
+
 // Primera pantalla: el título, la acción principal y el teléfono con "Hoy / Con habitando".
 // En escritorio el héroe ocupa justo una pantalla (menos el encabezado) y el teléfono se achica
 // para que entre entero. En el celular no entran los dos a un tamaño que se lea, así que la primera pantalla se arma
@@ -69,12 +75,24 @@ export default function Heroe({ perfil, alElegirPerfil }) {
         const anchoLibre = grilla.clientWidth / 2 - selector.offsetWidth - 18;
         const altoLibre = altoPantalla - altoEncabezado - ASOMA - relleno;
         escala = Math.min(1, anchoLibre / 288, Math.max(0.68, altoLibre / 590));
-        // La compu ocupa el ancho de la columna que queda al lado del selector, avanza sobre parte del espacio
+        heroe.style.setProperty("--escala", escala.toFixed(3));
+
+        // El selector sale de la escena hacia la izquierda, debajo del texto, y le deja ese lugar al dispositivo.
+        // Solo si queda bien separado de los botones del texto; si no (pantallas bajas), sigue al lado del dispositivo.
+        const escena = heroe.querySelector(".escena");
+        const acciones = [...heroe.querySelectorAll("[data-acciones-heroe]")].find((elemento) => elemento.offsetParent);
+        const arribaSelector = escena.getBoundingClientRect().bottom - MARGEN_ABAJO_SELECTOR - selector.offsetHeight;
+        const selectorAfuera = arribaSelector >= acciones.getBoundingClientRect().bottom + DISTANCIA_A_LOS_BOTONES;
+        escena.dataset.selector = selectorAfuera ? "afuera" : "al-lado";
+
+        // La compu ocupa el ancho de la columna (menos el selector, si va al lado), avanza sobre parte del espacio
         // entre las columnas y, del otro lado, sobre el margen de la página hasta casi el borde: crece sin cortarse.
         const estiloGrilla = getComputedStyle(grilla);
         const anchoColumna = parseFloat(estiloGrilla.gridTemplateColumns.split(" ")[1]);
         const separacion = parseFloat(estiloGrilla.columnGap);
-        const enColumna = anchoColumna + separacion * 0.75 - selector.offsetWidth - 18;
+        const enColumna = anchoColumna + separacion * 0.75 - (selectorAfuera ? 0 : selector.offsetWidth + 18);
+        const corrimiento = selector.offsetWidth + SEPARACION_SELECTOR + separacion * 0.75;
+        heroe.style.setProperty("--corrimiento-escena", `${Math.round(corrimiento)}px`);
         const bordeContenido = grilla.getBoundingClientRect().right - parseFloat(estiloGrilla.paddingRight);
         const margenLibre = Math.max(0, document.documentElement.clientWidth - bordeContenido - AIRE_COMPU);
         escalaCompu = Math.min(ANCHO_COMPU_MAXIMO / ANCHO_COMPU, (enColumna + margenLibre) / ANCHO_COMPU);

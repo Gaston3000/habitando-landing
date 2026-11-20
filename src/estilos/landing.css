@@ -595,10 +595,23 @@ html[data-perfil="administraciones"] .dispositivo {
   width: max(calc(288px * var(--escala, 1)), calc(560px * var(--escala-compu, 1) - var(--sobra-compu, 0px)));
 }
 
-/* En escritorio la escena de la administración se apoya a la derecha: lo que no entra en la columna avanza sobre
-   el espacio entre columnas. El selector queda abajo, en el mismo lugar que en la versión de vecinos. */
+/* En escritorio el selector "Hoy / Con habitando" sale de la escena hacia la izquierda, debajo del texto, apoyado
+   en la misma línea que el dispositivo y en el mismo lugar en las dos versiones: la escena se corre a la izquierda
+   (--corrimiento-escena, lo calcula el héroe) y el dispositivo arranca en el espacio entre columnas.
+   En pantallas bajas no entra debajo de los botones (data-selector="al-lado"): vuelve al costado del dispositivo
+   y la escena de la administración se apoya a la derecha. */
 @media (width >= 56.25rem) {
-  html[data-perfil="administraciones"] .escena {
+  .escena[data-selector="afuera"] {
+    justify-self: start;
+    margin-left: calc(-1 * var(--corrimiento-escena, 0px));
+    column-gap: 28px;
+  }
+
+  html[data-perfil="administraciones"] .escena[data-selector="afuera"] .telefono {
+    left: 0;
+  }
+
+  html[data-perfil="administraciones"] .escena:not([data-selector="afuera"]) {
     justify-self: end;
   }
 }
