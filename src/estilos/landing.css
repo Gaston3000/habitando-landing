@@ -629,9 +629,9 @@ html[data-perfil="administraciones"] .escena[data-estado="con"] .telefono {
   position: absolute;
   left: 0;
   /* A media altura del lugar del teléfono */
-  top: calc(50% - 173px * var(--escala-compu, 1));
+  top: calc(50% - 161px * var(--escala-compu, 1));
   width: 560px;
-  height: 346px;
+  height: 322px;
   transform: scale(var(--escala-compu, 1));
   transform-origin: 0 0;
 }
@@ -648,46 +648,6 @@ html[data-perfil="administraciones"] .escena[data-estado="con"] .telefono {
 
 .escena[data-estado="con"] .compu {
   transition-delay: 0.15s;
-}
-
-.compu-tapa {
-  width: 520px;
-  height: 332px;
-  margin-inline: auto;
-  padding: 10px;
-  border-radius: 16px 16px 4px 4px;
-  background: var(--telefono);
-  box-shadow:
-    0 0 0 1px var(--telefono-borde),
-    0 50px 90px -40px var(--sombra),
-    0 18px 36px -24px var(--sombra);
-}
-
-.compu-pantalla {
-  height: 100%;
-  overflow: hidden;
-  border-radius: 6px;
-}
-
-/* La base, un poco más ancha que la tapa, con la muesca para abrirla */
-.compu-base {
-  position: relative;
-  height: 14px;
-  border-radius: 2px 2px 12px 12px;
-  background: var(--telefono);
-  box-shadow: 0 0 0 1px var(--telefono-borde);
-}
-
-.compu-base::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 90px;
-  height: 5px;
-  margin-left: -45px;
-  border-radius: 0 0 6px 6px;
-  background: var(--telefono-borde);
 }
 
 /* La pantalla nueva entra barriendo en diagonal, con el corte de 30° del logo (ver EscenaTelefono.js) */
