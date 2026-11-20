@@ -25,19 +25,28 @@ export default function Landing() {
   const refIsologo = useRef(null);
 
   // Cambia de perfil con un fundido corto y deja el perfil en la dirección, así el link se puede compartir.
+  // Siempre arranca desde el héroe: cada versión es otro discurso y lo primero es su promesa. Si estabas más abajo,
+  // se funde la página entera y, mientras no se ve, sube de golpe (un desplazamiento desde el pie marearía).
   function elegirPerfil(nuevo) {
     if (nuevo === leerPerfil()) return;
     history.replaceState(null, "", `#${nuevo}`);
+    const subir = window.scrollY > 0;
+
+    function cambiar() {
+      if (subir) window.scrollTo({ top: 0, behavior: "instant" });
+      ponerPerfil(nuevo);
+    }
 
     if (movimientoReducido) {
-      ponerPerfil(nuevo);
+      cambiar();
       return;
     }
     const raiz = document.documentElement;
     raiz.classList.add("cambiando-perfil");
+    raiz.classList.toggle("subiendo", subir);
     setTimeout(() => {
-      ponerPerfil(nuevo);
-      requestAnimationFrame(() => raiz.classList.remove("cambiando-perfil"));
+      cambiar();
+      requestAnimationFrame(() => raiz.classList.remove("cambiando-perfil", "subiendo"));
     }, FUNDIDO);
   }
 
@@ -55,14 +64,13 @@ export default function Landing() {
     window.scrollTo({ top: 0, behavior: movimientoReducido ? "auto" : "smooth" });
   }
 
-  // Desde el pie: sube y muestra la versión elegida
+  // Desde el pie: muestra la versión elegida desde el héroe. Si ya es la que se ve, solo sube.
   function verPerfil(nuevo) {
-    irArriba();
-    elegirPerfil(nuevo);
+    if (nuevo === leerPerfil()) irArriba();
+    else elegirPerfil(nuevo);
   }
 
   function verElOtroLado() {
-    irArriba();
     elegirPerfil(perfil === "vecinos" ? "administraciones" : "vecinos");
   }
 

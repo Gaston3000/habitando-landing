@@ -180,6 +180,16 @@ html.cambiando-perfil [data-solo] {
   opacity: 0;
 }
 
+/* Si el cambio de perfil sube al héroe, se funde la página entera, así el salto no se ve (ver Landing.js) */
+main,
+body > footer {
+  transition: opacity 0.2s ease;
+}
+
+html.subiendo :is(main, body > footer) {
+  opacity: 0;
+}
+
 /* 5. BIENVENIDA */
 .bienvenida {
   display: none;
