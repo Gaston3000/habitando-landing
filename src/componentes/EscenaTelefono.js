@@ -102,7 +102,7 @@ export default function EscenaTelefono({ automatica, movimientoReducido }) {
             data-estado-boton={opcion.estado}
             aria-pressed={estado === opcion.estado}
             onClick={() => elegir(opcion.estado)}
-            className="relative cursor-pointer px-4 py-2.5 text-sm leading-none font-semibold text-texto-secundario corte-9 transition-colors duration-200 focus-visible:shadow-[inset_0_0_0_2px_var(--foco)] focus-visible:outline-none aria-pressed:bg-accion-principal aria-pressed:text-accion-principal-texto aria-[pressed=false]:hover:text-texto-principal escritorio:py-3 escritorio:pr-4.5 escritorio:pl-4.5 escritorio:text-left"
+            className="relative cursor-pointer px-4 py-2.5 text-sm leading-none font-semibold whitespace-nowrap text-texto-secundario corte-9 transition-colors duration-200 focus-visible:shadow-[inset_0_0_0_2px_var(--foco)] focus-visible:outline-none aria-pressed:bg-accion-principal aria-pressed:text-accion-principal-texto aria-[pressed=false]:hover:text-texto-principal escritorio:py-3 escritorio:pr-4.5 escritorio:pl-4.5 escritorio:text-left"
           >
             {opcion.texto}
           </button>
