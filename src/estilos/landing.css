@@ -599,8 +599,7 @@ html[data-perfil="administraciones"] .dispositivo {
    en la misma línea que el dispositivo y en el mismo lugar en las dos versiones: la escena se corre a la izquierda
    (--corrimiento-escena, lo calcula el héroe) y el dispositivo arranca en el espacio entre columnas.
    En pantallas bajas no entra debajo de los botones (data-selector="al-lado", lo pone el héroe en la sección):
-   vuelve al costado del dispositivo
-   y la escena de la administración se apoya a la derecha. */
+   vuelve al costado del dispositivo y la escena de la administración se apoya a la derecha. */
 @media (width >= 56.25rem) {
   [data-selector="afuera"] .escena {
     justify-self: start;
