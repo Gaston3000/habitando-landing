@@ -229,7 +229,7 @@ function EstadoArreglo() {
 // Bloques chicos (solo ícono y título): en el celular, una fila compacta con el ícono al lado del título
 const SIN_PIEZA = "sm:min-h-44 max-sm:flex-row max-sm:items-center max-sm:gap-4 max-sm:py-5";
 
-// Ordenados por el problema que resuelven, en el mismo orden que los datos de "El problema".
+// Ordenados por el problema que resuelven: primero lo que más pesa.
 // Los tres primeros llevan un pedacito de la app; los chicos, solo el título.
 const FUNCIONES = {
   vecinos: {

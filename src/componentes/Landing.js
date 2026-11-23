@@ -11,7 +11,6 @@ import Pasos from "@/componentes/Pasos";
 import Pie from "@/componentes/Pie";
 import Precios from "@/componentes/Precios";
 import PreguntasFrecuentes from "@/componentes/PreguntasFrecuentes";
-import Problema from "@/componentes/Problema";
 import { leerPerfil, ponerBienvenida, ponerPerfil, useMovimientoReducido, usePerfil } from "@/lib/pagina";
 
 const PERFILES = ["vecinos", "administraciones"];
@@ -71,10 +70,6 @@ export default function Landing() {
     else elegirPerfil(nuevo);
   }
 
-  function verElOtroLado() {
-    elegirPerfil(perfil === "vecinos" ? "administraciones" : "vecinos");
-  }
-
   function repetirBienvenida() {
     if (movimientoReducido) return;
     window.scrollTo(0, 0);
@@ -86,10 +81,9 @@ export default function Landing() {
       <Bienvenida refIsologo={refIsologo} />
       <Encabezado perfil={perfil} alElegirPerfil={elegirPerfil} alIrArriba={irArriba} refIsologo={refIsologo} />
       <main>
-        {/* De lo más importante a lo menos: la promesa, el problema con sus datos, qué incluye,
+        {/* De lo más importante a lo menos: la promesa, qué incluye,
             cómo se empieza, cuánto cuesta (solo para administraciones), las dudas de antes de decidirse y la acción. */}
         <Heroe perfil={perfil} alElegirPerfil={elegirPerfil} />
-        <Problema perfil={perfil} alVerElOtroLado={verElOtroLado} />
         <Funciones />
         <Pasos />
         <Precios />
