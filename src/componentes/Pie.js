@@ -164,8 +164,8 @@ export default function Pie({ alVerPerfil, alRepetirBienvenida }) {
           <div>
             <Isologo etiqueta="habitando" className="h-7.5" />
             <p className="mt-4 font-titulo text-[1.15rem] leading-[1.35] font-semibold">
-              <span className="block">La información ya existe.</span>
-              <span className="block">Nosotros abrimos la puerta.</span>
+              <span className="block">La información ya existe,</span>
+              <span className="block">nosotros abrimos la puerta.</span>
             </p>
           </div>
 
