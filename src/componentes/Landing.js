@@ -9,6 +9,7 @@ import Funciones from "@/componentes/Funciones";
 import Heroe from "@/componentes/Heroe";
 import Pasos from "@/componentes/Pasos";
 import Pie from "@/componentes/Pie";
+import Precios from "@/componentes/Precios";
 import PreguntasFrecuentes from "@/componentes/PreguntasFrecuentes";
 import Problema from "@/componentes/Problema";
 import { leerPerfil, ponerBienvenida, ponerPerfil, useMovimientoReducido, usePerfil } from "@/lib/pagina";
@@ -86,11 +87,12 @@ export default function Landing() {
       <Encabezado perfil={perfil} alElegirPerfil={elegirPerfil} alIrArriba={irArriba} refIsologo={refIsologo} />
       <main>
         {/* De lo más importante a lo menos: la promesa, el problema con sus datos, qué incluye,
-            cómo se empieza, las dudas de antes de decidirse y la acción. */}
+            cómo se empieza, cuánto cuesta (solo para administraciones), las dudas de antes de decidirse y la acción. */}
         <Heroe perfil={perfil} alElegirPerfil={elegirPerfil} />
         <Problema perfil={perfil} alVerElOtroLado={verElOtroLado} />
         <Funciones />
         <Pasos />
+        <Precios />
         <PreguntasFrecuentes />
         <Accion />
       </main>

@@ -6,7 +6,7 @@ import { CLASES_ENLACE } from "@/lib/clases";
 import { unirPalabrasCortas } from "@/lib/texto";
 
 // Las dudas que frenan a alguien antes de decidirse, para cada perfil.
-// Las respuestas dicen solo lo que la app ya hace: el precio todavía no está definido.
+// Las respuestas dicen solo lo que la app ya hace. El precio tiene su sección (Precios.js).
 const PREGUNTAS = {
   vecinos: [
     {
@@ -36,7 +36,7 @@ const PREGUNTAS = {
   administraciones: [
     {
       pregunta: "¿Cuánto cuesta?",
-      respuesta: "Es un abono mensual por cada unidad funcional que administrás. Para los vecinos es gratis.",
+      respuesta: "Desde $ 2.000 por unidad al mes, y baja por tramos: la cuenta para tus unidades está más arriba, en los precios. Para los vecinos es gratis.",
     },
     {
       pregunta: "¿Cómo empiezo si hoy trabajo con Excel?",
